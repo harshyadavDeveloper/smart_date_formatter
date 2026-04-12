@@ -2,6 +2,8 @@ name: smart_date_formatter
 description: "A smart Flutter date formatting utility that converts DateTime into human-readable strings like '2 hours ago', 'Yesterday', 'Next Monday', and more."
 version: 0.0.2
 homepage: https://github.com/harshyadavDeveloper/smart_date_formatter
+repository: https://github.com/harshyadavDeveloper/smart_date_formatter
+issue_tracker: https://github.com/harshyadavDeveloper/smart_date_formatter/issues
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
