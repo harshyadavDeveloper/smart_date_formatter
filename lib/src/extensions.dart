@@ -1,17 +1,69 @@
 import 'formatter.dart';
+import 'date_format_helper.dart';
 
-/// Convenient DateTime extensions using SmartDateFormatter.
+/// Smart DateTime extensions
 extension SmartDateExtension on DateTime {
   static const _formatter = SmartDateFormatter();
 
-  /// "2 hours ago", "Yesterday", "in 3 days", etc.
+  // ─────────────────────────────────────────
+  // EXISTING — Relative & Smart Strings
+  // ─────────────────────────────────────────
+
+  /// Returns relative time string
+  /// ```dart
+  /// DateTime.now().subtract(Duration(hours: 2)).timeAgo // "2 hours ago"
+  /// DateTime.now().add(Duration(days: 1)).timeAgo       // "Tomorrow"
+  /// ```
   String get timeAgo => _formatter.format(this);
 
-  /// "Today", "Yesterday", "Monday", "12 Jan 2024"
+  /// Returns calendar string
+  /// ```dart
+  /// DateTime.now().calendar                              // "Today"
+  /// DateTime.now().add(Duration(days: 2)).calendar      // "Wednesday"
+  /// ```
   String get calendar => _formatter.calendar(this);
 
-  /// "2:30 PM", "Mon 2:30 PM", "12 Jan"
+  /// Returns short timestamp
+  /// ```dart
+  /// DateTime.now().shortTimestamp                        // "2:30 PM"
+  /// ```
   String get shortTimestamp => _formatter.shortTimestamp(this);
+
+  // ─────────────────────────────────────────
+  // NEW v0.1.0 — Custom Format
+  // ─────────────────────────────────────────
+
+  /// Format date using custom pattern
+  ///
+  /// Tokens: dd, d, MM, MMM, MMMM, yyyy, yy,
+  ///         HH, hh, mm, ss, a, EEEE, EEE
+  ///
+  /// ```dart
+  /// DateTime(2024,6,15,14,30).format('dd-MM-yyyy')   // "15-06-2024"
+  /// DateTime(2024,6,15,14,30).format('MMM dd, yyyy') // "Jun 15, 2024"
+  /// DateTime(2024,6,15,14,30).format('EEEE')         // "Saturday"
+  /// DateTime(2024,6,15,14,30).format('hh:mm a')      // "02:30 PM"
+  /// ```
+  String format(String pattern) => DateFormatHelper.format(this, pattern);
+
+  /// Returns "Saturday, 15 June 2024"
+  String get toReadable => DateFormatHelper.format(this, 'EEEE, dd MMMM yyyy');
+
+  /// Returns ISO 8601 without milliseconds — "2024-06-15T14:30:00"
+  String get toISO => toIso8601String().split('.').first;
+
+  /// Returns 24-hour time string — "14:30:00"
+  String get toTimeString => DateFormatHelper.format(this, 'HH:mm:ss');
+
+  /// Returns 12-hour format — "02:30 PM"
+  String get to12Hour => DateFormatHelper.format(this, 'hh:mm a');
+
+  /// Returns 24-hour format — "14:30"
+  String get to24Hour => DateFormatHelper.format(this, 'HH:mm');
+
+  // ─────────────────────────────────────────
+  // EXISTING — Boolean Helpers
+  // ─────────────────────────────────────────
 
   /// Whether this date is today
   bool get isToday {
@@ -41,9 +93,13 @@ extension SmartDateExtension on DateTime {
   /// Whether this date is in the future
   bool get isFuture => isAfter(DateTime.now());
 
-  /// Start of the day (00:00:00)
+  // ─────────────────────────────────────────
+  // EXISTING — Utility
+  // ─────────────────────────────────────────
+
+  /// Start of the day — 2024-06-15 00:00:00
   DateTime get startOfDay => DateTime(year, month, day);
 
-  /// End of the day (23:59:59)
+  /// End of the day — 2024-06-15 23:59:59
   DateTime get endOfDay => DateTime(year, month, day, 23, 59, 59, 999);
 }

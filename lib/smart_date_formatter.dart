@@ -16,3 +16,4 @@ library smart_date_formatter;
 
 export 'src/formatter.dart';
 export 'src/extensions.dart';
+export 'src/date_format_helper.dart';

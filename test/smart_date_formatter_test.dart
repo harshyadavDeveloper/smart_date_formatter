@@ -156,4 +156,69 @@ void main() {
       expect(d.minute, 59);
     });
   });
+
+  group('DateFormatHelper & format() extension v0.1.0', () {
+    final date = DateTime(2024, 6, 15, 14, 30, 45);
+    final midnight = DateTime(2024, 6, 15, 0, 0, 0);
+
+    test('dd-MM-yyyy', () {
+      expect(date.format('dd-MM-yyyy'), '15-06-2024');
+    });
+
+    test('MM/dd/yyyy', () {
+      expect(date.format('MM/dd/yyyy'), '06/15/2024');
+    });
+
+    test('MMM dd, yyyy', () {
+      expect(date.format('MMM dd, yyyy'), 'Jun 15, 2024');
+    });
+
+    test('MMMM', () {
+      expect(date.format('MMMM'), 'June');
+    });
+
+    test('EEEE', () {
+      expect(date.format('EEEE'), 'Saturday');
+    });
+
+    test('EEE', () {
+      expect(date.format('EEE'), 'Sat');
+    });
+
+    test('yy', () {
+      expect(date.format('yy'), '24');
+    });
+
+    test('HH:mm:ss — 24 hour', () {
+      expect(date.format('HH:mm:ss'), '14:30:45');
+    });
+
+    test('hh:mm a — 12 hour PM', () {
+      expect(date.format('hh:mm a'), '02:30 PM');
+    });
+
+    test('hh:mm a — 12 hour midnight', () {
+      expect(midnight.format('hh:mm a'), '12:00 AM');
+    });
+
+    test('toReadable', () {
+      expect(date.toReadable, 'Saturday, 15 June 2024');
+    });
+
+    test('toISO', () {
+      expect(date.toISO, '2024-06-15T14:30:45');
+    });
+
+    test('toTimeString', () {
+      expect(date.toTimeString, '14:30:45');
+    });
+
+    test('to12Hour', () {
+      expect(date.to12Hour, '02:30 PM');
+    });
+
+    test('to24Hour', () {
+      expect(date.to24Hour, '14:30');
+    });
+  });
 }

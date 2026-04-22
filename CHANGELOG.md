@@ -1,3 +1,14 @@
+## 0.1.0
+
+* Added `format(String pattern)` extension — custom pattern-based formatting
+* Added `toReadable` — "Saturday, 15 June 2024"
+* Added `toISO` — "2024-06-15T14:30:00"
+* Added `toTimeString` — "14:30:00"
+* Added `to12Hour` — "02:30 PM"
+* Added `to24Hour` — "14:30"
+* Added `DateFormatHelper` class — zero dependency formatter
+* Supported tokens: dd, d, MM, MMM, MMMM, yyyy, yy, HH, hh, mm, ss, a, EEEE, EEE
+
 ## 0.0.4
 
 * Added missing CHANGELOG.md to comply with pub.dev requirements
