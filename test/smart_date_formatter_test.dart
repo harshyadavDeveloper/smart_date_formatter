@@ -221,4 +221,100 @@ void main() {
       expect(date.to24Hour, '14:30');
     });
   });
+
+  group('Date Calculations & Range v0.5.0', () {
+    final june15 = DateTime(2024, 6, 15); // Saturday
+
+    test('daysUntil — future', () {
+      final future = june15.add(const Duration(days: 10));
+      expect(june15.daysUntil(future), 10);
+    });
+
+    test('daysUntil — past', () {
+      final past = june15.subtract(const Duration(days: 5));
+      expect(june15.daysUntil(past), -5);
+    });
+
+    test('daysSince', () {
+      final past = june15.subtract(const Duration(days: 7));
+      expect(june15.daysSince(past), 7);
+    });
+
+    test('isBetween — inside range', () {
+      final start = june15.subtract(const Duration(days: 3));
+      final end = june15.add(const Duration(days: 3));
+      expect(june15.isBetween(start, end), true);
+    });
+
+    test('isBetween — outside range', () {
+      final start = june15.add(const Duration(days: 1));
+      final end = june15.add(const Duration(days: 5));
+      expect(june15.isBetween(start, end), false);
+    });
+
+    test('isBetween — on boundary', () {
+      expect(june15.isBetween(june15, june15), true);
+    });
+
+    test('addWorkingDays — skips weekend', () {
+      // Friday June 14 + 1 working day = Monday June 17
+      final friday = DateTime(2024, 6, 14);
+      final result = friday.addWorkingDays(1);
+      expect(result.weekday, DateTime.monday);
+    });
+
+    test('addWorkingDays — 5 days', () {
+      // Friday June 14 + 5 working days = Friday June 21
+      final friday = DateTime(2024, 6, 14);
+      final result = friday.addWorkingDays(5);
+      expect(result, DateTime(2024, 6, 21));
+    });
+
+    test('isWeekend — Saturday', () {
+      expect(DateTime(2024, 6, 22).isWeekend, true); // actual Saturday
+    });
+
+    test('isWeekday — Wednesday', () {
+      final actualWednesday = DateTime(2024, 6, 12); // real Wednesday
+      expect(actualWednesday.isWeekday, true);
+    });
+
+    test('age calculation', () {
+      final birthDate = DateTime(
+          DateTime.now().year - 25, DateTime.now().month, DateTime.now().day);
+      expect(birthDate.age, 25);
+    });
+
+    test('startOfWeek — Monday', () {
+      // Saturday June 15 → Monday June 10
+      expect(june15.startOfWeek, DateTime(2024, 6, 10));
+    });
+
+    test('endOfWeek — Sunday', () {
+      expect(june15.endOfWeek.weekday, DateTime.sunday);
+    });
+
+    test('startOfMonth', () {
+      expect(june15.startOfMonth, DateTime(2024, 6, 1));
+    });
+
+    test('endOfMonth — June has 30 days', () {
+      expect(june15.endOfMonth.day, 30);
+    });
+
+    test('startOfYear', () {
+      expect(june15.startOfYear, DateTime(2024, 1, 1));
+    });
+
+    test('endOfYear', () {
+      expect(june15.endOfYear.month, 12);
+      expect(june15.endOfYear.day, 31);
+    });
+
+    test('workingDaysUntil', () {
+      final monday = DateTime(2024, 6, 10);
+      final friday = DateTime(2024, 6, 14);
+      expect(monday.workingDaysUntil(friday), 4);
+    });
+  });
 }

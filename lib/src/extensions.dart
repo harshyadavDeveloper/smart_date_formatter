@@ -1,3 +1,5 @@
+import 'package:smart_date_formatter/src/date_calculations.dart';
+
 import 'formatter.dart';
 import 'date_format_helper.dart';
 
@@ -102,4 +104,69 @@ extension SmartDateExtension on DateTime {
 
   /// End of the day — 2024-06-15 23:59:59
   DateTime get endOfDay => DateTime(year, month, day, 23, 59, 59, 999);
+
+  // ─────────────────────────────────────────
+  // NEW v0.5.0 — Date Calculations & Range
+  // ─────────────────────────────────────────
+
+  /// Adds [days] working days — skips weekends
+  /// ```dart
+  /// DateTime.now().addWorkingDays(5)  // 5 business days later
+  /// DateTime.now().addWorkingDays(-3) // 3 business days ago
+  /// ```
+  DateTime addWorkingDays(int days) =>
+      DateCalculations.addWorkingDays(this, days);
+
+  /// Days until [other] date — positive if future, negative if past
+  /// ```dart
+  /// DateTime.now().daysUntil(deadline) // 15
+  /// ```
+  int daysUntil(DateTime other) => DateCalculations.daysBetween(this, other);
+
+  /// Days since [other] date
+  /// ```dart
+  /// DateTime.now().daysSince(joinDate) // 30
+  /// ```
+  int daysSince(DateTime other) => DateCalculations.daysBetween(other, this);
+
+  /// Whether this date falls between [start] and [end] (inclusive)
+  /// ```dart
+  /// someDate.isBetween(startDate, endDate) // true/false
+  /// ```
+  bool isBetween(DateTime start, DateTime end) =>
+      DateCalculations.isBetween(this, start, end);
+
+  /// Whether this date is a weekend (Saturday or Sunday)
+  bool get isWeekend => DateCalculations.isWeekend(this);
+
+  /// Whether this date is a weekday (Monday–Friday)
+  bool get isWeekday => DateCalculations.isWeekday(this);
+
+  /// Age in years from this date to today
+  /// ```dart
+  /// DateTime(1999, 5, 20).age // 25
+  /// ```
+  int get age => DateCalculations.age(this);
+
+  /// Start of the week — Monday 00:00:00
+  DateTime get startOfWeek => DateCalculations.startOfWeek(this);
+
+  /// End of the week — Sunday 23:59:59
+  DateTime get endOfWeek => DateCalculations.endOfWeek(this);
+
+  /// Start of the month — 1st 00:00:00
+  DateTime get startOfMonth => DateCalculations.startOfMonth(this);
+
+  /// End of the month — last day 23:59:59
+  DateTime get endOfMonth => DateCalculations.endOfMonth(this);
+
+  /// Start of the year — Jan 1 00:00:00
+  DateTime get startOfYear => DateCalculations.startOfYear(this);
+
+  /// End of the year — Dec 31 23:59:59
+  DateTime get endOfYear => DateCalculations.endOfYear(this);
+
+  /// Number of working days between this and [other]
+  int workingDaysUntil(DateTime other) =>
+      DateCalculations.workingDaysBetween(this, other);
 }

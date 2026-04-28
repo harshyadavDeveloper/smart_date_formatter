@@ -1,3 +1,18 @@
+## 0.5.0
+
+* Added `addWorkingDays(n)` — adds working days skipping weekends
+* Added `daysUntil(date)` — days between two dates
+* Added `daysSince(date)` — days since a date
+* Added `isBetween(start, end)` — range check
+* Added `isWeekend` — Saturday or Sunday check
+* Added `isWeekday` — Monday to Friday check
+* Added `age` — age in years from birthdate
+* Added `startOfWeek` / `endOfWeek`
+* Added `startOfMonth` / `endOfMonth`
+* Added `startOfYear` / `endOfYear`
+* Added `workingDaysUntil(date)` — working days count
+* Added `DateCalculations` class
+
 ## 0.1.0
 
 * Added `format(String pattern)` extension — custom pattern-based formatting
