@@ -1,3 +1,14 @@
+## 0.9.0
+
+* Added `SdfLocale` — built-in localization support
+* Supported locales: English, Hindi, Spanish, French, Japanese, Arabic
+* Added `SmartDateFormatter(locale: SdfLocale.hi)` constructor
+* Added `timeAgoIn(SdfLocale)` DateTime extension
+* Added `SdfLocale.fromCode(String)` — locale by code string
+* Added `SmartParser` — natural language to DateTime
+* SmartParser supports: today, tomorrow, yesterday, next/last week/month/year,
+  in N days/weeks/months, N days/weeks ago, next/last weekday
+
 ## 0.5.0
 
 * Added `addWorkingDays(n)` — adds working days skipping weekends

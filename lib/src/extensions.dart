@@ -1,4 +1,5 @@
 import 'package:smart_date_formatter/src/date_calculations.dart';
+import 'package:smart_date_formatter/src/localization.dart';
 
 import 'formatter.dart';
 import 'date_format_helper.dart';
@@ -17,6 +18,14 @@ extension SmartDateExtension on DateTime {
   /// DateTime.now().add(Duration(days: 1)).timeAgo       // "Tomorrow"
   /// ```
   String get timeAgo => _formatter.format(this);
+
+  /// Returns relative time in given locale
+  /// ```dart
+  /// DateTime.now().subtract(Duration(hours:2)).timeAgoIn(SdfLocale.hi)
+  /// // "2 घंटे पहले"
+  /// ```
+  String timeAgoIn(SdfLocale locale) =>
+      SmartDateFormatter(locale: locale).format(this);
 
   /// Returns calendar string
   /// ```dart

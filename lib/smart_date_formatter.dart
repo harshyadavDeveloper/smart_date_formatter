@@ -18,3 +18,5 @@ export 'src/formatter.dart';
 export 'src/extensions.dart';
 export 'src/date_format_helper.dart';
 export 'src/date_calculations.dart';
+export 'src/localization.dart';
+export 'src/smart_parser.dart';

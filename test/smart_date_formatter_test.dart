@@ -317,4 +317,147 @@ void main() {
       expect(monday.workingDaysUntil(friday), 4);
     });
   });
+
+  group('Localization — SdfLocale v0.9.0', () {
+    final date = DateTime(2024, 6, 15, 14, 30, 0);
+    final now = DateTime(2024, 6, 15, 16, 30, 0); // 2 hours later
+
+    test('English — default', () {
+      const f = SmartDateFormatter();
+      expect(f.format(date, now: now), '2 hours ago');
+    });
+
+    test('Hindi — 2 ghante pehle', () {
+      const f = SmartDateFormatter(locale: SdfLocale.hi);
+      expect(f.format(date, now: now), '2 घंटे पहले');
+    });
+
+    test('Spanish — horas atrás', () {
+      const f = SmartDateFormatter(locale: SdfLocale.es);
+      expect(f.format(date, now: now), '2 horas atrás');
+    });
+
+    test('French — heures', () {
+      const f = SmartDateFormatter(locale: SdfLocale.fr);
+      expect(f.format(date, now: now), contains('heures'));
+    });
+
+    test('Japanese — 時間前', () {
+      const f = SmartDateFormatter(locale: SdfLocale.ja);
+      expect(f.format(date, now: now), '2 時間前');
+    });
+
+    test('Arabic — ساعات مضت', () {
+      const f = SmartDateFormatter(locale: SdfLocale.ar);
+      expect(f.format(date, now: now), contains('ساعات مضت'));
+    });
+
+    test('SdfLocale.fromCode hi', () {
+      expect(SdfLocale.fromCode('hi').code, 'hi');
+    });
+
+    test('SdfLocale.fromCode unknown falls back to en', () {
+      expect(SdfLocale.fromCode('xyz').code, 'en');
+    });
+
+    test('timeAgoIn extension', () {
+      expect(
+        const SmartDateFormatter(locale: SdfLocale.hi).format(date, now: now),
+        contains('घंटे'),
+      );
+    });
+
+    test('supported locales list', () {
+      expect(SdfLocale.supported,
+          containsAll(['en', 'hi', 'es', 'fr', 'ja', 'ar']));
+    });
+  });
+
+  group('SmartParser v0.9.0', () {
+    final now = DateTime(2024, 6, 15, 12, 0, 0); // Saturday
+
+    test('today', () {
+      expect(SmartParser.parse('today', now: now), DateTime(2024, 6, 15));
+    });
+
+    test('tomorrow', () {
+      expect(SmartParser.parse('tomorrow', now: now), DateTime(2024, 6, 16));
+    });
+
+    test('yesterday', () {
+      expect(SmartParser.parse('yesterday', now: now), DateTime(2024, 6, 14));
+    });
+
+    test('in 3 days', () {
+      expect(SmartParser.parse('in 3 days', now: now), DateTime(2024, 6, 18));
+    });
+
+    test('in 2 weeks', () {
+      expect(SmartParser.parse('in 2 weeks', now: now), DateTime(2024, 6, 29));
+    });
+
+    test('in 1 month', () {
+      expect(SmartParser.parse('in 1 month', now: now), DateTime(2024, 7, 15));
+    });
+
+    test('3 days ago', () {
+      expect(SmartParser.parse('3 days ago', now: now), DateTime(2024, 6, 12));
+    });
+
+    test('2 weeks ago', () {
+      expect(SmartParser.parse('2 weeks ago', now: now), DateTime(2024, 6, 1));
+    });
+
+    test('next monday', () {
+      final result = SmartParser.parse('next monday', now: now);
+      expect(result?.weekday, DateTime.monday);
+    });
+
+    test('last friday', () {
+      final result = SmartParser.parse('last friday', now: now);
+      expect(result?.weekday, DateTime.friday);
+    });
+
+    test('next week', () {
+      expect(SmartParser.parse('next week', now: now), DateTime(2024, 6, 22));
+    });
+
+    test('last week', () {
+      expect(SmartParser.parse('last week', now: now), DateTime(2024, 6, 8));
+    });
+
+    test('next month', () {
+      expect(SmartParser.parse('next month', now: now), DateTime(2024, 7, 15));
+    });
+
+    test('last year', () {
+      expect(SmartParser.parse('last year', now: now), DateTime(2023, 6, 15));
+    });
+
+    test('invalid returns null', () {
+      expect(SmartParser.parse('blah blah', now: now), null);
+    });
+
+    test('canParse — valid', () {
+      expect(SmartParser.canParse('tomorrow'), true);
+    });
+
+    test('canParse — invalid', () {
+      expect(SmartParser.canParse('random text'), false);
+    });
+
+    test('parseOrThrow — throws on invalid', () {
+      expect(
+        () => SmartParser.parseOrThrow('invalid', now: now),
+        throwsA(isA<FormatException>()),
+      );
+    });
+
+    test('standard date string fallback', () {
+      expect(
+        SmartParser.parse('2024-01-15', now: now),
+        DateTime(2024, 1, 15),
+      );
+    });
+  });
 }
