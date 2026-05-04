@@ -4,13 +4,26 @@
 /// ```dart
 /// import 'package:smart_date_formatter/smart_date_formatter.dart';
 ///
-/// // Using extensions (easiest)
-/// print(DateTime.now().subtract(Duration(hours: 2)).timeAgo); // "2 hours ago"
-/// print(DateTime.now().calendar);  // "Today"
+/// // Relative time
+/// DateTime.now().subtract(Duration(hours: 2)).timeAgo;  // "2 hours ago"
 ///
-/// // Using the class directly (for custom labels)
-/// final formatter = SmartDateFormatter();
-/// print(formatter.format(someDate));
+/// // Custom format
+/// DateTime.now().format('dd-MM-yyyy');                   // "15-06-2024"
+///
+/// // Localization
+/// SmartDateFormatter(locale: SdfLocale.hi).format(date); // "2 घंटे पहले"
+///
+/// // Natural language parsing
+/// SmartParser.parse("next monday");                       // DateTime
+///
+/// // Auto-refreshing widget
+/// TimeAgoText(date: message.sentAt)
+///
+/// // Countdown widget
+/// CountdownText(target: event.startsAt, format: '{d}d {h}h {m}m {s}s')
+///
+/// // Date ranges
+/// DateRangeHelper.thisMonth()  // DateRange(start, end)
 /// ```
 library smart_date_formatter;
 
@@ -20,3 +33,6 @@ export 'src/date_format_helper.dart';
 export 'src/date_calculations.dart';
 export 'src/localization.dart';
 export 'src/smart_parser.dart';
+export 'src/date_range_helper.dart';
+export 'src/widgets/time_ago_text.dart';
+export 'src/widgets/countdown_text.dart';

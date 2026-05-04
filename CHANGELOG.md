@@ -1,3 +1,15 @@
+## 1.0.0
+
+* 🎉 Stable release!
+* Added `TimeAgoText` widget — auto-refreshing relative time widget
+* Added `CountdownText` widget — live countdown to a target DateTime
+* Added `DateRangeHelper` — ready-made date ranges for DB queries
+* Added `DateRange` class with `contains()`, `overlaps()`, `days`
+* Ranges: today, yesterday, tomorrow, thisWeek, lastWeek, nextWeek,
+  thisMonth, lastMonth, nextMonth, thisYear, lastYear,
+  lastNDays(n), nextNDays(n), custom(s,e), quarter(q), currentQuarter
+* Stable API — no breaking changes planned
+
 ## 0.9.0
 
 * Added `SdfLocale` — built-in localization support

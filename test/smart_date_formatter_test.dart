@@ -460,4 +460,108 @@ void main() {
       );
     });
   });
+
+  group('DateRange & DateRangeHelper v1.0.0', () {
+    final now = DateTime(2024, 6, 15, 12, 0, 0); // Saturday
+
+    test('today range contains today', () {
+      final range = DateRangeHelper.today(now: now);
+      expect(range.contains(now), true);
+    });
+
+    test('today range does not contain tomorrow', () {
+      final range = DateRangeHelper.today(now: now);
+      expect(range.contains(now.add(const Duration(days: 1))), false);
+    });
+
+    test('yesterday range', () {
+      final range = DateRangeHelper.yesterday(now: now);
+      expect(range.start.day, 14);
+      expect(range.end.day, 14);
+    });
+
+    test('thisWeek contains today', () {
+      final range = DateRangeHelper.thisWeek(now: now);
+      expect(range.contains(now), true);
+    });
+
+    test('thisWeek starts on Monday', () {
+      final range = DateRangeHelper.thisWeek(now: now);
+      expect(range.start.weekday, DateTime.monday);
+    });
+
+    test('thisWeek ends on Sunday', () {
+      final range = DateRangeHelper.thisWeek(now: now);
+      expect(range.end.weekday, DateTime.sunday);
+    });
+
+    test('thisMonth starts on 1st', () {
+      final range = DateRangeHelper.thisMonth(now: now);
+      expect(range.start.day, 1);
+    });
+
+    test('thisMonth ends on 30th for June', () {
+      final range = DateRangeHelper.thisMonth(now: now);
+      expect(range.end.day, 30);
+    });
+
+    test('lastNDays — 7 days', () {
+      final range = DateRangeHelper.lastNDays(7, now: now);
+      expect(range.days, 7);
+    });
+
+    test('lastNDays — 30 days', () {
+      final range = DateRangeHelper.lastNDays(30, now: now);
+      expect(range.days, 30);
+    });
+
+    test('nextNDays — 7 days', () {
+      final range = DateRangeHelper.nextNDays(7, now: now);
+      expect(range.days, 7);
+    });
+
+    test('custom range', () {
+      final start = DateTime(2024, 1, 1);
+      final end = DateTime(2024, 12, 31);
+      final range = DateRangeHelper.custom(start, end);
+      expect(range.contains(DateTime(2024, 6, 15)), true);
+      expect(range.contains(DateTime(2025, 1, 1)), false);
+    });
+
+    test('quarter Q1', () {
+      final range = DateRangeHelper.quarter(1, now: now);
+      expect(range.start.month, 1);
+      expect(range.end.month, 3);
+    });
+
+    test('quarter Q2', () {
+      final range = DateRangeHelper.quarter(2, now: now);
+      expect(range.start.month, 4);
+      expect(range.end.month, 6);
+    });
+
+    test('currentQuarter for June = Q2', () {
+      final range = DateRangeHelper.currentQuarter(now: now);
+      expect(range.start.month, 4);
+    });
+
+    test('thisYear starts Jan 1', () {
+      final range = DateRangeHelper.thisYear(now: now);
+      expect(range.start, DateTime(2024, 1, 1));
+    });
+
+    test('DateRange.overlaps', () {
+      final r1 =
+          DateRangeHelper.custom(DateTime(2024, 1, 1), DateTime(2024, 6, 30));
+      final r2 =
+          DateRangeHelper.custom(DateTime(2024, 6, 1), DateTime(2024, 12, 31));
+      expect(r1.overlaps(r2), true);
+    });
+
+    test('DateRange.days count', () {
+      final range =
+          DateRangeHelper.custom(DateTime(2024, 6, 1), DateTime(2024, 6, 7));
+      expect(range.days, 7);
+    });
+  });
 }
