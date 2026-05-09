@@ -22,6 +22,16 @@
 </p>
 
 <p align="center">
+  <a href="https://smart-date-formatter.netlify.app/">
+    <img src="https://img.shields.io/badge/🌐 Live Playground-Try it now!-brightgreen?style=for-the-badge" alt="Live Playground"/>
+  </a>
+</p>
+
+<p align="center">
+  <b>👉 <a href="https://smart-date-formatter.netlify.app/">Try the Interactive Playground</a> — no installation needed!</b>
+</p>
+
+<p align="center">
   The <b>complete</b> Flutter DateTime toolkit.<br/>
   Format • Parse • Calculate • Localize • Widget-Ready
 </p>
@@ -30,22 +40,22 @@
 
 ## ✨ Features
 
-| Feature | Description |
-|---|---|
-| ⏱️ **Relative time** | `"Just now"`, `"2 hours ago"`, `"Last week"` |
-| 📅 **Calendar strings** | `"Today"`, `"Yesterday"`, `"Monday"`, `"12 Jan 2024"` |
-| 🕐 **Short timestamps** | `"2:30 PM"`, `"Mon 4:15 PM"`, `"5 Mar"` |
-| 🎨 **Custom formats** | `format('dd-MM-yyyy')`, `toReadable`, `to12Hour` |
-| 🧮 **Date calculations** | `addWorkingDays`, `daysUntil`, `isBetween`, `age` |
-| 📆 **Range helpers** | `startOfWeek`, `endOfMonth`, `startOfYear` |
-| 🌍 **Localization** | English, Hindi, Spanish, French, Japanese, Arabic |
-| 🔍 **Smart parsing** | `"tomorrow"` → DateTime, `"next monday"` → DateTime |
-| ⏱️ **TimeAgoText** | Auto-refreshing Flutter widget |
-| ⏳ **CountdownText** | Live countdown Flutter widget |
-| 🗄️ **DateRangeHelper** | Ready-made ranges for DB queries |
-| ✅ **Boolean helpers** | `isToday`, `isWeekend`, `isPast`, `isFuture` |
-| 🪶 **Zero dependencies** | Pure Flutter — no external packages |
-| 💙 **Null safe** | Full Dart null safety support |
+| Feature                  | Description                                           |
+| ------------------------ | ----------------------------------------------------- |
+| ⏱️ **Relative time**     | `"Just now"`, `"2 hours ago"`, `"Last week"`          |
+| 📅 **Calendar strings**  | `"Today"`, `"Yesterday"`, `"Monday"`, `"12 Jan 2024"` |
+| 🕐 **Short timestamps**  | `"2:30 PM"`, `"Mon 4:15 PM"`, `"5 Mar"`               |
+| 🎨 **Custom formats**    | `format('dd-MM-yyyy')`, `toReadable`, `to12Hour`      |
+| 🧮 **Date calculations** | `addWorkingDays`, `daysUntil`, `isBetween`, `age`     |
+| 📆 **Range helpers**     | `startOfWeek`, `endOfMonth`, `startOfYear`            |
+| 🌍 **Localization**      | English, Hindi, Spanish, French, Japanese, Arabic     |
+| 🔍 **Smart parsing**     | `"tomorrow"` → DateTime, `"next monday"` → DateTime   |
+| ⏱️ **TimeAgoText**       | Auto-refreshing Flutter widget                        |
+| ⏳ **CountdownText**     | Live countdown Flutter widget                         |
+| 🗄️ **DateRangeHelper**   | Ready-made ranges for DB queries                      |
+| ✅ **Boolean helpers**   | `isToday`, `isWeekend`, `isPast`, `isFuture`          |
+| 🪶 **Zero dependencies** | Pure Flutter — no external packages                   |
+| 💙 **Null safe**         | Full Dart null safety support                         |
 
 ---
 
@@ -120,23 +130,23 @@ DateTime.now().add(Duration(days: 1)).timeAgo;           // "Tomorrow"
 DateTime.now().add(Duration(days: 4)).timeAgo;           // "in 4 days"
 ```
 
-| Difference | Output |
-|---|---|
-| < 10 seconds | `Just now` |
+| Difference   | Output           |
+| ------------ | ---------------- |
+| < 10 seconds | `Just now`       |
 | < 60 seconds | `45 seconds ago` |
-| 1 minute | `1 minute ago` |
+| 1 minute     | `1 minute ago`   |
 | < 60 minutes | `25 minutes ago` |
-| 1 hour | `1 hour ago` |
-| < 24 hours | `5 hours ago` |
-| 1 day back | `Yesterday` |
-| 1 day ahead | `Tomorrow` |
-| < 7 days | `3 days ago` |
-| ~1 week | `Last week` |
-| < 30 days | `2 weeks ago` |
-| ~1 month | `Last month` |
-| < 12 months | `3 months ago` |
-| ~1 year | `Last year` |
-| 2+ years | `2 years ago` |
+| 1 hour       | `1 hour ago`     |
+| < 24 hours   | `5 hours ago`    |
+| 1 day back   | `Yesterday`      |
+| 1 day ahead  | `Tomorrow`       |
+| < 7 days     | `3 days ago`     |
+| ~1 week      | `Last week`      |
+| < 30 days    | `2 weeks ago`    |
+| ~1 month     | `Last month`     |
+| < 12 months  | `3 months ago`   |
+| ~1 year      | `Last year`      |
+| 2+ years     | `2 years ago`    |
 
 ---
 
@@ -184,22 +194,22 @@ date.toTimeString;                 // "14:30:45"
 
 **Supported tokens:**
 
-| Token | Output | Example |
-|---|---|---|
-| `dd` | Day with zero | `05` |
-| `d` | Day without zero | `5` |
-| `MM` | Month number | `06` |
-| `MMM` | Short month | `Jun` |
-| `MMMM` | Full month | `June` |
-| `yyyy` | 4-digit year | `2024` |
-| `yy` | 2-digit year | `24` |
-| `HH` | 24-hour | `14` |
-| `hh` | 12-hour | `02` |
-| `mm` | Minutes | `30` |
-| `ss` | Seconds | `45` |
-| `a` | AM/PM | `PM` |
-| `EEE` | Short weekday | `Sat` |
-| `EEEE` | Full weekday | `Saturday` |
+| Token  | Output           | Example    |
+| ------ | ---------------- | ---------- |
+| `dd`   | Day with zero    | `05`       |
+| `d`    | Day without zero | `5`        |
+| `MM`   | Month number     | `06`       |
+| `MMM`  | Short month      | `Jun`      |
+| `MMMM` | Full month       | `June`     |
+| `yyyy` | 4-digit year     | `2024`     |
+| `yy`   | 2-digit year     | `24`       |
+| `HH`   | 24-hour          | `14`       |
+| `hh`   | 12-hour          | `02`       |
+| `mm`   | Minutes          | `30`       |
+| `ss`   | Seconds          | `45`       |
+| `a`    | AM/PM            | `PM`       |
+| `EEE`  | Short weekday    | `Sat`      |
+| `EEEE` | Full weekday     | `Saturday` |
 
 ---
 
@@ -269,14 +279,14 @@ SmartDateFormatter(locale: SdfLocale.fromCode('hi'));
 SdfLocale.supported; // ['en', 'hi', 'es', 'fr', 'ja', 'ar']
 ```
 
-| Code | Language | Example |
-|---|---|---|
-| `en` | English | `2 hours ago` |
-| `hi` | Hindi | `2 घंटे पहले` |
-| `es` | Spanish | `2 horas atrás` |
-| `fr` | French | `2 heures` |
-| `ja` | Japanese | `2 時間前` |
-| `ar` | Arabic | `ساعات مضت 2` |
+| Code | Language | Example         |
+| ---- | -------- | --------------- |
+| `en` | English  | `2 hours ago`   |
+| `hi` | Hindi    | `2 घंटे पहले`   |
+| `es` | Spanish  | `2 horas atrás` |
+| `fr` | French   | `2 heures`      |
+| `ja` | Japanese | `2 時間前`      |
+| `ar` | Arabic   | `ساعات مضت 2`   |
 
 ---
 
@@ -331,15 +341,15 @@ TimeAgoText(
 )
 ```
 
-| Property | Type | Default | Description |
-|---|---|---|---|
-| `date` | `DateTime` | required | Date to display |
-| `style` | `TextStyle?` | null | Text style |
-| `locale` | `SdfLocale` | `SdfLocale.en` | Language |
-| `refreshRate` | `Duration` | 60 seconds | Auto-refresh interval |
-| `prefix` | `String` | `''` | Text before time string |
-| `suffix` | `String` | `''` | Text after time string |
-| `textAlign` | `TextAlign?` | null | Text alignment |
+| Property      | Type         | Default        | Description             |
+| ------------- | ------------ | -------------- | ----------------------- |
+| `date`        | `DateTime`   | required       | Date to display         |
+| `style`       | `TextStyle?` | null           | Text style              |
+| `locale`      | `SdfLocale`  | `SdfLocale.en` | Language                |
+| `refreshRate` | `Duration`   | 60 seconds     | Auto-refresh interval   |
+| `prefix`      | `String`     | `''`           | Text before time string |
+| `suffix`      | `String`     | `''`           | Text after time string  |
+| `textAlign`   | `TextAlign?` | null           | Text alignment          |
 
 ---
 
@@ -367,15 +377,15 @@ CountdownText(
 
 **Format tokens:**
 
-| Token | Description | Example |
-|---|---|---|
-| `{d}` | Days | `3` |
-| `{h}` | Hours (0-23) | `5` |
-| `{m}` | Minutes (0-59) | `30` |
-| `{s}` | Seconds (0-59) | `45` |
-| `{hh}` | Hours with zero | `05` |
-| `{mm}` | Minutes with zero | `30` |
-| `{ss}` | Seconds with zero | `45` |
+| Token  | Description       | Example |
+| ------ | ----------------- | ------- |
+| `{d}`  | Days              | `3`     |
+| `{h}`  | Hours (0-23)      | `5`     |
+| `{m}`  | Minutes (0-59)    | `30`    |
+| `{s}`  | Seconds (0-59)    | `45`    |
+| `{hh}` | Hours with zero   | `05`    |
+| `{mm}` | Minutes with zero | `30`    |
+| `{ss}` | Seconds with zero | `45`    |
 
 ---
 
@@ -428,6 +438,7 @@ range.duration;                   // Duration
 ## 💡 Real World Examples
 
 ### Chat App
+
 ```dart
 // Message timestamp — auto updates!
 TimeAgoText(
@@ -438,6 +449,7 @@ TimeAgoText(
 ```
 
 ### Flash Sale Countdown
+
 ```dart
 CountdownText(
   target: saleEndsAt,
@@ -453,6 +465,7 @@ CountdownText(
 ```
 
 ### Analytics Dashboard
+
 ```dart
 // Filter by date range
 final range = DateRangeHelper.lastNDays(30);
@@ -463,6 +476,7 @@ final stats = await analyticsService.getStats(
 ```
 
 ### Company Invoice
+
 ```dart
 // Exact format for invoices/reports
 Text('Date: ${invoiceDate.format('dd-MM-yyyy')}')
@@ -470,6 +484,7 @@ Text('Date: ${invoiceDate.format('dd-MM-yyyy')}')
 ```
 
 ### Multilingual App
+
 ```dart
 // Detect user locale and show accordingly
 final locale = SdfLocale.fromCode(
@@ -479,6 +494,7 @@ Text(post.createdAt.timeAgoIn(locale))
 ```
 
 ### Deadline Checker
+
 ```dart
 // Red if past, green if future
 Text(
@@ -523,39 +539,39 @@ TimeAgoText(date: date)   // auto-refreshing widget!
 
 ### DateTime Extensions
 
-| Extension | Return | Description |
-|---|---|---|
-| `.timeAgo` | `String` | Relative time |
-| `.timeAgoIn(locale)` | `String` | Relative time in locale |
-| `.calendar` | `String` | Calendar string |
-| `.shortTimestamp` | `String` | Short timestamp |
-| `.format(pattern)` | `String` | Custom pattern |
-| `.toReadable` | `String` | Full readable date |
-| `.toISO` | `String` | ISO 8601 |
-| `.to12Hour` | `String` | 12-hour time |
-| `.to24Hour` | `String` | 24-hour time |
-| `.toTimeString` | `String` | HH:mm:ss |
-| `.isToday` | `bool` | Today? |
-| `.isYesterday` | `bool` | Yesterday? |
-| `.isTomorrow` | `bool` | Tomorrow? |
-| `.isPast` | `bool` | In the past? |
-| `.isFuture` | `bool` | In the future? |
-| `.isWeekend` | `bool` | Weekend? |
-| `.isWeekday` | `bool` | Weekday? |
-| `.isBetween(s,e)` | `bool` | In range? |
-| `.age` | `int` | Age in years |
-| `.daysUntil(d)` | `int` | Days until date |
-| `.daysSince(d)` | `int` | Days since date |
-| `.addWorkingDays(n)` | `DateTime` | Add working days |
-| `.workingDaysUntil(d)` | `int` | Working days count |
-| `.startOfDay` | `DateTime` | 00:00:00 |
-| `.endOfDay` | `DateTime` | 23:59:59 |
-| `.startOfWeek` | `DateTime` | Monday 00:00 |
-| `.endOfWeek` | `DateTime` | Sunday 23:59 |
-| `.startOfMonth` | `DateTime` | 1st 00:00 |
-| `.endOfMonth` | `DateTime` | Last day 23:59 |
-| `.startOfYear` | `DateTime` | Jan 1 00:00 |
-| `.endOfYear` | `DateTime` | Dec 31 23:59 |
+| Extension              | Return     | Description             |
+| ---------------------- | ---------- | ----------------------- |
+| `.timeAgo`             | `String`   | Relative time           |
+| `.timeAgoIn(locale)`   | `String`   | Relative time in locale |
+| `.calendar`            | `String`   | Calendar string         |
+| `.shortTimestamp`      | `String`   | Short timestamp         |
+| `.format(pattern)`     | `String`   | Custom pattern          |
+| `.toReadable`          | `String`   | Full readable date      |
+| `.toISO`               | `String`   | ISO 8601                |
+| `.to12Hour`            | `String`   | 12-hour time            |
+| `.to24Hour`            | `String`   | 24-hour time            |
+| `.toTimeString`        | `String`   | HH:mm:ss                |
+| `.isToday`             | `bool`     | Today?                  |
+| `.isYesterday`         | `bool`     | Yesterday?              |
+| `.isTomorrow`          | `bool`     | Tomorrow?               |
+| `.isPast`              | `bool`     | In the past?            |
+| `.isFuture`            | `bool`     | In the future?          |
+| `.isWeekend`           | `bool`     | Weekend?                |
+| `.isWeekday`           | `bool`     | Weekday?                |
+| `.isBetween(s,e)`      | `bool`     | In range?               |
+| `.age`                 | `int`      | Age in years            |
+| `.daysUntil(d)`        | `int`      | Days until date         |
+| `.daysSince(d)`        | `int`      | Days since date         |
+| `.addWorkingDays(n)`   | `DateTime` | Add working days        |
+| `.workingDaysUntil(d)` | `int`      | Working days count      |
+| `.startOfDay`          | `DateTime` | 00:00:00                |
+| `.endOfDay`            | `DateTime` | 23:59:59                |
+| `.startOfWeek`         | `DateTime` | Monday 00:00            |
+| `.endOfWeek`           | `DateTime` | Sunday 23:59            |
+| `.startOfMonth`        | `DateTime` | 1st 00:00               |
+| `.endOfMonth`          | `DateTime` | Last day 23:59          |
+| `.startOfYear`         | `DateTime` | Jan 1 00:00             |
+| `.endOfYear`           | `DateTime` | Dec 31 23:59            |
 
 ---
 
