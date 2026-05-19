@@ -1,3 +1,12 @@
+## 1.2.1
+
+* Refactored example app — modular tab structure
+* Added shared widgets: ExampleTile, SectionHeader, CodeBox
+* Stricter analysis_options.yaml rules
+* No API changes — pure code quality improvement
+
+...
+
 ## 1.2.0
 
 * Added 10 new languages — total 16 supported!
@@ -7,7 +16,6 @@
 * Updated `SdfLocale.supported` — now 16 locales
 * Updated `SdfLocale.fromCode()` — supports all 16 codes
 
-## 1.1.0
 ...
 
 ## 1.1.0
@@ -23,7 +31,6 @@
 * Added `previousMonday` through `previousSunday`
 * Added `copyWith` — create modified copies of DateTime
 
-## 1.0.1
 ...
 
 ## 1.0.1
