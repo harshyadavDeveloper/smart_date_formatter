@@ -1,8 +1,19 @@
 /// Built-in locale definitions for SmartDateFormatter.
 class SdfLocale {
+  /// Locale identifier code (e.g. 'en', 'hi', 'es')
   final String code;
+
+  /// Label map containing all time strings for this locale
   final Map<String, String> labels;
 
+  /// Creates a custom [SdfLocale] with given [code] and [labels].
+  ///
+  /// ```dart
+  /// const SdfLocale(
+  ///   code: 'my',
+  ///   labels: {'justNow': 'just now', ...},
+  /// )
+  /// ```
   const SdfLocale({required this.code, required this.labels});
 
   /// English (default)

@@ -9,6 +9,13 @@ class SmartDateFormatter {
   /// ```
   final SdfLocale locale;
 
+  /// Creates a [SmartDateFormatter] with optional [locale].
+  ///
+  /// ```dart
+  /// SmartDateFormatter()                        // English (default)
+  /// SmartDateFormatter(locale: SdfLocale.hi)   // Hindi
+  /// SmartDateFormatter(locale: SdfLocale.es)   // Spanish
+  /// ```
   const SmartDateFormatter({
     this.locale = SdfLocale.en,
     @Deprecated('Use locale instead. Will be removed in 1.0.0')

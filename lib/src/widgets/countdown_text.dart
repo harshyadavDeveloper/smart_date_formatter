@@ -44,6 +44,15 @@ class CountdownText extends StatefulWidget {
   /// Whether to show days when 0
   final bool showZeroDays;
 
+  /// Creates a [CountdownText] widget.
+  ///
+  /// ```dart
+  /// CountdownText(
+  ///   target: event.startsAt,
+  ///   format: '{d}d {h}h {m}m {s}s',
+  ///   onFinished: () => print('Done!'),
+  /// )
+  /// ```
   const CountdownText({
     super.key,
     required this.target,

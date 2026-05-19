@@ -4,7 +4,7 @@ import '../widgets/code_box.dart';
 import '../widgets/example_tile.dart';
 import '../widgets/section_header.dart';
 
-/// Demonstrates [DateTime.calendar] and [DateTime.shortTimestamp].
+/// Demonstrates calendar and shortTimestamp extensions.
 class CalendarTab extends StatelessWidget {
   const CalendarTab({super.key});
 

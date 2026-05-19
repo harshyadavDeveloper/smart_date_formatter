@@ -6,6 +6,7 @@ class DateRange {
   /// End of the range (inclusive)
   final DateTime end;
 
+  /// Creates a [DateRange] with given [start] and [end] dates.
   const DateRange({required this.start, required this.end});
 
   /// Duration of this range

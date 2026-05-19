@@ -95,7 +95,7 @@ class LocaleTab extends StatelessWidget {
   Widget _badge(String code) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
         decoration: BoxDecoration(
-          color: Colors.indigo.withValues(alpha: 0.1),
+          color: Colors.indigo.shade50,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(

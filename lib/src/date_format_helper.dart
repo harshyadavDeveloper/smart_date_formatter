@@ -1,3 +1,5 @@
+/// Lightweight pattern-based date formatter.
+/// No external dependencies — pure Dart.
 class DateFormatHelper {
   static const List<String> _weekdaysFull = [
     'Monday',
@@ -49,6 +51,28 @@ class DateFormatHelper {
     'Dec'
   ];
 
+  /// Formats [date] using the given [pattern].
+  ///
+  /// Supported tokens:
+  /// - `dd` → day with leading zero (01–31)
+  /// - `d`  → day without leading zero (1–31)
+  /// - `MM` → month with leading zero (01–12)
+  /// - `MMM`  → short month name (Jan–Dec)
+  /// - `MMMM` → full month name (January–December)
+  /// - `yyyy` → 4-digit year (2024)
+  /// - `yy`   → 2-digit year (24)
+  /// - `HH` → 24-hour with leading zero (00–23)
+  /// - `hh` → 12-hour with leading zero (01–12)
+  /// - `mm` → minutes with leading zero (00–59)
+  /// - `ss` → seconds with leading zero (00–59)
+  /// - `a`    → AM/PM
+  /// - `EEEE` → full weekday (Monday–Sunday)
+  /// - `EEE`  → short weekday (Mon–Sun)
+  ///
+  /// ```dart
+  /// DateFormatHelper.format(DateTime(2024,6,15,14,30), 'dd-MM-yyyy')
+  /// // "15-06-2024"
+  /// ```
   static String format(DateTime date, String pattern) {
     final hour12 = date.hour == 0
         ? 12

@@ -44,6 +44,15 @@ class TimeAgoText extends StatefulWidget {
   /// Optional suffix — e.g. " ago" added after the time string
   final String suffix;
 
+  /// Creates a [TimeAgoText] widget.
+  ///
+  /// ```dart
+  /// TimeAgoText(
+  ///   date: message.sentAt,
+  ///   locale: SdfLocale.hi,
+  ///   refreshRate: Duration(seconds: 30),
+  /// )
+  /// ```
   const TimeAgoText({
     super.key,
     required this.date,

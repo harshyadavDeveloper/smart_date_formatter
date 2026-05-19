@@ -4,7 +4,7 @@ import '../widgets/code_box.dart';
 import '../widgets/example_tile.dart';
 import '../widgets/section_header.dart';
 
-/// Demonstrates [DateTime.format] and related extensions.
+/// Demonstrates format() and related extensions.
 class FormatTab extends StatelessWidget {
   const FormatTab({super.key});
 
