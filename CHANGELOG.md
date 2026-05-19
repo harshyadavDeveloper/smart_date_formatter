@@ -1,3 +1,15 @@
+## 1.2.0
+
+* Added 10 new languages — total 16 supported!
+* International: German (de), Russian (ru), Chinese Simplified (zh)
+* Indian: Marathi (mr), Gujarati (gu), Bengali (bn),
+          Tamil (ta), Telugu (te), Kannada (kn), Punjabi (pa)
+* Updated `SdfLocale.supported` — now 16 locales
+* Updated `SdfLocale.fromCode()` — supports all 16 codes
+
+## 1.1.0
+...
+
 ## 1.1.0
 
 * Added `quarter` — quarter of year (1–4)

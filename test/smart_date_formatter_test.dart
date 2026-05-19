@@ -745,4 +745,82 @@ void main() {
       expect(result.day, 15); // day unchanged
     });
   });
+
+  group('Localization v1.2.0 — New Languages', () {
+    final date2h = DateTime(2024, 6, 15, 14, 30);
+    final now = DateTime(2024, 6, 15, 16, 30);
+
+    test('German — Stunden her', () {
+      const f = SmartDateFormatter(locale: SdfLocale.de);
+      expect(f.format(date2h, now: now), '2 Stunden her');
+    });
+
+    test('Russian — часов назад', () {
+      const f = SmartDateFormatter(locale: SdfLocale.ru);
+      expect(f.format(date2h, now: now), contains('назад'));
+    });
+
+    test('Chinese — 小时前', () {
+      const f = SmartDateFormatter(locale: SdfLocale.zh);
+      expect(f.format(date2h, now: now), '2 小时前');
+    });
+
+    test('Marathi — तास पूर्वी', () {
+      const f = SmartDateFormatter(locale: SdfLocale.mr);
+      expect(f.format(date2h, now: now), contains('तास'));
+    });
+
+    test('Gujarati — કલાક પહેલાં', () {
+      const f = SmartDateFormatter(locale: SdfLocale.gu);
+      expect(f.format(date2h, now: now), contains('કલાક'));
+    });
+
+    test('Bengali — ঘন্টা আগে', () {
+      const f = SmartDateFormatter(locale: SdfLocale.bn);
+      expect(f.format(date2h, now: now), contains('ঘন্টা'));
+    });
+
+    test('Tamil — மணி நேரம் முன்பு', () {
+      const f = SmartDateFormatter(locale: SdfLocale.ta);
+      expect(f.format(date2h, now: now), contains('மணி'));
+    });
+
+    test('Telugu — గంటలు క్రితం', () {
+      const f = SmartDateFormatter(locale: SdfLocale.te);
+      expect(f.format(date2h, now: now), contains('గంట'));
+    });
+
+    test('Kannada — ಗಂಟೆಗಳ ಹಿಂದೆ', () {
+      const f = SmartDateFormatter(locale: SdfLocale.kn);
+      expect(f.format(date2h, now: now), contains('ಗಂಟೆ'));
+    });
+
+    test('Punjabi — ਘੰਟੇ ਪਹਿਲਾਂ', () {
+      const f = SmartDateFormatter(locale: SdfLocale.pa);
+      expect(f.format(date2h, now: now), contains('ਘੰਟ'));
+    });
+
+    test('fromCode de', () {
+      expect(SdfLocale.fromCode('de').code, 'de');
+    });
+
+    test('fromCode mr', () {
+      expect(SdfLocale.fromCode('mr').code, 'mr');
+    });
+
+    test('fromCode bn', () {
+      expect(SdfLocale.fromCode('bn').code, 'bn');
+    });
+
+    test('supported list has 16 locales', () {
+      expect(SdfLocale.supported.length, 16);
+    });
+
+    test('timeAgoIn Gujarati', () {
+      expect(
+        const SmartDateFormatter(locale: SdfLocale.gu).format(date2h, now: now),
+        contains('કલાક'),
+      );
+    });
+  });
 }
