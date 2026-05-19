@@ -1,3 +1,19 @@
+## 1.1.0
+
+* Added `quarter` — quarter of year (1–4)
+* Added `isQ1`, `isQ2`, `isQ3`, `isQ4`
+* Added `weekOfYear` — week number (1–53)
+* Added `dayOfYear` — day number (1–366)
+* Added `isLeapYear`
+* Added `isMorning`, `isAfternoon`, `isEvening`, `isNight`
+* Added `isSameDay`, `isSameWeek`, `isSameMonth`, `isSameYear`
+* Added `nextMonday` through `nextSunday`
+* Added `previousMonday` through `previousSunday`
+* Added `copyWith` — create modified copies of DateTime
+
+## 1.0.1
+...
+
 ## 1.0.1
 
 - Added live playground link in README

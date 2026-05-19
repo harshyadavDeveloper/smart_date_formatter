@@ -564,4 +564,185 @@ void main() {
       expect(range.days, 7);
     });
   });
+
+  group('Extensions v1.1.0', () {
+    final june15 = DateTime(2024, 6, 15, 14, 30); // Saturday, Q2
+    final jan1 = DateTime(2024, 1, 1); // Monday, Q1
+    final dec31 = DateTime(2024, 12, 31); // Tuesday, Q4
+
+    // ── Quarter ────────────────────────────────
+    test('quarter — June is Q2', () {
+      expect(june15.quarter, 2);
+    });
+
+    test('quarter — January is Q1', () {
+      expect(jan1.quarter, 1);
+    });
+
+    test('quarter — December is Q4', () {
+      expect(dec31.quarter, 4);
+    });
+
+    test('isQ2 — June', () {
+      expect(june15.isQ2, true);
+      expect(june15.isQ1, false);
+    });
+
+    // ── Week & Day of Year ─────────────────────
+    test('dayOfYear — Jan 1 = 1', () {
+      expect(jan1.dayOfYear, 1);
+    });
+
+    test('dayOfYear — Dec 31 leap year = 366', () {
+      expect(dec31.dayOfYear, 366); // 2024 is leap year
+    });
+
+    test('weekOfYear — Jan 1', () {
+      expect(jan1.weekOfYear, 1);
+    });
+
+    // ── Leap Year ──────────────────────────────
+    test('isLeapYear — 2024 is leap', () {
+      expect(DateTime(2024, 1, 1).isLeapYear, true);
+    });
+
+    test('isLeapYear — 2023 is not leap', () {
+      expect(DateTime(2023, 1, 1).isLeapYear, false);
+    });
+
+    test('isLeapYear — 2000 is leap', () {
+      expect(DateTime(2000, 1, 1).isLeapYear, true);
+    });
+
+    test('isLeapYear — 1900 is not leap', () {
+      expect(DateTime(1900, 1, 1).isLeapYear, false);
+    });
+
+    // ── Time of Day ────────────────────────────
+    test('isMorning — 9AM', () {
+      expect(DateTime(2024, 6, 15, 9, 0).isMorning, true);
+    });
+
+    test('isAfternoon — 2PM', () {
+      expect(DateTime(2024, 6, 15, 14, 0).isAfternoon, true);
+    });
+
+    test('isEvening — 6PM', () {
+      expect(DateTime(2024, 6, 15, 18, 0).isEvening, true);
+    });
+
+    test('isNight — 10PM', () {
+      expect(DateTime(2024, 6, 15, 22, 0).isNight, true);
+    });
+
+    test('isNight — 3AM', () {
+      expect(DateTime(2024, 6, 15, 3, 0).isNight, true);
+    });
+
+    test('isMorning — 2PM is not morning', () {
+      expect(DateTime(2024, 6, 15, 14, 0).isMorning, false);
+    });
+
+    // ── isSameDay/Week/Month/Year ──────────────
+    test('isSameDay — same date different time', () {
+      expect(
+        DateTime(2024, 6, 15, 9, 0).isSameDay(DateTime(2024, 6, 15, 22, 0)),
+        true,
+      );
+    });
+
+    test('isSameDay — different dates', () {
+      expect(
+        DateTime(2024, 6, 15).isSameDay(DateTime(2024, 6, 16)),
+        false,
+      );
+    });
+
+    test('isSameWeek — same week', () {
+      // Monday Jun 10 and Saturday Jun 15 — same week
+      expect(
+        DateTime(2024, 6, 10).isSameWeek(DateTime(2024, 6, 15)),
+        true,
+      );
+    });
+
+    test('isSameWeek — different weeks', () {
+      expect(
+        DateTime(2024, 6, 10).isSameWeek(DateTime(2024, 6, 17)),
+        false,
+      );
+    });
+
+    test('isSameMonth — same month', () {
+      expect(
+        DateTime(2024, 6, 1).isSameMonth(DateTime(2024, 6, 30)),
+        true,
+      );
+    });
+
+    test('isSameMonth — different months', () {
+      expect(
+        DateTime(2024, 6, 1).isSameMonth(DateTime(2024, 7, 1)),
+        false,
+      );
+    });
+
+    test('isSameYear — same year', () {
+      expect(jan1.isSameYear(dec31), true);
+    });
+
+    test('isSameYear — different years', () {
+      expect(
+        DateTime(2024, 1, 1).isSameYear(DateTime(2023, 1, 1)),
+        false,
+      );
+    });
+
+    // ── Next / Previous Weekday ────────────────
+    test('nextMonday from Saturday Jun 15', () {
+      // Jun 15 is Saturday → next Monday is Jun 17
+      expect(june15.nextMonday, DateTime(2024, 6, 17));
+    });
+
+    test('nextFriday from Saturday Jun 15', () {
+      // Jun 15 is Saturday → next Friday is Jun 21
+      expect(june15.nextFriday, DateTime(2024, 6, 21));
+    });
+
+    test('nextSunday from Saturday Jun 15', () {
+      // Jun 15 is Saturday → next Sunday is Jun 16
+      expect(june15.nextSunday, DateTime(2024, 6, 16));
+    });
+
+    test('previousMonday from Saturday Jun 15', () {
+      // Jun 15 Saturday → previous Monday Jun 10
+      expect(june15.previousMonday, DateTime(2024, 6, 10));
+    });
+
+    test('previousFriday from Saturday Jun 15', () {
+      // Jun 15 Saturday → previous Friday Jun 14
+      expect(june15.previousFriday, DateTime(2024, 6, 14));
+    });
+
+    // ── copyWith ───────────────────────────────
+    test('copyWith — change hour', () {
+      final result = june15.copyWith(hour: 0, minute: 0, second: 0);
+      expect(result.hour, 0);
+      expect(result.minute, 0);
+      expect(result.day, 15); // day unchanged
+    });
+
+    test('copyWith — change day', () {
+      final result = june15.copyWith(day: 1);
+      expect(result.day, 1);
+      expect(result.month, 6); // month unchanged
+    });
+
+    test('copyWith — change month and year', () {
+      final result = june15.copyWith(year: 2025, month: 1);
+      expect(result.year, 2025);
+      expect(result.month, 1);
+      expect(result.day, 15); // day unchanged
+    });
+  });
 }
