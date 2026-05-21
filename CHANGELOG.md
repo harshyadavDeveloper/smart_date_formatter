@@ -1,35 +1,53 @@
+## 1.3.0
+
+- Added `DateBadge` widget — smart date chip/badge
+  - Styles: chip, outlined, flat
+  - Auto colors: green (today), blue (tomorrow), orange (yesterday)
+  - Custom label support
+- Added `SmartDateText` widget — all-in-one date text widget
+  - Modes: timeAgo, calendar, shortTimestamp, custom, auto
+  - Auto-refresh support
+  - prefix/suffix support
+- Added `RelativeDateBuilder` widget — builder pattern for custom UI
+  - Provides timeAgo, calendar, shortTimestamp strings
+  - Auto-refresh support
+
 ## 1.2.1
 
-* Refactored example app — modular tab structure
-* Added shared widgets: ExampleTile, SectionHeader, CodeBox
-* Stricter analysis_options.yaml rules
-* No API changes — pure code quality improvement
+...
+
+## 1.2.1
+
+- Refactored example app — modular tab structure
+- Added shared widgets: ExampleTile, SectionHeader, CodeBox
+- Stricter analysis_options.yaml rules
+- No API changes — pure code quality improvement
 
 ...
 
 ## 1.2.0
 
-* Added 10 new languages — total 16 supported!
-* International: German (de), Russian (ru), Chinese Simplified (zh)
-* Indian: Marathi (mr), Gujarati (gu), Bengali (bn),
-          Tamil (ta), Telugu (te), Kannada (kn), Punjabi (pa)
-* Updated `SdfLocale.supported` — now 16 locales
-* Updated `SdfLocale.fromCode()` — supports all 16 codes
+- Added 10 new languages — total 16 supported!
+- International: German (de), Russian (ru), Chinese Simplified (zh)
+- Indian: Marathi (mr), Gujarati (gu), Bengali (bn),
+  Tamil (ta), Telugu (te), Kannada (kn), Punjabi (pa)
+- Updated `SdfLocale.supported` — now 16 locales
+- Updated `SdfLocale.fromCode()` — supports all 16 codes
 
 ...
 
 ## 1.1.0
 
-* Added `quarter` — quarter of year (1–4)
-* Added `isQ1`, `isQ2`, `isQ3`, `isQ4`
-* Added `weekOfYear` — week number (1–53)
-* Added `dayOfYear` — day number (1–366)
-* Added `isLeapYear`
-* Added `isMorning`, `isAfternoon`, `isEvening`, `isNight`
-* Added `isSameDay`, `isSameWeek`, `isSameMonth`, `isSameYear`
-* Added `nextMonday` through `nextSunday`
-* Added `previousMonday` through `previousSunday`
-* Added `copyWith` — create modified copies of DateTime
+- Added `quarter` — quarter of year (1–4)
+- Added `isQ1`, `isQ2`, `isQ3`, `isQ4`
+- Added `weekOfYear` — week number (1–53)
+- Added `dayOfYear` — day number (1–366)
+- Added `isLeapYear`
+- Added `isMorning`, `isAfternoon`, `isEvening`, `isNight`
+- Added `isSameDay`, `isSameWeek`, `isSameMonth`, `isSameYear`
+- Added `nextMonday` through `nextSunday`
+- Added `previousMonday` through `previousSunday`
+- Added `copyWith` — create modified copies of DateTime
 
 ...
 

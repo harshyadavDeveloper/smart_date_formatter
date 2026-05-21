@@ -36,3 +36,6 @@ export 'src/smart_parser.dart';
 export 'src/date_range_helper.dart';
 export 'src/widgets/time_ago_text.dart';
 export 'src/widgets/countdown_text.dart';
+export 'src/widgets/date_badge.dart';
+export 'src/widgets/smart_date_text.dart';
+export 'src/widgets/relative_date_builder.dart';

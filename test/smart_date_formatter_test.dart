@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:smart_date_formatter/smart_date_formatter.dart';
 
@@ -821,6 +822,181 @@ void main() {
         const SmartDateFormatter(locale: SdfLocale.gu).format(date2h, now: now),
         contains('કલાક'),
       );
+    });
+  });
+
+  group('Widgets v1.3.0', () {
+    testWidgets('DateBadge — today shows TODAY', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: DateBadge(date: DateTime.now()),
+          ),
+        ),
+      );
+    });
+
+    testWidgets('DateBadge chip style — today', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: DateBadge(
+              date: DateTime.now(),
+              style: DateBadgeStyle.chip,
+            ),
+          ),
+        ),
+      );
+      expect(find.textContaining('TODAY'), findsOneWidget);
+    });
+
+    testWidgets('DateBadge outlined — tomorrow', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: DateBadge(
+              date: DateTime.now().add(const Duration(days: 1)),
+              style: DateBadgeStyle.outlined,
+            ),
+          ),
+        ),
+      );
+      expect(find.textContaining('TOMORROW'), findsOneWidget);
+    });
+
+    testWidgets('DateBadge flat — yesterday', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: DateBadge(
+              date: DateTime.now().subtract(const Duration(days: 1)),
+              style: DateBadgeStyle.flat,
+            ),
+          ),
+        ),
+      );
+      expect(find.textContaining('YESTERDAY'), findsOneWidget);
+    });
+
+    testWidgets('DateBadge custom label', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: DateBadge(
+              date: DateTime.now(),
+              label: 'NEW',
+            ),
+          ),
+        ),
+      );
+    });
+
+    testWidgets('SmartDateText — timeAgo mode', (tester) async {
+      final date = DateTime.now().subtract(const Duration(hours: 2));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SmartDateText(
+              date: date,
+              mode: SmartDateMode.timeAgo,
+            ),
+          ),
+        ),
+      );
+      expect(find.textContaining('hours ago'), findsOneWidget);
+    });
+
+    testWidgets('SmartDateText — calendar mode', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SmartDateText(
+              date: DateTime.now(),
+              mode: SmartDateMode.calendar,
+            ),
+          ),
+        ),
+      );
+      expect(find.text('Today'), findsOneWidget);
+    });
+
+    testWidgets('SmartDateText — custom mode', (tester) async {
+      final date = DateTime(2024, 6, 15);
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SmartDateText(
+              date: date,
+              mode: SmartDateMode.custom,
+              pattern: 'dd-MM-yyyy',
+            ),
+          ),
+        ),
+      );
+      expect(find.text('15-06-2024'), findsOneWidget);
+    });
+
+    testWidgets('SmartDateText — auto mode recent date uses timeAgo',
+        (tester) async {
+      final date = DateTime.now().subtract(const Duration(hours: 2));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SmartDateText(
+              date: date,
+              mode: SmartDateMode.auto,
+            ),
+          ),
+        ),
+      );
+      expect(find.textContaining('ago'), findsOneWidget);
+    });
+
+    testWidgets('SmartDateText — prefix and suffix', (tester) async {
+      final date = DateTime.now().subtract(const Duration(hours: 1));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SmartDateText(
+              date: date,
+              mode: SmartDateMode.timeAgo,
+              prefix: 'Posted ',
+              suffix: ' ✓',
+            ),
+          ),
+        ),
+      );
+      expect(find.textContaining('Posted'), findsOneWidget);
+      expect(find.textContaining('✓'), findsOneWidget);
+    });
+
+    testWidgets('RelativeDateBuilder — provides timeAgo', (tester) async {
+      final date = DateTime.now().subtract(const Duration(hours: 3));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: RelativeDateBuilder(
+              date: date,
+              builder: (ctx, timeAgo, calendar, timestamp, d) => Text(timeAgo),
+            ),
+          ),
+        ),
+      );
+      expect(find.textContaining('hours ago'), findsOneWidget);
+    });
+
+    testWidgets('RelativeDateBuilder — provides calendar', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: RelativeDateBuilder(
+              date: DateTime.now(),
+              builder: (ctx, timeAgo, calendar, timestamp, d) => Text(calendar),
+            ),
+          ),
+        ),
+      );
+      expect(find.text('Today'), findsOneWidget);
     });
   });
 }
