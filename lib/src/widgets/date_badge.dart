@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../extensions.dart';
 import '../localization.dart';
-import '../formatter.dart';
 
 /// Style options for [DateBadge].
 enum DateBadgeStyle {
@@ -60,16 +59,18 @@ class DateBadge extends StatelessWidget {
     this.uppercase = true,
   });
 
+  // ✅ Naya — direct simple strings
   String _buildLabel() {
     if (label != null) return uppercase ? label!.toUpperCase() : label!;
-    final formatter = SmartDateFormatter(locale: locale);
+
     String text;
+
     if (date.isToday) {
       text = 'Today';
     } else if (date.isYesterday) {
-      text = formatter.format(DateTime.now().subtract(const Duration(days: 1)));
+      text = 'Yesterday';
     } else if (date.isTomorrow) {
-      text = formatter.format(DateTime.now().add(const Duration(days: 1)));
+      text = 'Tomorrow';
     } else if (date.isFuture && date.difference(DateTime.now()).inDays < 7) {
       text = _weekdayShort(date.weekday);
     } else if (date.isPast && DateTime.now().difference(date).inDays < 7) {
@@ -77,6 +78,7 @@ class DateBadge extends StatelessWidget {
     } else {
       text = '${date.day} ${_monthShort(date.month)}';
     }
+
     return uppercase ? text.toUpperCase() : text;
   }
 
