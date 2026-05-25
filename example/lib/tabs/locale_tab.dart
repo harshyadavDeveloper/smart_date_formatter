@@ -47,24 +47,30 @@ class LocaleTab extends StatelessWidget {
           final fmt = SmartDateFormatter(locale: l.$1);
           return Card(
             margin: const EdgeInsets.only(bottom: 10),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(children: [
-                    Text(l.$2, style: const TextStyle(fontSize: 20)),
-                    const SizedBox(width: 8),
-                    Text(l.$3,
+                  Row(
+                    children: [
+                      Text(l.$2, style: const TextStyle(fontSize: 20)),
+                      const SizedBox(width: 8),
+                      Text(
+                        l.$3,
                         style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            color: Colors.indigo)),
-                    const Spacer(),
-                    _badge(l.$1.code),
-                  ]),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Colors.indigo,
+                        ),
+                      ),
+                      const Spacer(),
+                      _badge(l.$1.code),
+                    ],
+                  ),
                   const Divider(height: 14),
                   _row('2h ago', fmt.format(date2h)),
                   _row('Yesterday', fmt.format(date1d)),
@@ -79,32 +85,33 @@ class LocaleTab extends StatelessWidget {
   }
 
   Widget _row(String label, String value) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 3),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(label,
-                style: const TextStyle(fontSize: 12, color: Colors.grey)),
-            Text(value,
-                style:
-                    const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-          ],
+    padding: const EdgeInsets.symmetric(vertical: 3),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+        Text(
+          value,
+          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
         ),
-      );
+      ],
+    ),
+  );
 
   Widget _badge(String code) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-        decoration: BoxDecoration(
-          color: Colors.indigo.shade50,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Text(
-          code,
-          style: const TextStyle(
-              fontSize: 10,
-              color: Colors.indigo,
-              fontFamily: 'monospace',
-              fontWeight: FontWeight.bold),
-        ),
-      );
+    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+    decoration: BoxDecoration(
+      color: Colors.indigo.shade50,
+      borderRadius: BorderRadius.circular(20),
+    ),
+    child: Text(
+      code,
+      style: const TextStyle(
+        fontSize: 10,
+        color: Colors.indigo,
+        fontFamily: 'monospace',
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+  );
 }

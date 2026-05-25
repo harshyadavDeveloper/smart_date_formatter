@@ -41,3 +41,5 @@ export 'src/widgets/smart_date_text.dart';
 export 'src/widgets/relative_date_builder.dart';
 export 'src/holiday_helper.dart';
 export 'src/recurrence_helper.dart';
+export 'src/streak_calculator.dart';
+export 'src/date_grouper.dart';

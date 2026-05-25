@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'tabs/analytics_tab.dart';
 import 'tabs/time_ago_tab.dart';
 import 'tabs/calendar_tab.dart';
 import 'tabs/format_tab.dart';
@@ -32,7 +33,7 @@ class ExampleHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 8,
+      length: 9,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.indigo,
@@ -64,6 +65,7 @@ class ExampleHomePage extends StatelessWidget {
               Tab(text: '🔍 Parser'),
               Tab(text: '⏳ Widgets'),
               Tab(text: '🗄 Ranges'),
+              Tab(text: '📊 Analytics'),
             ],
           ),
         ),
@@ -77,6 +79,7 @@ class ExampleHomePage extends StatelessWidget {
             ParserTab(),
             WidgetsTab(),
             RangesTab(),
+            AnalyticsTab(),
           ],
         ),
       ),

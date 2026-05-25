@@ -30,49 +30,55 @@ class WidgetsTab extends StatelessWidget {
             now.subtract(const Duration(seconds: 5)),
             SdfLocale.en,
             '🇬🇧 English',
-            Colors.indigo
+            Colors.indigo,
           ),
           (
             now.subtract(const Duration(minutes: 2)),
             SdfLocale.hi,
             '🇮🇳 Hindi',
-            Colors.orange
+            Colors.orange,
           ),
           (
             now.subtract(const Duration(hours: 3)),
             SdfLocale.mr,
             '🇮🇳 Marathi',
-            Colors.teal
+            Colors.teal,
           ),
           (
             now.subtract(const Duration(days: 1)),
             SdfLocale.ja,
             '🇯🇵 Japanese',
-            Colors.red
+            Colors.red,
           ),
           (
             now.subtract(const Duration(days: 8)),
             SdfLocale.de,
             '🇩🇪 German',
-            Colors.purple
+            Colors.purple,
           ),
-        ].map((item) => Card(
-              margin: const EdgeInsets.only(bottom: 8),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-              child: ListTile(
-                leading: Icon(Icons.access_time, color: item.$4),
-                title: Text(item.$3,
-                    style:
-                        TextStyle(color: item.$4, fontWeight: FontWeight.w600)),
-                trailing: TimeAgoText(
-                  date: item.$1,
-                  locale: item.$2,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 14),
+        ].map(
+          (item) => Card(
+            margin: const EdgeInsets.only(bottom: 8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: ListTile(
+              leading: Icon(Icons.access_time, color: item.$4),
+              title: Text(
+                item.$3,
+                style: TextStyle(color: item.$4, fontWeight: FontWeight.w600),
+              ),
+              trailing: TimeAgoText(
+                date: item.$1,
+                locale: item.$2,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
                 ),
               ),
-            )),
+            ),
+          ),
+        ),
 
         const SizedBox(height: 24),
 
@@ -93,26 +99,27 @@ class WidgetsTab extends StatelessWidget {
             '⚡ Flash Sale',
             now.add(const Duration(hours: 2)),
             '{hh}:{mm}:{ss}',
-            Colors.red
+            Colors.red,
           ),
           ('📅 End of Month', now.endOfMonth, '{d}d {h}h {m}m', Colors.teal),
           (
             '🎉 New Year',
             DateTime(now.year, 12, 31, 23, 59, 59),
             '{d}d {h}h {m}m {s}s',
-            Colors.indigo
+            Colors.indigo,
           ),
           (
             '📞 Meeting',
             now.add(const Duration(minutes: 45)),
             '{mm}m {ss}s',
-            Colors.orange
+            Colors.orange,
           ),
         ].map(
           (item) => Card(
             margin: const EdgeInsets.only(bottom: 8),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(12),
               child: Row(
@@ -121,14 +128,21 @@ class WidgetsTab extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(item.$1,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, color: item.$4)),
-                        Text('format: "${item.$3}"',
-                            style: const TextStyle(
-                                fontSize: 10,
-                                color: Colors.grey,
-                                fontFamily: 'monospace')),
+                        Text(
+                          item.$1,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: item.$4,
+                          ),
+                        ),
+                        Text(
+                          'format: "${item.$3}"',
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: Colors.grey,
+                            fontFamily: 'monospace',
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -137,9 +151,10 @@ class WidgetsTab extends StatelessWidget {
                     format: item.$3,
                     finishedText: '🎉 Done!',
                     style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: item.$4),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: item.$4,
+                    ),
                   ),
                 ],
               ),

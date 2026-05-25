@@ -1,3 +1,21 @@
+## 1.5.0
+
+- Added `StreakCalculator` — habit/attendance streak analysis
+  - `currentStreak()` — active streak count
+  - `longestStreak()` — best streak ever
+  - `isTodayCompleted()` — today check
+  - `totalCompleted()` — total days count
+  - `completionRate()` — percentage between dates
+  - `allStreaks()` — all streak runs as list
+  - `missedDays()` — missed days since start
+  - `lastCompletedDate()` — most recent date
+- Added `DateGrouper` — group dates by time period
+  - `byDay/byWeek/byMonth/byQuarter/byYear`
+  - `byHour/byWeekday`
+  - `countByDay/countByMonth/countByWeekday`
+  - `mostActiveDay/mostActiveWeekday/mostActiveHour`
+  - `averageGap()`
+
 ## 1.4.0
 
 - Added `HolidayHelper` — holiday detection and working day utilities

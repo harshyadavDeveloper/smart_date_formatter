@@ -43,14 +43,16 @@ class ParserTab extends StatelessWidget {
           final result = SmartParser.parse(expr);
           return Card(
             margin: const EdgeInsets.only(bottom: 6),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
             child: ListTile(
               dense: true,
               leading: CircleAvatar(
                 radius: 14,
-                backgroundColor:
-                    result != null ? Colors.green.shade50 : Colors.red.shade50,
+                backgroundColor: result != null
+                    ? Colors.green.shade50
+                    : Colors.red.shade50,
                 child: Icon(
                   result != null ? Icons.check : Icons.close,
                   color: result != null ? Colors.green : Colors.red,
@@ -60,15 +62,20 @@ class ParserTab extends StatelessWidget {
               title: Text(
                 '"$expr"',
                 style: const TextStyle(
-                    fontFamily: 'monospace',
-                    fontSize: 13,
-                    color: Colors.indigo,
-                    fontWeight: FontWeight.w600),
+                  fontFamily: 'monospace',
+                  fontSize: 13,
+                  color: Colors.indigo,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               trailing: result != null
-                  ? Text(result.format('dd MMM yyyy'),
+                  ? Text(
+                      result.format('dd MMM yyyy'),
                       style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 12))
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    )
                   : const Text('null', style: TextStyle(color: Colors.red)),
             ),
           );

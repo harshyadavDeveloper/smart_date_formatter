@@ -55,8 +55,9 @@ class RangesTab extends StatelessWidget {
           final containsToday = range.contains(now);
           return Card(
             margin: const EdgeInsets.only(bottom: 6),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               child: Column(
@@ -68,25 +69,31 @@ class RangesTab extends StatelessWidget {
                       Text(
                         'DateRangeHelper.${r.$1}',
                         style: const TextStyle(
-                            fontFamily: 'monospace',
-                            color: Colors.indigo,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12),
+                          fontFamily: 'monospace',
+                          color: Colors.indigo,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                        ),
                       ),
                       if (containsToday)
                         Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 6, vertical: 2),
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.green.shade50,
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(color: Colors.green.shade200),
                           ),
-                          child: const Text('today ✓',
-                              style: TextStyle(
-                                  fontSize: 9,
-                                  color: Colors.green,
-                                  fontWeight: FontWeight.bold)),
+                          child: const Text(
+                            'today ✓',
+                            style: TextStyle(
+                              fontSize: 9,
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                     ],
                   ),

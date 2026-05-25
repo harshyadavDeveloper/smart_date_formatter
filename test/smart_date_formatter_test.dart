@@ -1208,4 +1208,159 @@ void main() {
       );
     });
   });
+
+  group('StreakCalculator v1.5.0', () {
+    final dates = [
+      DateTime(2024, 6, 10),
+      DateTime(2024, 6, 11),
+      DateTime(2024, 6, 12),
+      DateTime(2024, 6, 14), // gap on 13th
+      DateTime(2024, 6, 15),
+    ];
+
+    test('longestStreak — 3 days', () {
+      expect(StreakCalculator.longestStreak(dates), 3);
+    });
+
+    test('totalCompleted', () {
+      expect(StreakCalculator.totalCompleted(dates), 5);
+    });
+
+    test('allStreaks — 2 streaks', () {
+      final streaks = StreakCalculator.allStreaks(dates);
+      expect(streaks.length, 2);
+      expect(streaks[0].length, 3);
+      expect(streaks[1].length, 2);
+    });
+
+    test('lastCompletedDate', () {
+      expect(
+        StreakCalculator.lastCompletedDate(dates),
+        DateTime(2024, 6, 15),
+      );
+    });
+
+    test('lastCompletedDate — empty returns null', () {
+      expect(StreakCalculator.lastCompletedDate([]), null);
+    });
+
+    test('isTodayCompleted — false for old dates', () {
+      expect(StreakCalculator.isTodayCompleted(dates), false);
+    });
+
+    test('isTodayCompleted — true when today included', () {
+      expect(
+        StreakCalculator.isTodayCompleted([DateTime.now()]),
+        true,
+      );
+    });
+
+    test('completionRate — 5 out of 6 days', () {
+      final rate = StreakCalculator.completionRate(
+        dates,
+        start: DateTime(2024, 6, 10),
+        end: DateTime(2024, 6, 15),
+      );
+      expect(rate, closeTo(0.833, 0.01));
+    });
+
+    test('currentStreak — 0 for old dates', () {
+      expect(StreakCalculator.currentStreak(dates), 0);
+    });
+
+    test('currentStreak — active streak', () {
+      final today = DateTime.now();
+      final activeDates = [
+        today.subtract(const Duration(days: 2)),
+        today.subtract(const Duration(days: 1)),
+        today,
+      ];
+      expect(StreakCalculator.currentStreak(activeDates), 3);
+    });
+  });
+
+  group('DateGrouper v1.5.0', () {
+    final dates = [
+      DateTime(2024, 6, 1, 9, 0),
+      DateTime(2024, 6, 1, 14, 0),
+      DateTime(2024, 6, 2, 10, 0),
+      DateTime(2024, 6, 8, 11, 0),
+      DateTime(2024, 7, 1, 9, 0),
+    ];
+
+    test('byDay — groups correctly', () {
+      final grouped = DateGrouper.byDay(dates);
+      expect(grouped['2024-06-01']?.length, 2);
+      expect(grouped['2024-06-02']?.length, 1);
+    });
+
+    test('byMonth — groups correctly', () {
+      final grouped = DateGrouper.byMonth(dates);
+      expect(grouped['2024-06']?.length, 4);
+      expect(grouped['2024-07']?.length, 1);
+    });
+
+    test('byYear — groups correctly', () {
+      final grouped = DateGrouper.byYear(dates);
+      expect(grouped['2024']?.length, 5);
+    });
+
+    test('byQuarter — groups correctly', () {
+      final grouped = DateGrouper.byQuarter(dates);
+      expect(grouped['2024-Q2']?.length, 4); // Jun dates only
+      expect(grouped['2024-Q3']?.length, 1); // Jul 1 only
+    });
+
+    test('byWeekday — groups correctly', () {
+      final grouped = DateGrouper.byWeekday(dates);
+      // June 1 2024 is Saturday
+      expect(grouped.containsKey('Saturday'), true);
+    });
+
+    test('byHour — groups correctly', () {
+      final grouped = DateGrouper.byHour(dates);
+      expect(grouped['09']?.length, 2);
+      expect(grouped['14']?.length, 1);
+    });
+
+    test('countByDay', () {
+      final counts = DateGrouper.countByDay(dates);
+      expect(counts['2024-06-01'], 2);
+    });
+
+    test('countByMonth', () {
+      final counts = DateGrouper.countByMonth(dates);
+      expect(counts['2024-06'], 4);
+    });
+
+    test('mostActiveDay', () {
+      expect(DateGrouper.mostActiveDay(dates), '2024-06-01');
+    });
+
+    test('mostActiveWeekday', () {
+      final result = DateGrouper.mostActiveWeekday(dates);
+      expect(result, isNotNull);
+    });
+
+    test('mostActiveHour', () {
+      expect(DateGrouper.mostActiveHour(dates), 9);
+    });
+
+    test('averageGap — not null', () {
+      expect(DateGrouper.averageGap(dates), isNotNull);
+    });
+
+    test('averageGap — single date returns null', () {
+      expect(DateGrouper.averageGap([DateTime.now()]), null);
+    });
+
+    test('mostActiveDay — empty returns null', () {
+      expect(DateGrouper.mostActiveDay([]), null);
+    });
+
+    test('byWeek — groups correctly', () {
+      final grouped = DateGrouper.byWeek(dates);
+      expect(grouped.isNotEmpty, true);
+    });
+  });
 }
