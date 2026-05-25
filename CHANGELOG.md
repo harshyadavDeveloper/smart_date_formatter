@@ -1,3 +1,18 @@
+## 1.4.0
+
+- Added `HolidayHelper` — holiday detection and working day utilities
+- Added `isHoliday()`, `isWorkingDay()` static methods
+- Added `addWorkingDays()` with holiday skip support
+- Added `workingDaysBetween()` with holiday skip support
+- Added `nextWorkingDay()`, `previousWorkingDay()`
+- Added `indianHolidays()`, `globalHolidays()` preset lists
+- Added `HolidayExtension` on DateTime
+- Added `RecurrenceHelper` — generate recurring date lists
+- Added `RecurrenceFrequency` enum: daily, weekly, monthly, yearly
+- Recurrence supports: count, until date, skipWeekends, skipHolidays
+- Added `RecurrenceHelper.daily/weekly/monthly/yearly` convenience methods
+- Added `RecurrenceHelper.nextOccurrence()`
+
 ## 1.3.0
 
 - Added `DateBadge` widget — smart date chip/badge

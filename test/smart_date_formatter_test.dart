@@ -999,4 +999,213 @@ void main() {
       expect(find.text('Today'), findsOneWidget);
     });
   });
+
+  group('HolidayHelper v1.4.0', () {
+    final christmas = DateTime(2024, 12, 25);
+    final republicDay = DateTime(2024, 1, 26);
+    final monday = DateTime(2024, 6, 17);
+    final saturday = DateTime(2024, 6, 22);
+
+    final holidays = [christmas, republicDay];
+
+    test('isHoliday — christmas is holiday', () {
+      expect(
+        HolidayHelper.isHoliday(christmas, holidays: holidays),
+        true,
+      );
+    });
+
+    test('isHoliday — random day is not holiday', () {
+      expect(
+        HolidayHelper.isHoliday(monday, holidays: holidays),
+        false,
+      );
+    });
+
+    test('isWorkingDay — Monday is working day', () {
+      expect(
+        HolidayHelper.isWorkingDay(monday, holidays: holidays),
+        true,
+      );
+    });
+
+    test('isWorkingDay — Saturday is not working day', () {
+      expect(
+        HolidayHelper.isWorkingDay(saturday, holidays: holidays),
+        false,
+      );
+    });
+
+    test('isWorkingDay — Christmas is not working day', () {
+      expect(
+        HolidayHelper.isWorkingDay(christmas, holidays: holidays),
+        false,
+      );
+    });
+
+    test('addWorkingDays — skips Christmas', () {
+      // Dec 23 (Mon) + 3 working days skipping Christmas (Wed)
+      // Dec 23 → Dec 24 (Tue) → skip Dec 25 (Christmas)
+      // → Dec 26 (Thu) → Dec 27 (Fri) = 3 days
+      final dec23 = DateTime(2024, 12, 23);
+      final result =
+          HolidayHelper.addWorkingDays(dec23, 3, holidays: [christmas]);
+      expect(result, DateTime(2024, 12, 27));
+    });
+
+    test('addWorkingDays — no holidays', () {
+      // Monday + 5 = next Monday (skip weekend)
+      final result = HolidayHelper.addWorkingDays(monday, 5, holidays: []);
+      expect(result, DateTime(2024, 6, 24));
+    });
+
+    test('workingDaysBetween — skips holiday', () {
+      // Dec 23 to Dec 27 = Mon, Tue, (skip Wed Christmas), Thu, Fri = 4
+      final dec23 = DateTime(2024, 12, 23);
+      final dec27 = DateTime(2024, 12, 27);
+      expect(
+        HolidayHelper.workingDaysBetween(dec23, dec27, holidays: [christmas]),
+        3,
+      );
+    });
+
+    test('nextWorkingDay — skips Christmas', () {
+      // Dec 24 (Tue) next working day skipping Christmas = Dec 26
+      final dec24 = DateTime(2024, 12, 24);
+      final result = HolidayHelper.nextWorkingDay(dec24, holidays: [christmas]);
+      expect(result, DateTime(2024, 12, 26));
+    });
+
+    test('holidaysInYear — filters by year', () {
+      final allHolidays = [
+        DateTime(2024, 12, 25),
+        DateTime(2023, 12, 25),
+        DateTime(2024, 1, 26),
+      ];
+      expect(
+        HolidayHelper.holidaysInYear(2024, holidays: allHolidays).length,
+        2,
+      );
+    });
+
+    test('indianHolidays — has 8 holidays', () {
+      expect(HolidayHelper.indianHolidays(2024).length, 8);
+    });
+
+    // Extension tests
+    test('isHoliday extension', () {
+      expect(christmas.isHoliday(holidays: holidays), true);
+    });
+
+    test('isWorkingDay extension — Monday', () {
+      expect(monday.isWorkingDay(), true);
+    });
+
+    test('addWorkingDaysWithHolidays extension', () {
+      final dec23 = DateTime(2024, 12, 23);
+      final result = dec23.addWorkingDaysWithHolidays(3, holidays: [christmas]);
+      expect(result, DateTime(2024, 12, 27));
+    });
+  });
+
+  group('RecurrenceHelper v1.4.0', () {
+    final start = DateTime(2024, 6, 3); // Monday
+
+    test('daily — count 5', () {
+      final dates = RecurrenceHelper.daily(start: start, count: 5);
+      expect(dates.length, 5);
+      expect(dates.first, start);
+      expect(dates.last, DateTime(2024, 6, 7));
+    });
+
+    test('daily — skip weekends', () {
+      final dates =
+          RecurrenceHelper.daily(start: start, count: 5, skipWeekends: true);
+      // Mon, Tue, Wed, Thu, Fri — no weekends
+      expect(
+          dates.every((d) =>
+              d.weekday != DateTime.saturday && d.weekday != DateTime.sunday),
+          true);
+    });
+
+    test('daily — until date', () {
+      final dates = RecurrenceHelper.daily(
+        start: start,
+        until: DateTime(2024, 6, 7),
+      );
+      expect(dates.last.isBefore(DateTime(2024, 6, 8)), true);
+    });
+
+    test('weekly — count 4', () {
+      final dates = RecurrenceHelper.weekly(start: start, count: 4);
+      expect(dates.length, 4);
+      // Each 7 days apart
+      expect(dates[1].difference(dates[0]).inDays, 7);
+    });
+
+    test('monthly — count 3', () {
+      final dates =
+          RecurrenceHelper.monthly(start: DateTime(2024, 1, 15), count: 3);
+      expect(dates.length, 3);
+      expect(dates[0].month, 1);
+      expect(dates[1].month, 2);
+      expect(dates[2].month, 3);
+    });
+
+    test('yearly — count 3', () {
+      final dates = RecurrenceHelper.yearly(start: start, count: 3);
+      expect(dates.length, 3);
+      expect(dates[0].year, 2024);
+      expect(dates[1].year, 2025);
+      expect(dates[2].year, 2026);
+    });
+
+    test('nextOccurrence — daily', () {
+      expect(
+        RecurrenceHelper.nextOccurrence(start, RecurrenceFrequency.daily),
+        DateTime(2024, 6, 4),
+      );
+    });
+
+    test('nextOccurrence — weekly', () {
+      expect(
+        RecurrenceHelper.nextOccurrence(start, RecurrenceFrequency.weekly),
+        DateTime(2024, 6, 10),
+      );
+    });
+
+    test('nextOccurrence — monthly', () {
+      expect(
+        RecurrenceHelper.nextOccurrence(start, RecurrenceFrequency.monthly),
+        DateTime(2024, 7, 3),
+      );
+    });
+
+    test('nextOccurrence — yearly', () {
+      expect(
+        RecurrenceHelper.nextOccurrence(start, RecurrenceFrequency.yearly),
+        DateTime(2025, 6, 3),
+      );
+    });
+
+    test('skip holidays in recurrence', () {
+      final holiday = DateTime(2024, 6, 4); // Tuesday
+      final dates = RecurrenceHelper.daily(
+        start: start,
+        count: 3,
+        skipHolidays: [holiday],
+      );
+      expect(dates.contains(holiday), false);
+    });
+
+    test('assert — count and until both null throws', () {
+      expect(
+        () => RecurrenceHelper.generate(
+          start: start,
+          frequency: RecurrenceFrequency.daily,
+        ),
+        throwsA(isA<AssertionError>()),
+      );
+    });
+  });
 }
