@@ -50,9 +50,8 @@ class ParserTab extends StatelessWidget {
               dense: true,
               leading: CircleAvatar(
                 radius: 14,
-                backgroundColor: result != null
-                    ? Colors.green.shade50
-                    : Colors.red.shade50,
+                backgroundColor:
+                    result != null ? Colors.green.shade50 : Colors.red.shade50,
                 child: Icon(
                   result != null ? Icons.check : Icons.close,
                   color: result != null ? Colors.green : Colors.red,
