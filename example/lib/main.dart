@@ -20,8 +20,7 @@ class SmartDateDemoApp extends StatelessWidget {
     return MaterialApp(
       title: 'smart_date_formatter Playground',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          colorSchemeSeed: Colors.indigo, useMaterial3: true),
+      theme: ThemeData(colorSchemeSeed: Colors.indigo, useMaterial3: true),
       home: const PlaygroundHome(),
     );
   }
@@ -43,11 +42,9 @@ class PlaygroundHome extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('smart_date_formatter',
-                  style: TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold)),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               Text('Interactive Playground v1.5.0',
-                  style:
-                      TextStyle(fontSize: 11, color: Colors.white70)),
+                  style: TextStyle(fontSize: 11, color: Colors.white70)),
             ],
           ),
           bottom: const TabBar(

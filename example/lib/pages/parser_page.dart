@@ -96,8 +96,8 @@ class _ParserPageState extends State<ParserPage> {
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: _canParse
-                          ? Colors.green.withOpacity(0.08)
-                          : Colors.red.withOpacity(0.08),
+                          ? Colors.green.withValues(alpha: 0.08)
+                          : Colors.red.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
                         color: _canParse
@@ -143,8 +143,8 @@ class _ParserPageState extends State<ParserPage> {
               leading: CircleAvatar(
                 radius: 14,
                 backgroundColor: result != null
-                    ? Colors.green.withOpacity(0.15)
-                    : Colors.red.withOpacity(0.15),
+                    ? Colors.green.withValues(alpha: 0.15)
+                    : Colors.red.withValues(alpha: 0.15),
                 child: Icon(
                   result != null ? Icons.check : Icons.close,
                   color: result != null ? Colors.green : Colors.red,

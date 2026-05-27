@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:smart_date_formatter/smart_date_formatter.dart';
-import '../widgets/demo_tile.dart';
 import '../widgets/demo_section.dart';
 import '../widgets/demo_code_box.dart';
 
@@ -41,21 +40,19 @@ class CalendarPage extends StatelessWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: Colors.indigo.withOpacity(0.1),
+                    color: Colors.indigo.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Center(
                     child: Text('${date.day}',
                         style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.indigo)),
+                            fontWeight: FontWeight.bold, color: Colors.indigo)),
                   ),
                 ),
                 title: Text(date.calendar,
                     style: const TextStyle(fontWeight: FontWeight.w600)),
                 subtitle: Text(date.shortTimestamp,
-                    style: const TextStyle(
-                        color: Colors.grey, fontSize: 12)),
+                    style: const TextStyle(color: Colors.grey, fontSize: 12)),
                 trailing: Text(
                   '${date.day}/${date.month}/${date.year}',
                   style: const TextStyle(fontSize: 11, color: Colors.grey),
