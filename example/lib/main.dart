@@ -1,34 +1,35 @@
 import 'package:flutter/material.dart';
-import 'tabs/analytics_tab.dart';
-import 'tabs/time_ago_tab.dart';
-import 'tabs/calendar_tab.dart';
-import 'tabs/format_tab.dart';
-import 'tabs/calculate_tab.dart';
-import 'tabs/locale_tab.dart';
-import 'tabs/parser_tab.dart';
-import 'tabs/widgets_tab.dart';
-import 'tabs/ranges_tab.dart';
+import 'pages/time_ago_page.dart';
+import 'pages/calendar_page.dart';
+import 'pages/format_page.dart';
+import 'pages/calculations_page.dart';
+import 'pages/localization_page.dart';
+import 'pages/parser_page.dart';
+import 'pages/widgets_page.dart';
+import 'pages/ranges_page.dart';
+import 'pages/analytics_page.dart';
 
-void main() => runApp(const ExampleApp());
+void main() => runApp(const SmartDateDemoApp());
 
-/// Root app for smart_date_formatter example.
-class ExampleApp extends StatelessWidget {
-  const ExampleApp({super.key});
+/// Root app for smart_date_formatter interactive playground.
+class SmartDateDemoApp extends StatelessWidget {
+  const SmartDateDemoApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'SmartDateFormatter Example',
+      title: 'smart_date_formatter Playground',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(colorSchemeSeed: Colors.indigo, useMaterial3: true),
-      home: const ExampleHomePage(),
+      theme: ThemeData(
+          colorSchemeSeed: Colors.indigo, useMaterial3: true),
+      home: const PlaygroundHome(),
     );
   }
 }
 
-/// Home page with tabbed navigation showing all features.
-class ExampleHomePage extends StatelessWidget {
-  const ExampleHomePage({super.key});
+/// Main playground with all feature tabs.
+class PlaygroundHome extends StatelessWidget {
+  const PlaygroundHome({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,14 +42,12 @@ class ExampleHomePage extends StatelessWidget {
           title: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'smart_date_formatter',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                'v1.2.1 — Full Example',
-                style: TextStyle(fontSize: 11, color: Colors.white70),
-              ),
+              Text('smart_date_formatter',
+                  style: TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold)),
+              Text('Interactive Playground v1.5.0',
+                  style:
+                      TextStyle(fontSize: 11, color: Colors.white70)),
             ],
           ),
           bottom: const TabBar(
@@ -71,15 +70,15 @@ class ExampleHomePage extends StatelessWidget {
         ),
         body: const TabBarView(
           children: [
-            TimeAgoTab(),
-            CalendarTab(),
-            FormatTab(),
-            CalculateTab(),
-            LocaleTab(),
-            ParserTab(),
-            WidgetsTab(),
-            RangesTab(),
-            AnalyticsTab(),
+            TimeAgoPage(),
+            CalendarPage(),
+            FormatPage(),
+            CalculationsPage(),
+            LocalizationPage(),
+            ParserPage(),
+            WidgetsPage(),
+            RangesPage(),
+            AnalyticsPage(),
           ],
         ),
       ),
