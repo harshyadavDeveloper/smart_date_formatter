@@ -1,3 +1,28 @@
+## 1.6.0
+
+* SmartParser — major improvements
+* New English expressions:
+  * `midnight`, `noon`, `end of day`
+  * `start/end of month`, `start/end of year`
+  * `start/end of week`
+  * `this weekend`, `next weekend`, `last weekend`
+  * `day after tomorrow`, `day before yesterday`
+  * `a day ago`, `in a week`
+  * `N days/weeks from now`
+* Added Hindi parsing support:
+  * `आज`, `कल`, `परसों`
+  * `अगले/पिछले हफ्ते/महीने/साल`
+  * `अगले/पिछले सोमवार...रविवार`
+  * `{n} दिन बाद/पहले`
+* Added Marathi parsing support:
+  * `आज`, `उद्या`, `काल`, `परवा`
+  * `पुढील/मागील आठवडा/महिना/वर्ष`
+  * `पुढील/मागील सोमवार...रविवार`
+  * `{n} दिवसांनी/{n} दिवसांपूर्वी`
+* Added `SmartParser.parseLocale()` — parse with explicit locale
+* Added `SmartParser.canParseLocale()` — check locale parsing
+* Added `SmartParser.supportedParseLocales` — ['en', 'hi', 'mr']
+
 ## 1.5.0
 
 - Added `StreakCalculator` — habit/attendance streak analysis
@@ -44,10 +69,6 @@
 - Added `RelativeDateBuilder` widget — builder pattern for custom UI
   - Provides timeAgo, calendar, shortTimestamp strings
   - Auto-refresh support
-
-## 1.2.1
-
-...
 
 ## 1.2.1
 

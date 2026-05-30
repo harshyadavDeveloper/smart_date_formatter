@@ -1363,4 +1363,200 @@ void main() {
       expect(grouped.isNotEmpty, true);
     });
   });
+
+  group('SmartParser v1.6.0 — New English Expressions', () {
+    final now = DateTime(2024, 6, 15, 12, 0, 0); // Saturday
+
+    test('midnight', () {
+      final result = SmartParser.parse('midnight', now: now);
+      expect(result?.hour, 0);
+      expect(result?.minute, 0);
+    });
+
+    test('noon', () {
+      final result = SmartParser.parse('noon', now: now);
+      expect(result?.hour, 12);
+    });
+
+    test('end of month', () {
+      final result = SmartParser.parse('end of month', now: now);
+      expect(result?.month, 6);
+      expect(result?.day, 30);
+    });
+
+    test('start of month', () {
+      final result = SmartParser.parse('start of month', now: now);
+      expect(result?.day, 1);
+    });
+
+    test('end of year', () {
+      final result = SmartParser.parse('end of year', now: now);
+      expect(result?.month, 12);
+      expect(result?.day, 31);
+    });
+
+    test('start of year', () {
+      final result = SmartParser.parse('start of year', now: now);
+      expect(result?.month, 1);
+      expect(result?.day, 1);
+    });
+
+    test('day after tomorrow', () {
+      final result = SmartParser.parse('day after tomorrow', now: now);
+      expect(result, DateTime(2024, 6, 17));
+    });
+
+    test('day before yesterday', () {
+      final result = SmartParser.parse('day before yesterday', now: now);
+      expect(result, DateTime(2024, 6, 13));
+    });
+
+    test('this weekend — Saturday', () {
+      final result = SmartParser.parse('this weekend', now: now);
+      expect(result?.weekday, DateTime.saturday);
+    });
+
+    test('a day ago', () {
+      final result = SmartParser.parse('a day ago', now: now);
+      expect(result, DateTime(2024, 6, 14));
+    });
+
+    test('in a week', () {
+      final result = SmartParser.parse('in a week', now: now);
+      expect(result, DateTime(2024, 6, 22));
+    });
+
+    test('3 weeks from now', () {
+      final result = SmartParser.parse('3 weeks from now', now: now);
+      expect(result, DateTime(2024, 7, 6));
+    });
+
+    test('2 days from now', () {
+      final result = SmartParser.parse('2 days from now', now: now);
+      expect(result, DateTime(2024, 6, 17));
+    });
+  });
+
+  group('SmartParser v1.6.0 — Hindi Parsing', () {
+    final now = DateTime(2024, 6, 15, 12, 0, 0);
+
+    test('आज — today', () {
+      expect(SmartParser.parse('आज', now: now), DateTime(2024, 6, 15));
+    });
+
+    test('कल — tomorrow', () {
+      expect(SmartParser.parse('कल', now: now), DateTime(2024, 6, 16));
+    });
+
+    test('परसों — day after tomorrow', () {
+      expect(SmartParser.parse('परसों', now: now), DateTime(2024, 6, 17));
+    });
+
+    test('अगले हफ्ते — next week', () {
+      final result = SmartParser.parse('अगले हफ्ते', now: now);
+      expect(result, DateTime(2024, 6, 22));
+    });
+
+    test('पिछले हफ्ते — last week', () {
+      final result = SmartParser.parse('पिछले हफ्ते', now: now);
+      expect(result, DateTime(2024, 6, 8));
+    });
+
+    test('अगले महीने — next month', () {
+      final result = SmartParser.parse('अगले महीने', now: now);
+      expect(result?.month, 7);
+    });
+
+    test('पिछले साल — last year', () {
+      final result = SmartParser.parse('पिछले साल', now: now);
+      expect(result?.year, 2023);
+    });
+
+    test('अगले सोमवार — next monday', () {
+      final result = SmartParser.parse('अगले सोमवार', now: now);
+      expect(result?.weekday, DateTime.monday);
+    });
+
+    test('3 दिन बाद — in 3 days', () {
+      final result = SmartParser.parse('3 दिन बाद', now: now);
+      expect(result, DateTime(2024, 6, 18));
+    });
+
+    test('5 दिन पहले — 5 days ago', () {
+      final result = SmartParser.parse('5 दिन पहले', now: now);
+      expect(result, DateTime(2024, 6, 10));
+    });
+
+    test('canParse — आज', () {
+      expect(SmartParser.canParse('आज'), true);
+    });
+
+    test('parseLocale — Hindi', () {
+      final result = SmartParser.parseLocale(
+        'अगले सोमवार',
+        locale: SdfLocale.hi,
+        now: now,
+      );
+      expect(result?.weekday, DateTime.monday);
+    });
+  });
+
+  group('SmartParser v1.6.0 — Marathi Parsing', () {
+    final now = DateTime(2024, 6, 15, 12, 0, 0);
+
+    test('आज — today', () {
+      expect(SmartParser.parse('आज', now: now), DateTime(2024, 6, 15));
+    });
+
+    test('उद्या — tomorrow', () {
+      expect(SmartParser.parse('उद्या', now: now), DateTime(2024, 6, 16));
+    });
+
+    test('काल — yesterday', () {
+      expect(SmartParser.parse('काल', now: now), DateTime(2024, 6, 14));
+    });
+
+    test('परवा — day after tomorrow', () {
+      expect(SmartParser.parse('परवा', now: now), DateTime(2024, 6, 17));
+    });
+
+    test('पुढील आठवडा — next week', () {
+      final result = SmartParser.parse('पुढील आठवडा', now: now);
+      expect(result, DateTime(2024, 6, 22));
+    });
+
+    test('मागील आठवडा — last week', () {
+      final result = SmartParser.parse('मागील आठवडा', now: now);
+      expect(result, DateTime(2024, 6, 8));
+    });
+
+    test('पुढील महिना — next month', () {
+      final result = SmartParser.parse('पुढील महिना', now: now);
+      expect(result?.month, 7);
+    });
+
+    test('3 दिवसांनी — in 3 days', () {
+      final result = SmartParser.parse('3 दिवसांनी', now: now);
+      expect(result, DateTime(2024, 6, 18));
+    });
+
+    test('5 दिवसांपूर्वी — 5 days ago', () {
+      final result = SmartParser.parse('5 दिवसांपूर्वी', now: now);
+      expect(result, DateTime(2024, 6, 10));
+    });
+
+    test('parseLocale — Marathi', () {
+      final result = SmartParser.parseLocale(
+        'उद्या',
+        locale: SdfLocale.mr,
+        now: now,
+      );
+      expect(result, DateTime(2024, 6, 16));
+    });
+
+    test('supportedParseLocales', () {
+      expect(
+          SmartParser.supportedParseLocales, containsAll(['en', 'hi', 'mr']));
+    });
+  });
 }
