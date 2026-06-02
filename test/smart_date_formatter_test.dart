@@ -1559,4 +1559,247 @@ void main() {
           SmartParser.supportedParseLocales, containsAll(['en', 'hi', 'mr']));
     });
   });
+
+  group('SmartCalendar v2.0.0', () {
+    final events = [
+      CalendarEvent(
+        date: DateTime.now(),
+        title: 'Today Meeting',
+        color: Colors.blue,
+      ),
+      CalendarEvent(
+        date: DateTime.now().add(const Duration(days: 1)),
+        title: 'Tomorrow Event',
+        color: Colors.green,
+        description: 'Important event',
+      ),
+      CalendarEvent(
+        date: DateTime.now(),
+        title: 'Second Event',
+        color: Colors.red,
+        allDay: false,
+        startTime: const TimeOfDay(hour: 10, minute: 0),
+        endTime: const TimeOfDay(hour: 11, minute: 30),
+      ),
+    ];
+
+    // CalendarEvent tests
+    test('CalendarEvent.isOnDate — today', () {
+      expect(events[0].isOnDate(DateTime.now()), true);
+    });
+
+    test('CalendarEvent.isOnDate — wrong date', () {
+      expect(
+        events[0].isOnDate(DateTime.now().subtract(const Duration(days: 2))),
+        false,
+      );
+    });
+
+    test('CalendarEvent.timeString — all day', () {
+      expect(events[0].timeString, 'All day');
+    });
+
+    test('CalendarEvent.timeString — with time', () {
+      expect(events[2].timeString, contains('AM'));
+    });
+
+    // Controller tests
+    test('SmartCalendarController — initial date', () {
+      final controller =
+          SmartCalendarController(initialDate: DateTime(2024, 6, 15));
+      expect(controller.focusedDate.month, 6);
+      expect(controller.focusedDate.day, 15);
+      controller.dispose();
+    });
+
+    test('Controller.nextMonth', () {
+      final controller =
+          SmartCalendarController(initialDate: DateTime(2024, 6, 15));
+      controller.nextMonth();
+      expect(controller.focusedDate.month, 7);
+      controller.dispose();
+    });
+
+    test('Controller.previousMonth', () {
+      final controller =
+          SmartCalendarController(initialDate: DateTime(2024, 6, 15));
+      controller.previousMonth();
+      expect(controller.focusedDate.month, 5);
+      controller.dispose();
+    });
+
+    test('Controller.goToToday', () {
+      final controller =
+          SmartCalendarController(initialDate: DateTime(2024, 1, 1));
+      controller.goToToday();
+      expect(controller.focusedDate.year, DateTime.now().year);
+      controller.dispose();
+    });
+
+    test('Controller.jumpToDate', () {
+      final controller = SmartCalendarController();
+      controller.jumpToDate(DateTime(2025, 3, 15));
+      expect(controller.selectedDate, DateTime(2025, 3, 15));
+      controller.dispose();
+    });
+
+    test('Controller.isCurrentMonth — false for past', () {
+      final controller =
+          SmartCalendarController(initialDate: DateTime(2020, 1, 1));
+      expect(controller.isCurrentMonth, false);
+      controller.dispose();
+    });
+
+    test('Controller.nextWeek', () {
+      final controller =
+          SmartCalendarController(initialDate: DateTime(2024, 6, 15));
+      controller.nextWeek();
+      expect(controller.focusedDate,
+          DateTime(2024, 6, 15).add(const Duration(days: 7)));
+      controller.dispose();
+    });
+
+    test('Controller.selectDate', () {
+      final controller = SmartCalendarController();
+      controller.selectDate(DateTime(2024, 6, 20));
+      expect(controller.selectedDate.day, 20);
+      controller.dispose();
+    });
+
+    // Widget tests
+    testWidgets('SmartCalendar — renders month view', (tester) async {
+      // ✅ Large surface size set karo
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              // 👈 wrap in scroll
+              child: SmartCalendar(events: events),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(SmartCalendar), findsOneWidget);
+      await tester.binding.setSurfaceSize(null); // reset
+    });
+
+    testWidgets('SmartCalendar — shows today button', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SmartCalendar(
+                events: events,
+                showTodayButton: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.text('Today'), findsOneWidget);
+      await tester.binding.setSurfaceSize(null);
+    });
+
+    testWidgets('SmartCalendar — week view', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SmartCalendar(
+                events: events,
+                initialView: CalendarView.week,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(SmartCalendar), findsOneWidget);
+      await tester.binding.setSurfaceSize(null);
+    });
+
+    testWidgets('SmartCalendar — day view', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SmartCalendar(
+                events: events,
+                initialView: CalendarView.day,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(SmartCalendar), findsOneWidget);
+      await tester.binding.setSurfaceSize(null);
+    });
+
+    testWidgets('SmartCalendar — with controller', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      final controller =
+          SmartCalendarController(initialDate: DateTime(2024, 6, 15));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SmartCalendar(
+                events: events,
+                controller: controller,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(SmartCalendar), findsOneWidget);
+      controller.dispose();
+      await tester.binding.setSurfaceSize(null);
+    });
+
+    testWidgets('EventMarkerStyle.dot renders', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SmartCalendar(
+                events: events,
+                markerStyle: EventMarkerStyle.dot,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(SmartCalendar), findsOneWidget);
+      await tester.binding.setSurfaceSize(null);
+    });
+
+    testWidgets('EventMarkerStyle.chip renders', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SmartCalendar(
+                events: events,
+                markerStyle: EventMarkerStyle.chip,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(SmartCalendar), findsOneWidget);
+      await tester.binding.setSurfaceSize(null);
+    });
+  });
 }

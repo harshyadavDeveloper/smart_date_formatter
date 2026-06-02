@@ -1,3 +1,27 @@
+## 2.0.0
+
+* 🎉 Major release — Full Calendar Widget!
+* Added `SmartCalendar` widget
+  * Month view — full grid calendar
+  * Week view — week strip with events list
+  * Day view — single day detail view
+  * View switcher — switch between month/week/day
+  * Today button — jump to today
+  * Smooth navigation with chevron buttons
+* Added `SmartCalendarController`
+  * `nextMonth/previousMonth`
+  * `nextWeek/previousWeek`
+  * `nextDay/previousDay`
+  * `jumpToDate/jumpToMonth`
+  * `goToToday/selectDate`
+  * `isCurrentMonth`
+* Added `CalendarEvent` model
+  * title, date, color, description
+  * allDay, startTime, endTime
+  * `isOnDate()`, `timeString`
+* Added `EventMarkerStyle` — dot, chip, both
+* Added `CalendarView` — month, week, day
+
 ## 1.6.0
 
 * SmartParser — major improvements
