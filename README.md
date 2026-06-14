@@ -22,7 +22,7 @@
 </p>
 
 <p align="center">
-  <a href="YOUR_NETLIFY_LINK_HERE">
+  <a href="https://smart-date-formatter.netlify.app/">
     <img src="https://img.shields.io/badge/🌐 Live Playground-Try it now!-brightgreen?style=for-the-badge" alt="Live Playground"/>
   </a>
 </p>
@@ -33,7 +33,7 @@
 </p>
 
 <p align="center">
-  👉 <a href="YOUR_NETLIFY_LINK_HERE"><b>Try the Interactive Playground</b></a> — no installation needed!
+  👉 <a href="https://smart-date-formatter.netlify.app/"><b>Try the Interactive Playground</b></a> — no installation needed!
 </p>
 
 ---
