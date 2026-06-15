@@ -1,51 +1,65 @@
+## 2.1.0
+
+- Added `AgendaView` — chronological event list grouped by date
+- Added `CalendarView.agenda` — new view mode
+- Added multi-day event support in `CalendarEvent`
+  - `endDate` — optional end date for multi-day events
+  - `isMultiDay` — check if spans multiple days
+  - `spanDays` — number of days event spans
+  - `startsOnDate()` / `endsOnDate()`
+  - `dateRangeString` — formatted date range
+- Added swipe gestures — left/right to navigate
+- Added `agendaDaysAhead` / `agendaDaysBehind` params
+- Multi-day events show bar indicator in month view
+
 ## 2.0.0
 
-* 🎉 Major release — Full Calendar Widget!
-* Added `SmartCalendar` widget
-  * Month view — full grid calendar
-  * Week view — week strip with events list
-  * Day view — single day detail view
-  * View switcher — switch between month/week/day
-  * Today button — jump to today
-  * Smooth navigation with chevron buttons
-* Added `SmartCalendarController`
-  * `nextMonth/previousMonth`
-  * `nextWeek/previousWeek`
-  * `nextDay/previousDay`
-  * `jumpToDate/jumpToMonth`
-  * `goToToday/selectDate`
-  * `isCurrentMonth`
-* Added `CalendarEvent` model
-  * title, date, color, description
-  * allDay, startTime, endTime
-  * `isOnDate()`, `timeString`
-* Added `EventMarkerStyle` — dot, chip, both
-* Added `CalendarView` — month, week, day
+- 🎉 Major release — Full Calendar Widget!
+- Added `SmartCalendar` widget
+  - Month view — full grid calendar
+  - Week view — week strip with events list
+  - Day view — single day detail view
+  - View switcher — switch between month/week/day
+  - Today button — jump to today
+  - Smooth navigation with chevron buttons
+- Added `SmartCalendarController`
+  - `nextMonth/previousMonth`
+  - `nextWeek/previousWeek`
+  - `nextDay/previousDay`
+  - `jumpToDate/jumpToMonth`
+  - `goToToday/selectDate`
+  - `isCurrentMonth`
+- Added `CalendarEvent` model
+  - title, date, color, description
+  - allDay, startTime, endTime
+  - `isOnDate()`, `timeString`
+- Added `EventMarkerStyle` — dot, chip, both
+- Added `CalendarView` — month, week, day
 
 ## 1.6.0
 
-* SmartParser — major improvements
-* New English expressions:
-  * `midnight`, `noon`, `end of day`
-  * `start/end of month`, `start/end of year`
-  * `start/end of week`
-  * `this weekend`, `next weekend`, `last weekend`
-  * `day after tomorrow`, `day before yesterday`
-  * `a day ago`, `in a week`
-  * `N days/weeks from now`
-* Added Hindi parsing support:
-  * `आज`, `कल`, `परसों`
-  * `अगले/पिछले हफ्ते/महीने/साल`
-  * `अगले/पिछले सोमवार...रविवार`
-  * `{n} दिन बाद/पहले`
-* Added Marathi parsing support:
-  * `आज`, `उद्या`, `काल`, `परवा`
-  * `पुढील/मागील आठवडा/महिना/वर्ष`
-  * `पुढील/मागील सोमवार...रविवार`
-  * `{n} दिवसांनी/{n} दिवसांपूर्वी`
-* Added `SmartParser.parseLocale()` — parse with explicit locale
-* Added `SmartParser.canParseLocale()` — check locale parsing
-* Added `SmartParser.supportedParseLocales` — ['en', 'hi', 'mr']
+- SmartParser — major improvements
+- New English expressions:
+  - `midnight`, `noon`, `end of day`
+  - `start/end of month`, `start/end of year`
+  - `start/end of week`
+  - `this weekend`, `next weekend`, `last weekend`
+  - `day after tomorrow`, `day before yesterday`
+  - `a day ago`, `in a week`
+  - `N days/weeks from now`
+- Added Hindi parsing support:
+  - `आज`, `कल`, `परसों`
+  - `अगले/पिछले हफ्ते/महीने/साल`
+  - `अगले/पिछले सोमवार...रविवार`
+  - `{n} दिन बाद/पहले`
+- Added Marathi parsing support:
+  - `आज`, `उद्या`, `काल`, `परवा`
+  - `पुढील/मागील आठवडा/महिना/वर्ष`
+  - `पुढील/मागील सोमवार...रविवार`
+  - `{n} दिवसांनी/{n} दिवसांपूर्वी`
+- Added `SmartParser.parseLocale()` — parse with explicit locale
+- Added `SmartParser.canParseLocale()` — check locale parsing
+- Added `SmartParser.supportedParseLocales` — ['en', 'hi', 'mr']
 
 ## 1.5.0
 

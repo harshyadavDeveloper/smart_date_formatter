@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_date_formatter/src/calendar/views/agenda_view.dart';
 import 'calendar_event.dart';
 import 'calendar_controller.dart';
 import 'views/month_view.dart';
@@ -15,6 +16,9 @@ enum CalendarView {
 
   /// Single day detail view
   day,
+
+  /// Agenda list view
+  agenda,
 }
 
 /// A full-featured calendar widget with month, week, and day views.
@@ -80,6 +84,12 @@ class SmartCalendar extends StatefulWidget {
   /// First day of week (1=Monday, 7=Sunday)
   final int firstDayOfWeek;
 
+  /// Days to show ahead in agenda view
+  final int agendaDaysAhead;
+
+  /// Days to show behind in agenda view
+  final int agendaDaysBehind;
+
   /// Creates a [SmartCalendar] widget.
   ///
   /// ```dart
@@ -108,6 +118,8 @@ class SmartCalendar extends StatefulWidget {
     this.elevation = 2,
     this.showTodayButton = true,
     this.firstDayOfWeek = 1,
+    this.agendaDaysAhead = 30,
+    this.agendaDaysBehind = 7,
   });
 
   @override
@@ -208,6 +220,50 @@ class _SmartCalendarState extends State<SmartCalendar> {
   }
 
   Widget _buildCurrentView() {
+    return GestureDetector(
+      onHorizontalDragEnd: (details) {
+        // Swipe left → next
+        if (details.primaryVelocity != null &&
+            details.primaryVelocity! < -300) {
+          _navigateForward();
+        }
+        // Swipe right → previous
+        else if (details.primaryVelocity != null &&
+            details.primaryVelocity! > 300) {
+          _navigateBackward();
+        }
+      },
+      child: _buildView(),
+    );
+  }
+
+  void _navigateForward() {
+    switch (_currentView) {
+      case CalendarView.month:
+        _controller.nextMonth();
+      case CalendarView.week:
+        _controller.nextWeek();
+      case CalendarView.day:
+        _controller.nextDay();
+      case CalendarView.agenda:
+        _controller.nextMonth();
+    }
+  }
+
+  void _navigateBackward() {
+    switch (_currentView) {
+      case CalendarView.month:
+        _controller.previousMonth();
+      case CalendarView.week:
+        _controller.previousWeek();
+      case CalendarView.day:
+        _controller.previousDay();
+      case CalendarView.agenda:
+        _controller.previousMonth();
+    }
+  }
+
+  Widget _buildView() {
     switch (_currentView) {
       case CalendarView.month:
         return MonthView(
@@ -221,7 +277,6 @@ class _SmartCalendarState extends State<SmartCalendar> {
           headerColor: widget.headerColor,
           firstDayOfWeek: widget.firstDayOfWeek,
         );
-
       case CalendarView.week:
         return WeekView(
           controller: _controller,
@@ -232,7 +287,6 @@ class _SmartCalendarState extends State<SmartCalendar> {
           todayColor: widget.todayColor,
           headerColor: widget.headerColor,
         );
-
       case CalendarView.day:
         return SizedBox(
           height: 400,
@@ -243,6 +297,17 @@ class _SmartCalendarState extends State<SmartCalendar> {
             headerColor: widget.headerColor,
             selectedColor: widget.selectedColor,
           ),
+        );
+      case CalendarView.agenda:
+        return AgendaView(
+          controller: _controller,
+          events: widget.events,
+          onDateSelected: widget.onDateSelected,
+          onEventTap: widget.onEventTap,
+          headerColor: widget.headerColor,
+          selectedColor: widget.selectedColor,
+          daysAhead: widget.agendaDaysAhead,
+          daysBehind: widget.agendaDaysBehind,
         );
     }
   }

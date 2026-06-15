@@ -1802,4 +1802,213 @@ void main() {
       await tester.binding.setSurfaceSize(null);
     });
   });
+
+  group('SmartCalendar v2.1.0 — New Features', () {
+    final now = DateTime.now();
+
+    // Multi-day event tests
+    test('CalendarEvent.isMultiDay — true', () {
+      final event = CalendarEvent(
+        date: DateTime(2024, 6, 15),
+        endDate: DateTime(2024, 6, 17),
+        title: 'Conference',
+        color: Colors.blue,
+      );
+      expect(event.isMultiDay, true);
+    });
+
+    test('CalendarEvent.isMultiDay — false for single day', () {
+      final event = CalendarEvent(
+        date: DateTime(2024, 6, 15),
+        title: 'Meeting',
+        color: Colors.blue,
+      );
+      expect(event.isMultiDay, false);
+    });
+
+    test('CalendarEvent.spanDays — 3 days', () {
+      final event = CalendarEvent(
+        date: DateTime(2024, 6, 15),
+        endDate: DateTime(2024, 6, 17),
+        title: 'Conference',
+        color: Colors.blue,
+      );
+      expect(event.spanDays, 3);
+    });
+
+    test('CalendarEvent.spanDays — single day = 1', () {
+      final event = CalendarEvent(
+        date: DateTime(2024, 6, 15),
+        title: 'Meeting',
+        color: Colors.blue,
+      );
+      expect(event.spanDays, 1);
+    });
+
+    test('CalendarEvent.isOnDate — middle of multi-day', () {
+      final event = CalendarEvent(
+        date: DateTime(2024, 6, 15),
+        endDate: DateTime(2024, 6, 17),
+        title: 'Conference',
+        color: Colors.blue,
+      );
+      expect(event.isOnDate(DateTime(2024, 6, 16)), true);
+    });
+
+    test('CalendarEvent.isOnDate — outside multi-day', () {
+      final event = CalendarEvent(
+        date: DateTime(2024, 6, 15),
+        endDate: DateTime(2024, 6, 17),
+        title: 'Conference',
+        color: Colors.blue,
+      );
+      expect(event.isOnDate(DateTime(2024, 6, 18)), false);
+    });
+
+    test('CalendarEvent.startsOnDate', () {
+      final event = CalendarEvent(
+        date: DateTime(2024, 6, 15),
+        endDate: DateTime(2024, 6, 17),
+        title: 'Conference',
+        color: Colors.blue,
+      );
+      expect(event.startsOnDate(DateTime(2024, 6, 15)), true);
+      expect(event.startsOnDate(DateTime(2024, 6, 16)), false);
+    });
+
+    test('CalendarEvent.endsOnDate', () {
+      final event = CalendarEvent(
+        date: DateTime(2024, 6, 15),
+        endDate: DateTime(2024, 6, 17),
+        title: 'Conference',
+        color: Colors.blue,
+      );
+      expect(event.endsOnDate(DateTime(2024, 6, 17)), true);
+      expect(event.endsOnDate(DateTime(2024, 6, 16)), false);
+    });
+
+    test('CalendarEvent.dateRangeString', () {
+      final event = CalendarEvent(
+        date: DateTime(2024, 6, 15),
+        endDate: DateTime(2024, 6, 17),
+        title: 'Conference',
+        color: Colors.blue,
+      );
+      expect(event.dateRangeString, contains('15'));
+      expect(event.dateRangeString, contains('17'));
+    });
+
+    // Controller
+    test('Controller.nextDay', () {
+      final controller =
+          SmartCalendarController(initialDate: DateTime(2024, 6, 15));
+      controller.nextDay();
+      expect(controller.focusedDate.day, 16);
+      controller.dispose();
+    });
+
+    test('Controller.previousDay', () {
+      final controller =
+          SmartCalendarController(initialDate: DateTime(2024, 6, 15));
+      controller.previousDay();
+      expect(controller.focusedDate.day, 14);
+      controller.dispose();
+    });
+
+    // Agenda view widget test
+    testWidgets('SmartCalendar — agenda view', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SmartCalendar(
+                events: [
+                  CalendarEvent(
+                    date: now,
+                    title: 'Today Event',
+                    color: Colors.blue,
+                  ),
+                  CalendarEvent(
+                    date: now.add(const Duration(days: 2)),
+                    endDate: now.add(const Duration(days: 4)),
+                    title: 'Multi-day Event',
+                    color: Colors.green,
+                  ),
+                ],
+                initialView: CalendarView.agenda,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(SmartCalendar), findsOneWidget);
+      await tester.binding.setSurfaceSize(null);
+    });
+
+    // Swipe gesture test
+    testWidgets('SmartCalendar — swipe left navigates forward', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      final controller =
+          SmartCalendarController(initialDate: DateTime(2024, 6, 15));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SmartCalendar(
+                controller: controller,
+                events: const [],
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      // ✅ flingFrom — proper velocity
+      await tester.flingFrom(
+        const Offset(600, 300), // start position
+        const Offset(-400, 0), // direction
+        1000, // velocity
+      );
+      await tester.pumpAndSettle();
+
+      expect(controller.focusedDate.month, 7); // June → July
+      controller.dispose();
+      await tester.binding.setSurfaceSize(null);
+    });
+
+    testWidgets('SmartCalendar — swipe right navigates backward',
+        (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      final controller =
+          SmartCalendarController(initialDate: DateTime(2024, 6, 15));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SmartCalendar(
+                controller: controller,
+                events: const [],
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      // ✅ flingFrom — proper velocity
+      await tester.flingFrom(
+        const Offset(200, 300), // start position
+        const Offset(400, 0), // direction
+        1000, // velocity
+      );
+      await tester.pumpAndSettle();
+
+      expect(controller.focusedDate.month, 5); // June → May
+      controller.dispose();
+      await tester.binding.setSurfaceSize(null);
+    });
+  });
 }

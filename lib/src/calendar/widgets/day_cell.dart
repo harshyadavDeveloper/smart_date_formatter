@@ -92,6 +92,20 @@ class DayCell extends StatelessWidget {
                 maxMarkers: 3,
               ),
             ],
+            if (events.any((e) => e.isMultiDay)) ...[
+              const SizedBox(height: 2),
+              Container(
+                height: 3,
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                decoration: BoxDecoration(
+                  color: events
+                      .firstWhere((e) => e.isMultiDay)
+                      .color
+                      .withValues(alpha: 0.6),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ],
           ],
         ),
       ),
