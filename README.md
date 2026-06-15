@@ -40,29 +40,29 @@
 
 ## ✨ Features
 
-| Feature | Description |
-|---|---|
-| ⏱️ **Relative time** | `"Just now"`, `"2 hours ago"`, `"Last week"` |
-| 📅 **Calendar strings** | `"Today"`, `"Yesterday"`, `"Monday"`, `"12 Jan 2024"` |
-| 🕐 **Short timestamps** | `"2:30 PM"`, `"Mon 4:15 PM"`, `"5 Mar"` |
-| 🎨 **Custom formats** | `format('dd-MM-yyyy')`, `toReadable`, `to12Hour` |
-| 🧮 **Date calculations** | `addWorkingDays`, `daysUntil`, `isBetween`, `age` |
-| 📆 **Range helpers** | `startOfWeek`, `endOfMonth`, `quarter`, `weekOfYear` |
-| 🌍 **16 Languages** | English, Hindi, Marathi, Gujarati, Bengali, Tamil, Telugu, Kannada, Punjabi, Spanish, French, German, Russian, Chinese, Japanese, Arabic |
-| 🔍 **Smart parsing** | `"tomorrow"` → DateTime, `"next monday"` → DateTime |
-| ⏱️ **TimeAgoText** | Auto-refreshing Flutter widget |
-| ⏳ **CountdownText** | Live countdown Flutter widget |
-| 🏷️ **DateBadge** | Smart date chip widget |
-| 📝 **SmartDateText** | All-in-one date text widget |
-| 🔧 **RelativeDateBuilder** | Builder pattern for custom UI |
-| 🗄️ **DateRangeHelper** | Ready-made ranges for DB queries |
-| 🎄 **HolidayHelper** | Holiday detection + working days |
-| 🔁 **RecurrenceHelper** | Generate recurring date lists |
-| 📊 **StreakCalculator** | Habit/attendance streak analysis |
-| 📈 **DateGrouper** | Group dates by day/week/month/year |
-| ✅ **Boolean helpers** | `isToday`, `isWeekend`, `isMorning`, `isPast` |
-| 🪶 **Zero dependencies** | Pure Flutter — no external packages |
-| 💙 **Null safe** | Full Dart null safety |
+| Feature                    | Description                                                                                                                              |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| ⏱️ **Relative time**       | `"Just now"`, `"2 hours ago"`, `"Last week"`                                                                                             |
+| 📅 **Calendar strings**    | `"Today"`, `"Yesterday"`, `"Monday"`, `"12 Jan 2024"`                                                                                    |
+| 🕐 **Short timestamps**    | `"2:30 PM"`, `"Mon 4:15 PM"`, `"5 Mar"`                                                                                                  |
+| 🎨 **Custom formats**      | `format('dd-MM-yyyy')`, `toReadable`, `to12Hour`                                                                                         |
+| 🧮 **Date calculations**   | `addWorkingDays`, `daysUntil`, `isBetween`, `age`                                                                                        |
+| 📆 **Range helpers**       | `startOfWeek`, `endOfMonth`, `quarter`, `weekOfYear`                                                                                     |
+| 🌍 **16 Languages**        | English, Hindi, Marathi, Gujarati, Bengali, Tamil, Telugu, Kannada, Punjabi, Spanish, French, German, Russian, Chinese, Japanese, Arabic |
+| 🔍 **Smart parsing**       | `"tomorrow"` → DateTime, `"next monday"` → DateTime                                                                                      |
+| ⏱️ **TimeAgoText**         | Auto-refreshing Flutter widget                                                                                                           |
+| ⏳ **CountdownText**       | Live countdown Flutter widget                                                                                                            |
+| 🏷️ **DateBadge**           | Smart date chip widget                                                                                                                   |
+| 📝 **SmartDateText**       | All-in-one date text widget                                                                                                              |
+| 🔧 **RelativeDateBuilder** | Builder pattern for custom UI                                                                                                            |
+| 🗄️ **DateRangeHelper**     | Ready-made ranges for DB queries                                                                                                         |
+| 🎄 **HolidayHelper**       | Holiday detection + working days                                                                                                         |
+| 🔁 **RecurrenceHelper**    | Generate recurring date lists                                                                                                            |
+| 📊 **StreakCalculator**    | Habit/attendance streak analysis                                                                                                         |
+| 📈 **DateGrouper**         | Group dates by day/week/month/year                                                                                                       |
+| ✅ **Boolean helpers**     | `isToday`, `isWeekend`, `isMorning`, `isPast`                                                                                            |
+| 🪶 **Zero dependencies**   | Pure Flutter — no external packages                                                                                                      |
+| 💙 **Null safe**           | Full Dart null safety                                                                                                                    |
 
 ---
 
@@ -162,15 +162,15 @@ date.toTimeString                  // "14:30:45"
 
 **Format tokens:**
 
-| Token | Output | Token | Output |
-|---|---|---|---|
-| `dd` | `15` | `EEEE` | `Saturday` |
-| `d` | `5` | `EEE` | `Sat` |
-| `MM` | `06` | `yyyy` | `2024` |
-| `MMM` | `Jun` | `yy` | `24` |
-| `MMMM` | `June` | `HH` | `14` |
-| `hh` | `02` | `mm` | `30` |
-| `ss` | `45` | `a` | `PM` |
+| Token  | Output | Token  | Output     |
+| ------ | ------ | ------ | ---------- |
+| `dd`   | `15`   | `EEEE` | `Saturday` |
+| `d`    | `5`    | `EEE`  | `Sat`      |
+| `MM`   | `06`   | `yyyy` | `2024`     |
+| `MMM`  | `Jun`  | `yy`   | `24`       |
+| `MMMM` | `June` | `HH`   | `14`       |
+| `hh`   | `02`   | `mm`   | `30`       |
+| `ss`   | `45`   | `a`    | `PM`       |
 
 ---
 
@@ -237,16 +237,16 @@ date.timeAgoIn(SdfLocale.bn)    // "2 ঘন্টা আগে"
 SdfLocale.fromCode('ta')        // Tamil
 ```
 
-| Code | Language | Code | Language |
-|---|---|---|---|
-| `en` | English 🇬🇧 | `de` | German 🇩🇪 |
-| `hi` | Hindi 🇮🇳 | `ru` | Russian 🇷🇺 |
-| `mr` | Marathi 🇮🇳 | `zh` | Chinese 🇨🇳 |
+| Code | Language    | Code | Language    |
+| ---- | ----------- | ---- | ----------- |
+| `en` | English 🇬🇧  | `de` | German 🇩🇪   |
+| `hi` | Hindi 🇮🇳    | `ru` | Russian 🇷🇺  |
+| `mr` | Marathi 🇮🇳  | `zh` | Chinese 🇨🇳  |
 | `gu` | Gujarati 🇮🇳 | `ja` | Japanese 🇯🇵 |
-| `bn` | Bengali 🇮🇳 | `ar` | Arabic 🇸🇦 |
-| `ta` | Tamil 🇮🇳 | `es` | Spanish 🇪🇸 |
-| `te` | Telugu 🇮🇳 | `fr` | French 🇫🇷 |
-| `kn` | Kannada 🇮🇳 | `pa` | Punjabi 🇮🇳 |
+| `bn` | Bengali 🇮🇳  | `ar` | Arabic 🇸🇦   |
+| `ta` | Tamil 🇮🇳    | `es` | Spanish 🇪🇸  |
+| `te` | Telugu 🇮🇳   | `fr` | French 🇫🇷   |
+| `kn` | Kannada 🇮🇳  | `pa` | Punjabi 🇮🇳  |
 
 ---
 
@@ -269,6 +269,7 @@ SmartParser.parseOrThrow("blah")   // FormatException
 ### 7️⃣ Widgets
 
 #### TimeAgoText ⏱️
+
 ```dart
 TimeAgoText(
   date: message.sentAt,
@@ -280,6 +281,7 @@ TimeAgoText(
 ```
 
 #### CountdownText ⏳
+
 ```dart
 CountdownText(
   target: saleEndsAt,
@@ -291,6 +293,7 @@ CountdownText(
 ```
 
 #### DateBadge 🏷️
+
 ```dart
 DateBadge(date: DateTime.now())
 DateBadge(date: date, style: DateBadgeStyle.outlined)
@@ -299,6 +302,7 @@ DateBadge(date: date, label: 'NEW', uppercase: true)
 ```
 
 #### SmartDateText 📝
+
 ```dart
 SmartDateText(date: date, mode: SmartDateMode.auto)
 SmartDateText(date: date, mode: SmartDateMode.timeAgo)
@@ -312,6 +316,7 @@ SmartDateText(
 ```
 
 #### RelativeDateBuilder 🔧
+
 ```dart
 RelativeDateBuilder(
   date: post.createdAt,
@@ -325,6 +330,78 @@ RelativeDateBuilder(
   },
 )
 ```
+
+### 🗓️ SmartCalendar Widget
+
+Full featured calendar with month, week, day, and agenda views.
+
+```dart
+SmartCalendar(
+  events: [
+    // Single day event
+    CalendarEvent(
+      date: DateTime(2024, 6, 15),
+      title: 'Team Meeting',
+      color: Colors.blue,
+      allDay: false,
+      startTime: TimeOfDay(hour: 10, minute: 0),
+    ),
+
+    // Multi-day event 🆕
+    CalendarEvent(
+      date: DateTime(2024, 6, 15),
+      endDate: DateTime(2024, 6, 17),
+      title: 'Company Retreat',
+      color: Colors.teal,
+    ),
+  ],
+  initialView: CalendarView.month,  // month, week, day, agenda
+  markerStyle: EventMarkerStyle.dot, // dot, chip, both
+  selectedColor: Colors.indigo,
+  showViewSwitcher: true,
+  showTodayButton: true,
+  agendaDaysAhead: 30,
+  onDateSelected: (date, events) => print(date),
+  onEventTap: (event) => print(event.title),
+  // 👈 Swipe left/right to navigate!
+)
+```
+
+**CalendarEvent properties:**
+
+```dart
+event.isMultiDay        // true for multi-day events
+event.spanDays          // number of days (3)
+event.dateRangeString   // "15/6/2024 – 17/6/2024"
+event.isOnDate(date)    // true if date is in event range
+event.startsOnDate(date)
+event.endsOnDate(date)
+event.timeString        // "10:00 AM – 11:00 AM"
+```
+
+**SmartCalendarController:**
+
+```dart
+final controller = SmartCalendarController();
+controller.nextMonth();
+controller.previousWeek();
+controller.jumpToDate(DateTime(2024, 12, 25));
+controller.goToToday();
+controller.selectDate(date);
+```
+
+| Property           | Type                  | Default  | Description           |
+| ------------------ | --------------------- | -------- | --------------------- |
+| `events`           | `List<CalendarEvent>` | `[]`     | Events to display     |
+| `initialView`      | `CalendarView`        | `month`  | Initial view mode     |
+| `markerStyle`      | `EventMarkerStyle`    | `dot`    | Event marker style    |
+| `selectedColor`    | `Color`               | `indigo` | Selected date color   |
+| `todayColor`       | `Color`               | `blue`   | Today highlight color |
+| `showViewSwitcher` | `bool`                | `true`   | Show view tabs        |
+| `showTodayButton`  | `bool`                | `true`   | Show Today button     |
+| `agendaDaysAhead`  | `int`                 | `30`     | Days ahead in agenda  |
+| `agendaDaysBehind` | `int`                 | `7`      | Days behind in agenda |
+| `firstDayOfWeek`   | `int`                 | `1`      | 1=Monday, 7=Sunday    |
 
 ---
 
@@ -450,6 +527,7 @@ DateGrouper.averageGap(dates)         // Duration(days: 2)
 ## 💡 Real World Examples
 
 ### Chat App
+
 ```dart
 // Auto-refreshing message timestamp
 TimeAgoText(
@@ -460,6 +538,7 @@ TimeAgoText(
 ```
 
 ### Habit Tracker
+
 ```dart
 // Daily streak
 final streak = StreakCalculator.currentStreak(completedDates);
@@ -472,6 +551,7 @@ Text('🔥 $streak day streak  •  ${(rate*100).toInt()}% this month')
 ```
 
 ### Analytics Dashboard
+
 ```dart
 // Group user activity
 final byWeekday = DateGrouper.countByWeekday(loginDates);
@@ -480,6 +560,7 @@ final mostActive = DateGrouper.mostActiveWeekday(loginDates);
 ```
 
 ### HR System
+
 ```dart
 // Working days between dates skipping holidays
 final leaveDays = HolidayHelper.workingDaysBetween(
@@ -489,6 +570,7 @@ final leaveDays = HolidayHelper.workingDaysBetween(
 ```
 
 ### Subscription App
+
 ```dart
 // Generate billing dates
 final billingDates = RecurrenceHelper.monthly(
@@ -498,6 +580,7 @@ final billingDates = RecurrenceHelper.monthly(
 ```
 
 ### Invoice System
+
 ```dart
 // Company date format
 Text('Invoice Date: ${date.format('dd-MM-yyyy')}')
@@ -505,6 +588,7 @@ Text('Due Date: ${dueDate.format('dd MMM yyyy')}')
 ```
 
 ### Multilingual App
+
 ```dart
 final locale = SdfLocale.fromCode(
   Localizations.localeOf(context).languageCode,
