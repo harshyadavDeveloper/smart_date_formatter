@@ -8,7 +8,8 @@ import 'tabs/parser_tab.dart';
 import 'tabs/widgets_tab.dart';
 import 'tabs/ranges_tab.dart';
 import 'tabs/analytics_tab.dart';
-import 'tabs/calendar_widget_tab.dart'; // 👈 new
+import 'tabs/calendar_widget_tab.dart';
+import 'tabs/date_field_tab.dart'; // 👈 new
 
 void main() => runApp(const ExampleApp());
 
@@ -21,7 +22,8 @@ class ExampleApp extends StatelessWidget {
     return MaterialApp(
       title: 'SmartDateFormatter Example',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(colorSchemeSeed: Colors.indigo, useMaterial3: true),
+      theme: ThemeData(
+          colorSchemeSeed: Colors.indigo, useMaterial3: true),
       home: const ExampleHomePage(),
     );
   }
@@ -34,7 +36,7 @@ class ExampleHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 10, // 👈 9 → 10
+      length: 11, // 👈 10 → 11
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.indigo,
@@ -43,9 +45,11 @@ class ExampleHomePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('smart_date_formatter',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              Text('v2.0.0 — Full Example',
-                  style: TextStyle(fontSize: 11, color: Colors.white70)),
+                  style: TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold)),
+              Text('v2.2.0 — Full Example',
+                  style: TextStyle(
+                      fontSize: 11, color: Colors.white70)),
             ],
           ),
           bottom: const TabBar(
@@ -63,7 +67,8 @@ class ExampleHomePage extends StatelessWidget {
               Tab(text: '⏳ Widgets'),
               Tab(text: '🗄 Ranges'),
               Tab(text: '📊 Analytics'),
-              Tab(text: '🗓 SmartCalendar'), // 👈 new
+              Tab(text: '🗓 SmartCalendar'),
+              Tab(text: '📝 DateField'), // 👈 new
             ],
           ),
         ),
@@ -79,6 +84,7 @@ class ExampleHomePage extends StatelessWidget {
             RangesTab(),
             AnalyticsTab(),
             CalendarWidgetTab(),
+            DateFieldTab(),
           ],
         ),
       ),
