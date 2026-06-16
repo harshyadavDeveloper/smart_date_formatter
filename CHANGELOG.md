@@ -1,3 +1,17 @@
+## 2.2.0
+
+* Added `SmartDateField` — smart Flutter form field for date input
+  * Natural language input — type "tomorrow", "next monday"
+  * Smart autocomplete suggestions
+  * Date picker dialog integration
+  * Min/Max date constraints
+  * Built-in validation support
+  * Clear button
+  * Selected date display with timeAgo
+* Added `SmartDateFieldController`
+  * `setValue()`, `clear()`
+  * `value`, `hasValue`
+
 ## 2.1.0
 
 - Added `AgendaView` — chronological event list grouped by date

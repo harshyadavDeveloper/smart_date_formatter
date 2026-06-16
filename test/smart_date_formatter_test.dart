@@ -2011,4 +2011,184 @@ void main() {
       await tester.binding.setSurfaceSize(null);
     });
   });
+
+  group('SmartDateField v2.2.0', () {
+    testWidgets('SmartDateField — renders', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Padding(
+              padding: EdgeInsets.all(16),
+              child: SmartDateField(label: 'Due Date'),
+            ),
+          ),
+        ),
+      );
+      expect(find.byType(SmartDateField), findsOneWidget);
+      expect(find.text('Due Date'), findsOneWidget);
+    });
+
+    testWidgets('SmartDateField — shows initial value', (tester) async {
+      final date = DateTime(2024, 6, 15);
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Padding(
+              padding: const EdgeInsets.all(16),
+              child: SmartDateField(
+                label: 'Date',
+                initialValue: date,
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(find.text('15 Jun 2024'), findsOneWidget);
+    });
+
+    testWidgets('SmartDateField — natural language input', (tester) async {
+      DateTime? result;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Padding(
+              padding: const EdgeInsets.all(16),
+              child: SmartDateField(
+                label: 'Date',
+                onChanged: (date) => result = date,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.enterText(find.byType(TextField), 'tomorrow');
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(result, isNotNull);
+    });
+
+    testWidgets('SmartDateField — shows picker icon', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Padding(
+              padding: EdgeInsets.all(16),
+              child: SmartDateField(
+                label: 'Date',
+                showPickerIcon: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(find.byIcon(Icons.date_range), findsOneWidget);
+    });
+
+    testWidgets('SmartDateField — clear button', (tester) async {
+      DateTime? result = DateTime.now();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Padding(
+              padding: const EdgeInsets.all(16),
+              child: SmartDateField(
+                label: 'Date',
+                initialValue: DateTime.now(),
+                showClearButton: true,
+                onChanged: (date) => result = date,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byIcon(Icons.clear));
+      await tester.pump();
+      expect(result, isNull);
+    });
+
+    testWidgets('SmartDateField — validator error', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Padding(
+              padding: const EdgeInsets.all(16),
+              child: SmartDateField(
+                label: 'Date',
+                validator: (date) => date == null ? 'Date required' : null,
+              ),
+            ),
+          ),
+        ),
+      );
+      // No date selected — no error shown yet
+      expect(find.text('Date required'), findsNothing);
+    });
+
+    // Controller tests
+    test('SmartDateFieldController — setValue', () {
+      final controller = SmartDateFieldController();
+      controller.setValue(DateTime(2024, 6, 15));
+      expect(controller.value, DateTime(2024, 6, 15));
+      expect(controller.hasValue, true);
+      controller.dispose();
+    });
+
+    test('SmartDateFieldController — clear', () {
+      final controller = SmartDateFieldController(initialValue: DateTime.now());
+      expect(controller.hasValue, true);
+      controller.clear();
+      expect(controller.hasValue, false);
+      expect(controller.value, isNull);
+      controller.dispose();
+    });
+
+    test('SmartDateFieldController — initialValue', () {
+      final date = DateTime(2024, 6, 15);
+      final controller = SmartDateFieldController(initialValue: date);
+      expect(controller.value, date);
+      controller.dispose();
+    });
+
+    testWidgets('SmartDateField — with controller', (tester) async {
+      final controller = SmartDateFieldController();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Padding(
+              padding: const EdgeInsets.all(16),
+              child: SmartDateField(
+                label: 'Date',
+                controller: controller,
+              ),
+            ),
+          ),
+        ),
+      );
+      controller.setValue(DateTime(2024, 6, 15));
+      await tester.pump();
+      expect(find.text('15 Jun 2024'), findsOneWidget);
+      controller.dispose();
+    });
+
+    testWidgets('SmartDateField — suggestions on tap', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Padding(
+              padding: EdgeInsets.all(16),
+              child: SmartDateField(
+                label: 'Date',
+                showSuggestions: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.byType(TextField));
+      await tester.pump();
+      // Suggestions should appear
+      expect(find.text('today'), findsOneWidget);
+    });
+  });
 }

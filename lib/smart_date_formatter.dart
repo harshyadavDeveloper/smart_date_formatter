@@ -46,3 +46,4 @@ export 'src/date_grouper.dart';
 export 'src/calendar/calendar_event.dart';
 export 'src/calendar/calendar_controller.dart';
 export 'src/calendar/smart_calendar.dart';
+export 'src/widgets/smart_date_field.dart';
