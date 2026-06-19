@@ -2191,4 +2191,192 @@ void main() {
       expect(find.text('today'), findsOneWidget);
     });
   });
+
+  group('SmartDateRangePicker v2.3.0', () {
+    // SelectedDateRange tests
+    test('SelectedDateRange.days — 7 days', () {
+      final range = SelectedDateRange(
+        start: DateTime(2024, 6, 1),
+        end: DateTime(2024, 6, 7),
+      );
+      expect(range.days, 7);
+    });
+
+    test('SelectedDateRange.contains — inside', () {
+      final range = SelectedDateRange(
+        start: DateTime(2024, 6, 1),
+        end: DateTime(2024, 6, 30),
+      );
+      expect(range.contains(DateTime(2024, 6, 15)), true);
+    });
+
+    test('SelectedDateRange.contains — outside', () {
+      final range = SelectedDateRange(
+        start: DateTime(2024, 6, 1),
+        end: DateTime(2024, 6, 30),
+      );
+      expect(range.contains(DateTime(2024, 7, 1)), false);
+    });
+
+    test('SelectedDateRange.toDateRange', () {
+      final range = SelectedDateRange(
+        start: DateTime(2024, 6, 1),
+        end: DateTime(2024, 6, 30),
+      );
+      final dateRange = range.toDateRange();
+      expect(dateRange.start, DateTime(2024, 6, 1));
+      expect(dateRange.end, DateTime(2024, 6, 30));
+    });
+
+    // Controller tests
+    test('Controller.setRange', () {
+      final controller = SmartDateRangePickerController();
+      controller.setRange(
+        DateTime(2024, 6, 1),
+        DateTime(2024, 6, 30),
+      );
+      expect(controller.hasValue, true);
+      expect(controller.value?.days, 30);
+      controller.dispose();
+    });
+
+    test('Controller.setPreset — thisWeek', () {
+      final controller = SmartDateRangePickerController();
+      controller.setPreset(DateRangePreset.thisWeek);
+      expect(controller.hasValue, true);
+      expect(controller.value?.preset, DateRangePreset.thisWeek);
+      controller.dispose();
+    });
+
+    test('Controller.setPreset — last30Days', () {
+      final controller = SmartDateRangePickerController();
+      controller.setPreset(DateRangePreset.last30Days);
+      expect(controller.value?.days, 30);
+      controller.dispose();
+    });
+
+    test('Controller.clear', () {
+      final controller = SmartDateRangePickerController(
+        initialRange: SelectedDateRange(
+          start: DateTime(2024, 6, 1),
+          end: DateTime(2024, 6, 30),
+        ),
+      );
+      expect(controller.hasValue, true);
+      controller.clear();
+      expect(controller.hasValue, false);
+      controller.dispose();
+    });
+
+    test('Controller.initialRange', () {
+      final range = SelectedDateRange(
+        start: DateTime(2024, 6, 1),
+        end: DateTime(2024, 6, 30),
+      );
+      final controller = SmartDateRangePickerController(initialRange: range);
+      expect(controller.value?.start, DateTime(2024, 6, 1));
+      controller.dispose();
+    });
+
+    // Widget tests
+    testWidgets('SmartDateRangePicker — renders', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: SmartDateRangePicker(),
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(find.byType(SmartDateRangePicker), findsOneWidget);
+    });
+
+    testWidgets('SmartDateRangePicker — shows presets', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: SmartDateRangePicker(
+                  showPresets: true,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(find.text('Today'), findsOneWidget);
+      expect(find.text('This Week'), findsOneWidget);
+      expect(find.text('This Month'), findsOneWidget);
+    });
+
+    testWidgets('SmartDateRangePicker — preset tap', (tester) async {
+      SelectedDateRange? result;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: SmartDateRangePicker(
+                  showConfirmButton: false,
+                  onRangeSelected: (range) => result = range,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Today'));
+      await tester.pump();
+      expect(result, isNotNull);
+      expect(result?.preset, DateRangePreset.today);
+    });
+
+    testWidgets('SmartDateRangePicker — with controller', (tester) async {
+      final controller = SmartDateRangePickerController();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: SmartDateRangePicker(
+                  controller: controller,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      controller.setPreset(DateRangePreset.thisMonth);
+      await tester.pump();
+      expect(find.byType(SmartDateRangePicker), findsOneWidget);
+      controller.dispose();
+    });
+
+    testWidgets('SmartDateRangePicker — no presets', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: SmartDateRangePicker(
+                  showPresets: false,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(find.text('Today'), findsNothing);
+    });
+  });
 }
