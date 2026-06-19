@@ -1,3 +1,26 @@
+## 2.3.0
+
+* Added `SmartDateRangePicker` widget
+  * Visual range selection with highlight
+  * Preset ranges: today, thisWeek, thisMonth,
+    last7Days, last30Days, thisYear + more
+  * Min/Max date constraints
+  * `onRangeSelected` callback
+  * `onCleared` callback
+  * `showAsBottomSheet()` — dialog mode
+  * Custom preset labels support
+  * Configurable primary + range colors
+* Added `SmartDateRangePickerController`
+  * `setRange(start, end)`
+  * `setPreset(DateRangePreset)`
+  * `clear()`
+  * `value`, `hasValue`
+* Added `SelectedDateRange` model
+  * `days` — range length
+  * `contains(date)` — check if date in range
+  * `toDateRange()` — convert to DateRange
+* Added `DateRangePreset` enum
+
 ## 2.2.0
 
 * Added `SmartDateField` — smart Flutter form field for date input
