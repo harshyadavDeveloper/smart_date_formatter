@@ -47,3 +47,4 @@ export 'src/calendar/calendar_event.dart';
 export 'src/calendar/calendar_controller.dart';
 export 'src/calendar/smart_calendar.dart';
 export 'src/widgets/smart_date_field.dart';
+export 'src/widgets/smart_date_range_picker.dart';
