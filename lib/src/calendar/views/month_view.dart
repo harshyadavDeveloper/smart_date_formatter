@@ -36,6 +36,9 @@ class MonthView extends StatelessWidget {
   /// First day of week (1=Monday, 7=Sunday)
   final int firstDayOfWeek;
 
+  /// Show week numbers on left side
+  final bool showWeekNumbers;
+
   /// Creates a [MonthView].
   const MonthView({
     super.key,
@@ -49,6 +52,7 @@ class MonthView extends StatelessWidget {
     this.headerColor = Colors.black87,
     this.showWeekdayHeaders = true,
     this.firstDayOfWeek = 1,
+    this.showWeekNumbers = false,
   });
 
   List<DateTime> _daysInMonth(DateTime month) {
@@ -103,55 +107,36 @@ class MonthView extends StatelessWidget {
             const SizedBox(height: 8),
             if (showWeekdayHeaders)
               Row(
-                children: weekdays
-                    .map((day) => Expanded(
-                          child: Text(
-                            day,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey.shade600,
-                            ),
+                children: [
+                  // Week number empty header
+                  if (showWeekNumbers)
+                    SizedBox(
+                      width: 28,
+                      child: Text(
+                        'W',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey.shade400,
+                        ),
+                      ),
+                    ),
+                  ...weekdays.map((day) => Expanded(
+                        child: Text(
+                          day,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey.shade600,
                           ),
-                        ))
-                    .toList(),
+                        ),
+                      )),
+                ],
               ),
             const SizedBox(height: 4),
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 7,
-                childAspectRatio: 1,
-              ),
-              itemCount: days.length,
-              itemBuilder: (context, index) {
-                final date = days[index];
-                final dayEvents = _eventsForDate(date);
-                final isCurrentMonth =
-                    date.month == controller.focusedDate.month;
-                final isSelected = date.isSameDay(controller.selectedDate);
-                final isToday = date.isToday;
-                final isWeekend = date.isWeekend;
-
-                return DayCell(
-                  date: date,
-                  events: dayEvents,
-                  isSelected: isSelected,
-                  isToday: isToday,
-                  isCurrentMonth: isCurrentMonth,
-                  isWeekend: isWeekend,
-                  markerStyle: markerStyle,
-                  selectedColor: selectedColor,
-                  todayColor: todayColor,
-                  onTap: () {
-                    controller.selectDate(date);
-                    onDateSelected?.call(date, dayEvents);
-                  },
-                );
-              },
-            ),
+            _buildCalendarGrid(days),
           ],
         );
       },
@@ -165,5 +150,69 @@ class MonthView extends StatelessWidget {
       ...allDays.sublist(offset),
       ...allDays.sublist(0, offset),
     ];
+  }
+
+  Widget _buildCalendarGrid(List<DateTime> days) {
+    // Group days into weeks (7 days each)
+    final weeks = <List<DateTime>>[];
+    for (int i = 0; i < days.length; i += 7) {
+      weeks.add(days.sublist(i, i + 7));
+    }
+
+    return Column(
+      children: weeks.map((week) {
+        return Row(
+          children: [
+            // ── Week number ────────────────────────────
+            if (showWeekNumbers)
+              SizedBox(
+                width: 28,
+                child: Text(
+                  '${_weekNumber(week.first)}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey.shade400,
+                  ),
+                ),
+              ),
+
+            // ── 7 day cells ────────────────────────────
+            ...week.map((date) {
+              final dayEvents = _eventsForDate(date);
+              final isCurrentMonth = date.month == controller.focusedDate.month;
+              final isSelected = date.isSameDay(controller.selectedDate);
+              final isToday = date.isToday;
+              final isWeekend = date.isWeekend;
+
+              return Expanded(
+                child: DayCell(
+                  date: date,
+                  events: dayEvents,
+                  isSelected: isSelected,
+                  isToday: isToday,
+                  isCurrentMonth: isCurrentMonth,
+                  isWeekend: isWeekend,
+                  markerStyle: markerStyle,
+                  selectedColor: selectedColor,
+                  todayColor: todayColor,
+                  onTap: () {
+                    controller.selectDate(date);
+                    onDateSelected?.call(date, dayEvents);
+                  },
+                ),
+              );
+            }),
+          ],
+        );
+      }).toList(),
+    );
+  }
+
+  int _weekNumber(DateTime date) {
+    final firstDayOfYear = DateTime(date.year, 1, 1);
+    final dayOfYear = date.difference(firstDayOfYear).inDays + 1;
+    return ((dayOfYear + firstDayOfYear.weekday - 2) / 7).ceil().clamp(1, 53);
   }
 }

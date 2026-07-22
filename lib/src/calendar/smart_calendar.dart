@@ -90,6 +90,9 @@ class SmartCalendar extends StatefulWidget {
   /// Days to show behind in agenda view
   final int agendaDaysBehind;
 
+  /// Whether to show week numbers in month view
+  final bool showWeekNumbers;
+
   /// Creates a [SmartCalendar] widget.
   ///
   /// ```dart
@@ -120,6 +123,7 @@ class SmartCalendar extends StatefulWidget {
     this.firstDayOfWeek = 1,
     this.agendaDaysAhead = 30,
     this.agendaDaysBehind = 7,
+    this.showWeekNumbers = false,
   });
 
   @override
@@ -276,6 +280,7 @@ class _SmartCalendarState extends State<SmartCalendar> {
           todayColor: widget.todayColor,
           headerColor: widget.headerColor,
           firstDayOfWeek: widget.firstDayOfWeek,
+          showWeekNumbers: widget.showWeekNumbers,
         );
       case CalendarView.week:
         return WeekView(
