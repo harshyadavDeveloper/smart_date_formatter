@@ -395,33 +395,37 @@ class _SmartDateFieldState extends State<SmartDateField> {
                 ),
               ],
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: _suggestions.map((suggestion) {
-                final parsed = SmartParser.parse(suggestion);
-                return ListTile(
-                  dense: true,
-                  leading: const Icon(Icons.access_time,
-                      size: 16, color: Colors.grey),
-                  title: Text(
-                    suggestion,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
+            child: Material(
+              color: Colors.transparent,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: _suggestions.map((suggestion) {
+                  final parsed = SmartParser.parse(suggestion);
+                  return ListTile(
+                    dense: true,
+                    leading: const Icon(Icons.access_time,
+                        size: 16, color: Colors.grey),
+                    title: Text(
+                      suggestion,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                  trailing: parsed != null
-                      ? Text(
-                          DateFormatHelper.format(parsed, widget.displayFormat),
-                          style: const TextStyle(
-                            fontSize: 11,
-                            color: Colors.grey,
-                          ),
-                        )
-                      : null,
-                  onTap: () => _selectSuggestion(suggestion),
-                );
-              }).toList(),
+                    trailing: parsed != null
+                        ? Text(
+                            DateFormatHelper.format(
+                                parsed, widget.displayFormat),
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: Colors.grey,
+                            ),
+                          )
+                        : null,
+                    onTap: () => _selectSuggestion(suggestion),
+                  );
+                }).toList(),
+              ),
             ),
           ),
         ],

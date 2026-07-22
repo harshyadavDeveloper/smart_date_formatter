@@ -1,3 +1,10 @@
+## 2.4.0
+
+* Added `showWeekNumbers` to `SmartCalendar` 
+  and `MonthView`
+* Week numbers shown on left side of calendar grid
+* 'W' header shown when week numbers enabled
+
 ## 2.2.0
 
 * Added `SmartDateField` — smart Flutter form field for date input

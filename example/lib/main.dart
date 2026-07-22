@@ -22,8 +22,7 @@ class ExampleApp extends StatelessWidget {
     return MaterialApp(
       title: 'SmartDateFormatter Example',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          colorSchemeSeed: Colors.indigo, useMaterial3: true),
+      theme: ThemeData(colorSchemeSeed: Colors.indigo, useMaterial3: true),
       home: const ExampleHomePage(),
     );
   }
@@ -45,11 +44,9 @@ class ExampleHomePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('smart_date_formatter',
-                  style: TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold)),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               Text('v2.2.0 — Full Example',
-                  style: TextStyle(
-                      fontSize: 11, color: Colors.white70)),
+                  style: TextStyle(fontSize: 11, color: Colors.white70)),
             ],
           ),
           bottom: const TabBar(
