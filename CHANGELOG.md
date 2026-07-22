@@ -1,9 +1,13 @@
-## 2.4.0
+## 2.3.0
 
-* Added `showWeekNumbers` to `SmartCalendar` 
-  and `MonthView`
-* Week numbers shown on left side of calendar grid
-* 'W' header shown when week numbers enabled
+* Added `showWeekNumbers` to `SmartCalendar`
+* Added time picker to `SmartDateField`
+  * `enableTimePicker` — show time picker icon
+  * `initialTime` — initial TimeOfDay value
+  * `onTimeChanged` — callback when time changes
+  * `use24HourFormat` — 12h or 24h display
+  * Combined date + time display in field
+  * Time shown in selected info section
 
 ## 2.2.0
 

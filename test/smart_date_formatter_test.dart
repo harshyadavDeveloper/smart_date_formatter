@@ -2246,4 +2246,99 @@ void main() {
       });
     });
   });
+
+  group('SmartDateField v2.3.0 — Time Picker', () {
+    testWidgets('SmartDateField — time picker icon shows', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Padding(
+              padding: EdgeInsets.all(16),
+              child: SmartDateField(
+                label: 'Date & Time',
+                enableTimePicker: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(find.byIcon(Icons.access_time), findsOneWidget);
+    });
+
+    testWidgets('SmartDateField — time picker hidden by default',
+        (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Padding(
+              padding: EdgeInsets.all(16),
+              child: SmartDateField(
+                label: 'Date Only',
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(find.byIcon(Icons.access_time), findsNothing);
+    });
+
+    testWidgets('SmartDateField — date and time picker icons', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Padding(
+              padding: EdgeInsets.all(16),
+              child: SmartDateField(
+                label: 'Date & Time',
+                enableTimePicker: true,
+                showPickerIcon: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // Both icons should show
+      expect(find.byIcon(Icons.access_time), findsOneWidget);
+      expect(find.byIcon(Icons.date_range), findsOneWidget);
+    });
+
+    testWidgets('SmartDateField — 24 hour format', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Padding(
+              padding: EdgeInsets.all(16),
+              child: SmartDateField(
+                label: 'Date & Time',
+                enableTimePicker: true,
+                use24HourFormat: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(find.byType(SmartDateField), findsOneWidget);
+    });
+
+    testWidgets('SmartDateField — initialTime set', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Padding(
+              padding: const EdgeInsets.all(16),
+              child: SmartDateField(
+                label: 'Date & Time',
+                enableTimePicker: true,
+                initialValue: DateTime.now(),
+                initialTime: const TimeOfDay(hour: 10, minute: 30),
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(find.byType(SmartDateField), findsOneWidget);
+      // Should show AM time
+      expect(find.textContaining('10:30'), findsOneWidget);
+    });
+  });
 }
