@@ -2247,7 +2247,7 @@ void main() {
     });
   });
 
-  group('SmartDateField v2.4.0 — Time Picker', () {
+  group('SmartDateField v2.3.0 — Time Picker', () {
     testWidgets('SmartDateField — time picker icon shows', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
