@@ -18,6 +18,50 @@ class _CalendarWidgetTabState extends State<CalendarWidgetTab> {
   EventMarkerStyle _markerStyle = EventMarkerStyle.dot;
   final CalendarView _currentView = CalendarView.month;
 
+  bool _showWeekNumbers = false;
+
+  Widget _weekNumbersDemo() => Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    '🆕 Week Numbers',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: Colors.indigo),
+                  ),
+                  Switch(
+                    value: _showWeekNumbers,
+                    onChanged: (val) => setState(() => _showWeekNumbers = val),
+                    activeThumbColor: Colors.indigo,
+                  ),
+                ],
+              ),
+              const CodeBox(
+                'SmartCalendar(\n'
+                '  showWeekNumbers: true,\n'
+                ')',
+              ),
+              const SizedBox(height: 12),
+              SmartCalendar(
+                events: _events,
+                showWeekNumbers: _showWeekNumbers,
+                showViewSwitcher: false,
+                showTodayButton: false,
+                markerStyle: _markerStyle,
+              ),
+            ],
+          ),
+        ),
+      );
+
   final List<CalendarEvent> _events = [
     // Single day events
     CalendarEvent(
@@ -169,6 +213,8 @@ class _CalendarWidgetTabState extends State<CalendarWidgetTab> {
 
         // Controller demo
         _controllerDemo(),
+        const SizedBox(height: 16),
+        _weekNumbersDemo(),
         const SizedBox(height: 16),
 
         // Event properties

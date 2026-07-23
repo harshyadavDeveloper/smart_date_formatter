@@ -87,6 +87,18 @@ class SmartDateField extends StatefulWidget {
   /// Decoration override
   final InputDecoration? decoration;
 
+  /// Whether to enable time selection
+  final bool enableTimePicker;
+
+  /// Initial time value
+  final TimeOfDay? initialTime;
+
+  /// Called when time changes
+  final void Function(TimeOfDay? time)? onTimeChanged;
+
+  /// Time display format — 12 or 24 hour
+  final bool use24HourFormat;
+
   /// Creates a [SmartDateField].
   ///
   /// ```dart
@@ -115,6 +127,10 @@ class SmartDateField extends StatefulWidget {
     this.controller,
     this.textStyle,
     this.decoration,
+    this.enableTimePicker = false,
+    this.initialTime,
+    this.onTimeChanged,
+    this.use24HourFormat = false,
   });
 
   @override
@@ -128,6 +144,7 @@ class _SmartDateFieldState extends State<SmartDateField> {
   bool _showSuggestions = false;
   List<String> _suggestions = [];
   Timer? _debounce;
+  TimeOfDay? _selectedTime;
 
   // Natural language suggestions
   static const _naturalSuggestions = [
@@ -152,6 +169,11 @@ class _SmartDateFieldState extends State<SmartDateField> {
     super.initState();
     _textController = TextEditingController();
     _selectedDate = widget.initialValue ?? widget.controller?.value;
+    _selectedTime = widget.initialTime;
+
+    if (_selectedDate != null) {
+      _textController.text = _buildDisplayText(); // 👈 updated
+    }
 
     if (_selectedDate != null) {
       _textController.text =
@@ -159,6 +181,55 @@ class _SmartDateFieldState extends State<SmartDateField> {
     }
 
     widget.controller?.addListener(_onControllerChanged);
+  }
+
+  String _buildDisplayText() {
+    if (_selectedDate == null) return '';
+    final dateStr =
+        DateFormatHelper.format(_selectedDate!, widget.displayFormat);
+    if (!widget.enableTimePicker || _selectedTime == null) {
+      return dateStr;
+    }
+    final timeStr = _formatTime(_selectedTime!);
+    return '$dateStr  $timeStr';
+  }
+
+  String _formatTime(TimeOfDay time) {
+    if (widget.use24HourFormat) {
+      return '${time.hour.toString().padLeft(2, '0')}:'
+          '${time.minute.toString().padLeft(2, '0')}';
+    }
+    final hour = time.hour == 0
+        ? 12
+        : time.hour > 12
+            ? time.hour - 12
+            : time.hour;
+    final minute = time.minute.toString().padLeft(2, '0');
+    final period = time.hour >= 12 ? 'PM' : 'AM';
+    return '$hour:$minute $period';
+  }
+
+  Future<void> _openTimePicker() async {
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime ?? TimeOfDay.now(),
+      builder: (context, child) => MediaQuery(
+        data: MediaQuery.of(context).copyWith(
+          alwaysUse24HourFormat: widget.use24HourFormat,
+        ),
+        child: child!,
+      ),
+    );
+
+    if (picked != null) {
+      setState(() {
+        _selectedTime = picked;
+        if (_selectedDate != null) {
+          _textController.text = _buildDisplayText();
+        }
+      });
+      widget.onTimeChanged?.call(picked);
+    }
   }
 
   void _onControllerChanged() {
@@ -217,7 +288,6 @@ class _SmartDateFieldState extends State<SmartDateField> {
   }
 
   void _setDate(DateTime? date, {bool updateText = true}) {
-    // Validate min/max
     if (date != null) {
       if (widget.minDate != null && date.isBefore(widget.minDate!)) {
         setState(() => _errorText =
@@ -231,7 +301,6 @@ class _SmartDateFieldState extends State<SmartDateField> {
       }
     }
 
-    // Run validator
     final validatorError = widget.validator?.call(date);
 
     setState(() {
@@ -240,8 +309,7 @@ class _SmartDateFieldState extends State<SmartDateField> {
       _showSuggestions = false;
 
       if (updateText && date != null) {
-        _textController.text =
-            DateFormatHelper.format(date, widget.displayFormat);
+        _textController.text = _buildDisplayText(); // 👈 updated
       }
     });
 
@@ -285,11 +353,13 @@ class _SmartDateFieldState extends State<SmartDateField> {
     setState(() {
       _selectedDate = null;
       _errorText = null;
+      _selectedTime = null;
       _textController.clear();
       _showSuggestions = false;
     });
     widget.controller?.setValue(null);
     widget.onChanged?.call(null);
+    widget.onTimeChanged?.call(null);
   }
 
   @override
@@ -339,6 +409,18 @@ class _SmartDateFieldState extends State<SmartDateField> {
                         onPressed: _clearDate,
                         tooltip: 'Clear date',
                       ),
+                    // Time picker button 👈 new
+                    if (widget.enableTimePicker)
+                      IconButton(
+                        icon: Icon(
+                          Icons.access_time,
+                          color: _selectedTime != null
+                              ? Theme.of(context).colorScheme.primary
+                              : Colors.grey,
+                        ),
+                        onPressed: _openTimePicker,
+                        tooltip: 'Select time',
+                      ),
                     // Date picker button
                     if (widget.showPickerIcon)
                       IconButton(
@@ -355,25 +437,41 @@ class _SmartDateFieldState extends State<SmartDateField> {
         ),
 
         // Selected date display
+        // ✅ Date + Time info show karo
         if (_selectedDate != null && _errorText == null) ...[
           const SizedBox(height: 4),
           Padding(
             padding: const EdgeInsets.only(left: 12),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(
-                  Icons.check_circle,
-                  size: 14,
-                  color: Colors.green.shade600,
+                Row(
+                  children: [
+                    Icon(Icons.check_circle,
+                        size: 14, color: Colors.green.shade600),
+                    const SizedBox(width: 4),
+                    Text(
+                      '${_selectedDate!.calendar}  •  ${_selectedDate!.timeAgo}',
+                      style:
+                          TextStyle(fontSize: 11, color: Colors.green.shade600),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 4),
-                Text(
-                  '${_selectedDate!.calendar}  •  ${_selectedDate!.timeAgo}',
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: Colors.green.shade600,
+                if (widget.enableTimePicker && _selectedTime != null) ...[
+                  const SizedBox(height: 2),
+                  Row(
+                    children: [
+                      Icon(Icons.access_time,
+                          size: 14, color: Colors.blue.shade600),
+                      const SizedBox(width: 4),
+                      Text(
+                        'Time: ${_formatTime(_selectedTime!)}',
+                        style: TextStyle(
+                            fontSize: 11, color: Colors.blue.shade600),
+                      ),
+                    ],
                   ),
-                ),
+                ],
               ],
             ),
           ),
@@ -395,33 +493,37 @@ class _SmartDateFieldState extends State<SmartDateField> {
                 ),
               ],
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: _suggestions.map((suggestion) {
-                final parsed = SmartParser.parse(suggestion);
-                return ListTile(
-                  dense: true,
-                  leading: const Icon(Icons.access_time,
-                      size: 16, color: Colors.grey),
-                  title: Text(
-                    suggestion,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
+            child: Material(
+              color: Colors.transparent,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: _suggestions.map((suggestion) {
+                  final parsed = SmartParser.parse(suggestion);
+                  return ListTile(
+                    dense: true,
+                    leading: const Icon(Icons.access_time,
+                        size: 16, color: Colors.grey),
+                    title: Text(
+                      suggestion,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                  trailing: parsed != null
-                      ? Text(
-                          DateFormatHelper.format(parsed, widget.displayFormat),
-                          style: const TextStyle(
-                            fontSize: 11,
-                            color: Colors.grey,
-                          ),
-                        )
-                      : null,
-                  onTap: () => _selectSuggestion(suggestion),
-                );
-              }).toList(),
+                    trailing: parsed != null
+                        ? Text(
+                            DateFormatHelper.format(
+                                parsed, widget.displayFormat),
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: Colors.grey,
+                            ),
+                          )
+                        : null,
+                    onTap: () => _selectSuggestion(suggestion),
+                  );
+                }).toList(),
+              ),
             ),
           ),
         ],

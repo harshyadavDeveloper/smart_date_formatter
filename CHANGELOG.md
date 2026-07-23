@@ -1,5 +1,13 @@
 ## 2.3.0
 
+* Added `showWeekNumbers` to `SmartCalendar`
+* Added time picker to `SmartDateField`
+  * `enableTimePicker` — show time picker icon
+  * `initialTime` — initial TimeOfDay value
+  * `onTimeChanged` — callback when time changes
+  * `use24HourFormat` — 12h or 24h display
+  * Combined date + time display in field
+  * Time shown in selected info section
 * Added `SmartDateRangePicker` widget
   * Visual range selection with highlight
   * Preset ranges: today, thisWeek, thisMonth,
