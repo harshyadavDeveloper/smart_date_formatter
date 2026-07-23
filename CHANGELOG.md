@@ -1,4 +1,4 @@
-## 2.3.0
+## 2.4.0
 
 * Added `showWeekNumbers` to `SmartCalendar`
 * Added time picker to `SmartDateField`
