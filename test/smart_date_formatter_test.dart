@@ -2529,4 +2529,103 @@ void main() {
       expect(find.text('Today'), findsNothing);
     });
   });
+
+  group('SmartCalendar v2.5.0 — Dark Theme', () {
+    testWidgets('SmartCalendar — dark theme renders', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SmartCalendar(
+                events: [],
+                themeMode: ThemeMode.dark,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(SmartCalendar), findsOneWidget);
+      await tester.binding.setSurfaceSize(null);
+    });
+
+    testWidgets('SmartCalendar — light theme renders', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SmartCalendar(
+                events: [],
+                themeMode: ThemeMode.light,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(SmartCalendar), findsOneWidget);
+      await tester.binding.setSurfaceSize(null);
+    });
+
+    testWidgets('SmartCalendar — system theme renders', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SmartCalendar(
+                events: [],
+                themeMode: ThemeMode.system,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(SmartCalendar), findsOneWidget);
+      await tester.binding.setSurfaceSize(null);
+    });
+
+    testWidgets('SmartCalendar — dark theme week view', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SmartCalendar(
+                events: [],
+                themeMode: ThemeMode.dark,
+                initialView: CalendarView.week,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(SmartCalendar), findsOneWidget);
+      await tester.binding.setSurfaceSize(null);
+    });
+
+    testWidgets('SmartCalendar — dark theme agenda view', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SmartCalendar(
+                events: [],
+                themeMode: ThemeMode.dark,
+                initialView: CalendarView.agenda,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(SmartCalendar), findsOneWidget);
+      await tester.binding.setSurfaceSize(null);
+    });
+  });
 }

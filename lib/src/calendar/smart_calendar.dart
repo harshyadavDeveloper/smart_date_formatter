@@ -93,6 +93,9 @@ class SmartCalendar extends StatefulWidget {
   /// Whether to show week numbers in month view
   final bool showWeekNumbers;
 
+  /// Theme mode for calendar
+  final ThemeMode themeMode;
+
   /// Creates a [SmartCalendar] widget.
   ///
   /// ```dart
@@ -124,6 +127,7 @@ class SmartCalendar extends StatefulWidget {
     this.agendaDaysAhead = 30,
     this.agendaDaysBehind = 7,
     this.showWeekNumbers = false,
+    this.themeMode = ThemeMode.light,
   });
 
   @override
@@ -147,6 +151,32 @@ class _SmartCalendarState extends State<SmartCalendar> {
     _currentView = widget.initialView;
   }
 
+  bool get _isDark {
+    if (widget.themeMode == ThemeMode.system) {
+      return WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+          Brightness.dark;
+    }
+    return widget.themeMode == ThemeMode.dark;
+  }
+
+  Color get _backgroundColor {
+    if (widget.backgroundColor != null) return widget.backgroundColor!;
+    return _isDark ? const Color(0xFF1E1E2E) : Colors.white;
+  }
+
+  Color get _headerColor {
+    if (widget.headerColor != Colors.black87) return widget.headerColor;
+    return _isDark ? Colors.white : Colors.black87;
+  }
+
+  Color get _surfaceColor =>
+      _isDark ? const Color(0xFF2A2A3E) : Colors.grey.shade100;
+
+  // Color get _textColor => _isDark ? Colors.white : Colors.black87;
+
+  Color get _subtleTextColor =>
+      _isDark ? Colors.grey.shade400 : Colors.grey.shade600;
+
   @override
   void dispose() {
     if (_ownsController) _controller.dispose();
@@ -157,7 +187,7 @@ class _SmartCalendarState extends State<SmartCalendar> {
   Widget build(BuildContext context) {
     return Card(
       elevation: widget.elevation,
-      color: widget.backgroundColor ?? Theme.of(context).cardColor,
+      color: _backgroundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(widget.borderRadius),
       ),
@@ -205,7 +235,9 @@ class _SmartCalendarState extends State<SmartCalendar> {
               margin: const EdgeInsets.only(right: 6),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: isActive ? widget.selectedColor : Colors.grey.shade100,
+                color: isActive
+                    ? widget.selectedColor
+                    : _surfaceColor, // 👈 dynamic
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
@@ -213,7 +245,8 @@ class _SmartCalendarState extends State<SmartCalendar> {
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
-                  color: isActive ? Colors.white : Colors.grey.shade700,
+                  color:
+                      isActive ? Colors.white : _subtleTextColor, // 👈 dynamic
                 ),
               ),
             ),
@@ -271,17 +304,17 @@ class _SmartCalendarState extends State<SmartCalendar> {
     switch (_currentView) {
       case CalendarView.month:
         return MonthView(
-          controller: _controller,
-          events: widget.events,
-          onDateSelected: widget.onDateSelected,
-          onEventTap: widget.onEventTap,
-          markerStyle: widget.markerStyle,
-          selectedColor: widget.selectedColor,
-          todayColor: widget.todayColor,
-          headerColor: widget.headerColor,
-          firstDayOfWeek: widget.firstDayOfWeek,
-          showWeekNumbers: widget.showWeekNumbers,
-        );
+            controller: _controller,
+            events: widget.events,
+            onDateSelected: widget.onDateSelected,
+            onEventTap: widget.onEventTap,
+            markerStyle: widget.markerStyle,
+            selectedColor: widget.selectedColor,
+            todayColor: widget.todayColor,
+            headerColor: _headerColor,
+            firstDayOfWeek: widget.firstDayOfWeek,
+            showWeekNumbers: widget.showWeekNumbers,
+            isDark: _isDark);
       case CalendarView.week:
         return WeekView(
           controller: _controller,
@@ -290,7 +323,8 @@ class _SmartCalendarState extends State<SmartCalendar> {
           markerStyle: widget.markerStyle,
           selectedColor: widget.selectedColor,
           todayColor: widget.todayColor,
-          headerColor: widget.headerColor,
+          headerColor: _headerColor, // 👈 dynamic
+          isDark: _isDark,
         );
       case CalendarView.day:
         return SizedBox(
@@ -299,8 +333,9 @@ class _SmartCalendarState extends State<SmartCalendar> {
             controller: _controller,
             events: widget.events,
             onEventTap: widget.onEventTap,
-            headerColor: widget.headerColor,
+            headerColor: _headerColor,
             selectedColor: widget.selectedColor,
+            isDark: _isDark,
           ),
         );
       case CalendarView.agenda:
@@ -309,10 +344,11 @@ class _SmartCalendarState extends State<SmartCalendar> {
           events: widget.events,
           onDateSelected: widget.onDateSelected,
           onEventTap: widget.onEventTap,
-          headerColor: widget.headerColor,
+          headerColor: _headerColor,
           selectedColor: widget.selectedColor,
           daysAhead: widget.agendaDaysAhead,
           daysBehind: widget.agendaDaysBehind,
+          isDark: _isDark,
         );
     }
   }

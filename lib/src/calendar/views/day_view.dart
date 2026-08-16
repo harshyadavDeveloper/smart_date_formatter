@@ -18,6 +18,9 @@ class DayView extends StatelessWidget {
   /// Selected color
   final Color selectedColor;
 
+  /// Whether dark theme is active`
+  final bool isDark;
+
   /// Creates a [DayView].
   const DayView({
     super.key,
@@ -26,6 +29,7 @@ class DayView extends StatelessWidget {
     this.onEventTap,
     this.headerColor = Colors.black87,
     this.selectedColor = Colors.indigo,
+    this.isDark = false,
   });
 
   List<CalendarEvent> _eventsForDate(DateTime date) =>
@@ -90,12 +94,21 @@ class DayView extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.event_available,
-                          size: 48, color: Colors.grey.shade400),
+                      Icon(
+                        Icons.event_available,
+                        size: 48,
+                        color: isDark
+                            ? Colors.grey.shade600
+                            : Colors.grey.shade400,
+                      ),
                       const SizedBox(height: 12),
                       Text(
                         'No events today',
-                        style: TextStyle(color: Colors.grey.shade500),
+                        style: TextStyle(
+                          color: isDark
+                              ? Colors.grey.shade500
+                              : Colors.grey.shade500,
+                        ),
                       ),
                     ],
                   ),

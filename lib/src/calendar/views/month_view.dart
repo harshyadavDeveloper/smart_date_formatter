@@ -39,6 +39,9 @@ class MonthView extends StatelessWidget {
   /// Show week numbers on left side
   final bool showWeekNumbers;
 
+  /// Whether dark theme is active
+  final bool isDark;
+
   /// Creates a [MonthView].
   const MonthView({
     super.key,
@@ -53,6 +56,7 @@ class MonthView extends StatelessWidget {
     this.showWeekdayHeaders = true,
     this.firstDayOfWeek = 1,
     this.showWeekNumbers = false,
+    this.isDark = false,
   });
 
   List<DateTime> _daysInMonth(DateTime month) {
@@ -129,7 +133,9 @@ class MonthView extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
-                            color: Colors.grey.shade600,
+                            color: isDark
+                                ? Colors.grey.shade400
+                                : Colors.grey.shade600,
                           ),
                         ),
                       )),
@@ -173,7 +179,7 @@ class MonthView extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
-                    color: Colors.grey.shade400,
+                    color: isDark ? Colors.grey.shade500 : Colors.grey.shade400,
                   ),
                 ),
               ),
@@ -197,6 +203,7 @@ class MonthView extends StatelessWidget {
                   markerStyle: markerStyle,
                   selectedColor: selectedColor,
                   todayColor: todayColor,
+                  isDark: isDark,
                   onTap: () {
                     controller.selectDate(date);
                     onDateSelected?.call(date, dayEvents);
