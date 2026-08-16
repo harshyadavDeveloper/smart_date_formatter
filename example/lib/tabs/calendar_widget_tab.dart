@@ -19,6 +19,8 @@ class _CalendarWidgetTabState extends State<CalendarWidgetTab> {
   final CalendarView _currentView = CalendarView.month;
 
   bool _showWeekNumbers = false;
+  // Custom cell builder toggle
+  bool _useCustomCell = false;
 
   Widget _weekNumbersDemo() => Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -59,6 +61,116 @@ class _CalendarWidgetTabState extends State<CalendarWidgetTab> {
               ),
             ],
           ),
+        ),
+      );
+
+  Widget _customCellDemo() => Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    '🆕 Custom Cell Builder',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: Colors.indigo),
+                  ),
+                  Switch(
+                    value: _useCustomCell,
+                    onChanged: (val) => setState(() => _useCustomCell = val),
+                    activeThumbColor: Colors.indigo,
+                  ),
+                ],
+              ),
+              const CodeBox(
+                'SmartCalendar(\n'
+                '  cellBuilder: (date, events, isSelected, isToday) {\n'
+                '    return Container(\n'
+                '      decoration: BoxDecoration(\n'
+                '        color: isSelected ? Colors.indigo : null,\n'
+                '        shape: BoxShape.circle,\n'
+                '      ),\n'
+                '      child: Column(children: [\n'
+                '        Text(\'${'date.day'}\'),\n'
+                '        if (events.isNotEmpty)\n'
+                '          Icon(Icons.circle, size: 6),\n'
+                '      ]),\n'
+                '    );\n'
+                '  },\n'
+                ')',
+              ),
+              const SizedBox(height: 12),
+              SmartCalendar(
+                events: _events,
+                showViewSwitcher: false,
+                showTodayButton: false,
+                markerStyle: _markerStyle,
+                cellBuilder: _useCustomCell
+                    ? (date, events, isSelected, isToday) =>
+                        _customCell(date, events, isSelected, isToday)
+                    : null,
+              ),
+            ],
+          ),
+        ),
+      );
+
+  Widget _customCell(
+    DateTime date,
+    List<CalendarEvent> events,
+    bool isSelected,
+    bool isToday,
+  ) =>
+      Container(
+        margin: const EdgeInsets.all(3),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? Colors.indigo
+              : isToday
+                  ? Colors.indigo.withValues(alpha: 0.15)
+                  : events.isNotEmpty
+                      ? events.first.color.withValues(alpha: 0.1)
+                      : null,
+          shape: BoxShape.circle,
+          border: isToday && !isSelected
+              ? Border.all(color: Colors.indigo, width: 1.5)
+              : null,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '${date.day}',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight:
+                    isSelected || isToday ? FontWeight.bold : FontWeight.normal,
+                color: isSelected ? Colors.white : Colors.black87,
+              ),
+            ),
+            if (events.isNotEmpty)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: events
+                    .take(2)
+                    .map((e) => Container(
+                          width: 4,
+                          height: 4,
+                          margin: const EdgeInsets.symmetric(horizontal: 1),
+                          decoration: BoxDecoration(
+                            color: isSelected ? Colors.white : e.color,
+                            shape: BoxShape.circle,
+                          ),
+                        ))
+                    .toList(),
+              ),
+          ],
         ),
       );
 
@@ -215,6 +327,9 @@ class _CalendarWidgetTabState extends State<CalendarWidgetTab> {
         _controllerDemo(),
         const SizedBox(height: 16),
         _weekNumbersDemo(),
+        const SizedBox(height: 16),
+        _customCellDemo(),
+
         const SizedBox(height: 16),
 
         // Event properties

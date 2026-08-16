@@ -42,6 +42,32 @@ class MonthView extends StatelessWidget {
   /// Whether dark theme is active
   final bool isDark;
 
+  /// Custom cell builder for month view dates.
+  ///
+  /// ```dart
+  /// SmartCalendar(
+  ///   cellBuilder: (date, events, isSelected, isToday) {
+  ///     return Container(
+  ///       decoration: BoxDecoration(
+  ///         color: isSelected ? Colors.indigo : null,
+  ///         borderRadius: BorderRadius.circular(8),
+  ///       ),
+  ///       child: Column(children: [
+  ///         Text('${date.day}'),
+  ///         if (events.isNotEmpty)
+  ///           Icon(Icons.circle, size: 6, color: events.first.color),
+  ///       ]),
+  ///     );
+  ///   },
+  /// )
+  /// ```
+  final Widget Function(
+    DateTime date,
+    List<CalendarEvent> events,
+    bool isSelected,
+    bool isToday,
+  )? cellBuilder;
+
   /// Creates a [MonthView].
   const MonthView({
     super.key,
@@ -57,6 +83,7 @@ class MonthView extends StatelessWidget {
     this.firstDayOfWeek = 1,
     this.showWeekNumbers = false,
     this.isDark = false,
+    this.cellBuilder,
   });
 
   List<DateTime> _daysInMonth(DateTime month) {
@@ -193,22 +220,35 @@ class MonthView extends StatelessWidget {
               final isWeekend = date.isWeekend;
 
               return Expanded(
-                child: DayCell(
-                  date: date,
-                  events: dayEvents,
-                  isSelected: isSelected,
-                  isToday: isToday,
-                  isCurrentMonth: isCurrentMonth,
-                  isWeekend: isWeekend,
-                  markerStyle: markerStyle,
-                  selectedColor: selectedColor,
-                  todayColor: todayColor,
-                  isDark: isDark,
-                  onTap: () {
-                    controller.selectDate(date);
-                    onDateSelected?.call(date, dayEvents);
-                  },
-                ),
+                child: cellBuilder != null
+                    ? GestureDetector(
+                        onTap: () {
+                          controller.selectDate(date);
+                          onDateSelected?.call(date, dayEvents);
+                        },
+                        child: cellBuilder!(
+                          date,
+                          dayEvents,
+                          isSelected,
+                          isToday,
+                        ),
+                      )
+                    : DayCell(
+                        date: date,
+                        events: dayEvents,
+                        isSelected: isSelected,
+                        isToday: isToday,
+                        isCurrentMonth: isCurrentMonth,
+                        isWeekend: isWeekend,
+                        markerStyle: markerStyle,
+                        selectedColor: selectedColor,
+                        todayColor: todayColor,
+                        isDark: isDark,
+                        onTap: () {
+                          controller.selectDate(date);
+                          onDateSelected?.call(date, dayEvents);
+                        },
+                      ),
               );
             }),
           ],

@@ -2628,4 +2628,83 @@ void main() {
       await tester.binding.setSurfaceSize(null);
     });
   });
+
+  group('SmartCalendar v2.5.0 — Custom Cell Builder', () {
+    testWidgets('SmartCalendar — custom cell builder renders', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SmartCalendar(
+                events: const [],
+                cellBuilder: (date, events, isSelected, isToday) => Container(
+                  color: isSelected ? Colors.indigo : Colors.transparent,
+                  child: Center(
+                    child: Text('${date.day}'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(SmartCalendar), findsOneWidget);
+      await tester.binding.setSurfaceSize(null);
+    });
+
+    testWidgets('SmartCalendar — default cell when builder null',
+        (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SmartCalendar(
+                events: [],
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(SmartCalendar), findsOneWidget);
+      await tester.binding.setSurfaceSize(null);
+    });
+
+    testWidgets('SmartCalendar — custom cell with events', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SmartCalendar(
+                events: [
+                  CalendarEvent(
+                    date: DateTime.now(),
+                    title: 'Test',
+                    color: Colors.blue,
+                  ),
+                ],
+                cellBuilder: (date, events, isSelected, isToday) =>
+                    Stack(children: [
+                  Center(child: Text('${date.day}')),
+                  if (events.isNotEmpty)
+                    const Positioned(
+                      bottom: 4,
+                      right: 4,
+                      child: Icon(Icons.circle, size: 6, color: Colors.blue),
+                    ),
+                ]),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(SmartCalendar), findsOneWidget);
+      await tester.binding.setSurfaceSize(null);
+    });
+  });
 }

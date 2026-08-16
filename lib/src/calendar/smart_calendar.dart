@@ -96,6 +96,32 @@ class SmartCalendar extends StatefulWidget {
   /// Theme mode for calendar
   final ThemeMode themeMode;
 
+  /// Custom cell builder for month view dates.
+  ///
+  /// ```dart
+  /// SmartCalendar(
+  ///   cellBuilder: (date, events, isSelected, isToday) {
+  ///     return Container(
+  ///       decoration: BoxDecoration(
+  ///         color: isSelected ? Colors.indigo : null,
+  ///         borderRadius: BorderRadius.circular(8),
+  ///       ),
+  ///       child: Column(children: [
+  ///         Text('${date.day}'),
+  ///         if (events.isNotEmpty)
+  ///           Icon(Icons.circle, size: 6, color: events.first.color),
+  ///       ]),
+  ///     );
+  ///   },
+  /// )
+  /// ```
+  final Widget Function(
+    DateTime date,
+    List<CalendarEvent> events,
+    bool isSelected,
+    bool isToday,
+  )? cellBuilder;
+
   /// Creates a [SmartCalendar] widget.
   ///
   /// ```dart
@@ -128,6 +154,7 @@ class SmartCalendar extends StatefulWidget {
     this.agendaDaysBehind = 7,
     this.showWeekNumbers = false,
     this.themeMode = ThemeMode.light,
+    this.cellBuilder,
   });
 
   @override
@@ -304,17 +331,19 @@ class _SmartCalendarState extends State<SmartCalendar> {
     switch (_currentView) {
       case CalendarView.month:
         return MonthView(
-            controller: _controller,
-            events: widget.events,
-            onDateSelected: widget.onDateSelected,
-            onEventTap: widget.onEventTap,
-            markerStyle: widget.markerStyle,
-            selectedColor: widget.selectedColor,
-            todayColor: widget.todayColor,
-            headerColor: _headerColor,
-            firstDayOfWeek: widget.firstDayOfWeek,
-            showWeekNumbers: widget.showWeekNumbers,
-            isDark: _isDark);
+          controller: _controller,
+          events: widget.events,
+          onDateSelected: widget.onDateSelected,
+          onEventTap: widget.onEventTap,
+          markerStyle: widget.markerStyle,
+          selectedColor: widget.selectedColor,
+          todayColor: widget.todayColor,
+          headerColor: _headerColor,
+          firstDayOfWeek: widget.firstDayOfWeek,
+          showWeekNumbers: widget.showWeekNumbers,
+          isDark: _isDark,
+          cellBuilder: widget.cellBuilder,
+        );
       case CalendarView.week:
         return WeekView(
           controller: _controller,

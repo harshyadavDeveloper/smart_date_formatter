@@ -1,3 +1,10 @@
+## 2.5.0
+
+* Added `themeMode` to `SmartCalendar` — light/dark/system
+* Added `cellBuilder` to `SmartCalendar` — custom cell widget
+* Added `isDark` support to all calendar views
+* pub.dev score improvements — more dartdoc examples
+
 ## 2.3.0
 
 * Added `showWeekNumbers` to `SmartCalendar`
