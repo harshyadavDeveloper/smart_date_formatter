@@ -34,6 +34,9 @@ class DayCell extends StatelessWidget {
   /// Today color
   final Color todayColor;
 
+  /// Whether dark theme active
+  final bool isDark;
+
   /// Creates a [DayCell].
   const DayCell({
     super.key,
@@ -47,6 +50,7 @@ class DayCell extends StatelessWidget {
     this.markerStyle = EventMarkerStyle.dot,
     this.selectedColor = Colors.indigo,
     this.todayColor = Colors.blue,
+    this.isDark = false,
   });
 
   @override
@@ -57,10 +61,16 @@ class DayCell extends StatelessWidget {
         margin: const EdgeInsets.all(2),
         decoration: BoxDecoration(
           color: isSelected
-              ? selectedColor
-              : isToday
-                  ? todayColor.withValues(alpha: 0.12)
-                  : Colors.transparent,
+              ? Colors.white
+              : isCurrentMonth
+                  ? isWeekend
+                      ? Colors.red.shade400
+                      : isDark
+                          ? Colors.white
+                          : Colors.black87
+                  : isDark
+                      ? Colors.grey.shade600
+                      : Colors.grey.shade400,
           borderRadius: BorderRadius.circular(8),
           border: isToday && !isSelected
               ? Border.all(color: todayColor, width: 1.5)

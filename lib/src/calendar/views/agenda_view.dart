@@ -30,6 +30,9 @@ class AgendaView extends StatelessWidget {
   /// Number of days to show behind
   final int daysBehind;
 
+  /// Whether dark theme is active
+  final bool isDark;
+
   /// Creates an [AgendaView].
   const AgendaView({
     super.key,
@@ -41,6 +44,7 @@ class AgendaView extends StatelessWidget {
     this.selectedColor = Colors.indigo,
     this.daysAhead = 30,
     this.daysBehind = 7,
+    this.isDark = false,
   });
 
   List<CalendarEvent> _eventsForDate(DateTime date) =>
@@ -120,12 +124,20 @@ class AgendaView extends StatelessWidget {
                 child: Center(
                   child: Column(
                     children: [
-                      Icon(Icons.event_busy,
-                          size: 48, color: Colors.grey.shade400),
+                      Icon(
+                        Icons.event_busy,
+                        size: 48,
+                        color: isDark
+                            ? Colors.grey.shade700
+                            : Colors.grey.shade200,
+                      ),
                       const SizedBox(height: 12),
                       Text(
                         'No events in this period',
-                        style: TextStyle(color: Colors.grey.shade500),
+                        style: TextStyle(
+                            color: isDark
+                                ? Colors.grey.shade500
+                                : Colors.grey.shade500),
                       ),
                     ],
                   ),
