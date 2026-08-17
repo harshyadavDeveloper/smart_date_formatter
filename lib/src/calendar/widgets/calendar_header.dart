@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../../date_format_helper.dart';
 
 /// Header widget showing month/year with navigation arrows.
+///
+/// Tap the title to jump to today.
 class CalendarHeader extends StatelessWidget {
   /// Currently focused date
   final DateTime focusedDate;

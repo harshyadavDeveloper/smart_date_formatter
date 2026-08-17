@@ -2,7 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:smart_date_formatter/smart_date_formatter.dart';
 import '../widgets/event_marker.dart';
 
-/// Week view for [SmartCalendar].
+/// Displays a week strip with events list.
+///
+/// Used internally by [SmartCalendar].
+///
+/// ```dart
+/// WeekView(
+///   controller: controller,
+///   events: events,
+/// )
+/// ```
 class WeekView extends StatelessWidget {
   /// Controller
   final SmartCalendarController controller;

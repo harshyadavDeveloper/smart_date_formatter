@@ -2825,4 +2825,294 @@ void main() {
       expect(find.byType(SmartDateRangePicker), findsOneWidget);
     });
   });
+
+  group('Edge Cases & Quality v2.5.0', () {
+    // ── DateTime Extensions edge cases ────────────────
+    test('startOfDay — exactly midnight', () {
+      final d = DateTime(2024, 6, 15).startOfDay;
+      expect(d.hour, 0);
+      expect(d.minute, 0);
+      expect(d.second, 0);
+      expect(d.millisecond, 0);
+    });
+
+    test('endOfDay — exactly 23:59:59', () {
+      final d = DateTime(2024, 6, 15).endOfDay;
+      expect(d.hour, 23);
+      expect(d.minute, 59);
+      expect(d.second, 59);
+    });
+
+    test('isBetween — same start and end date', () {
+      final date = DateTime(2024, 6, 15);
+      expect(date.isBetween(date, date), true);
+    });
+
+    test('addWorkingDays — 0 days returns same date', () {
+      final date = DateTime(2024, 6, 17); // Monday
+      expect(date.addWorkingDays(0), date);
+    });
+
+    test('addWorkingDays — negative days goes backward', () {
+      final friday = DateTime(2024, 6, 14);
+      final result = friday.addWorkingDays(-1);
+      expect(result.weekday, DateTime.thursday);
+    });
+
+    test('copyWith — all fields', () {
+      final date = DateTime(2024, 6, 15, 14, 30, 45);
+      final copy = date.copyWith(
+        year: 2025,
+        month: 1,
+        day: 1,
+        hour: 0,
+        minute: 0,
+        second: 0,
+      );
+      expect(copy.year, 2025);
+      expect(copy.month, 1);
+      expect(copy.day, 1);
+      expect(copy.hour, 0);
+    });
+
+    test('nextSunday from Saturday', () {
+      final saturday = DateTime(2024, 6, 15);
+      expect(saturday.nextSunday.weekday, DateTime.sunday);
+    });
+
+    test('previousSunday from Saturday', () {
+      final saturday = DateTime(2024, 6, 15);
+      expect(saturday.previousSunday.weekday, DateTime.sunday);
+      expect(saturday.previousSunday.isBefore(saturday), true);
+    });
+
+    // ── Format edge cases ─────────────────────────────
+    test('format — midnight 12:00 AM', () {
+      final midnight = DateTime(2024, 6, 15, 0, 0);
+      expect(midnight.format('hh:mm a'), '12:00 AM');
+    });
+
+    test('format — noon 12:00 PM', () {
+      final noon = DateTime(2024, 6, 15, 12, 0);
+      expect(noon.format('hh:mm a'), '12:00 PM');
+    });
+
+    test('format — single digit day no padding', () {
+      final date = DateTime(2024, 6, 5);
+      expect(date.format('d'), '5');
+    });
+
+    test('toISO — no milliseconds', () {
+      final date = DateTime(2024, 6, 15, 14, 30, 45, 123);
+      expect(date.toISO, '2024-06-15T14:30:45');
+      expect(date.toISO.contains('.'), false);
+    });
+
+    // ── Localization edge cases ───────────────────────
+    test('SdfLocale.fromCode — uppercase input', () {
+      // Should handle gracefully
+      expect(SdfLocale.fromCode('EN').code, 'en');
+    });
+
+    test('SdfLocale.fromCode — empty falls back to en', () {
+      expect(SdfLocale.fromCode('').code, 'en');
+    });
+
+    test('SmartFormatter — justNow < 10 seconds', () {
+      const f = SmartDateFormatter();
+      final date = DateTime.now().subtract(const Duration(seconds: 9));
+      expect(f.format(date), 'Just now');
+    });
+
+    test('SmartFormatter — exactly 10 seconds is not justNow', () {
+      const f = SmartDateFormatter();
+      final now = DateTime(2024, 6, 15, 12, 0, 0);
+      final date = now.subtract(const Duration(seconds: 10));
+      expect(f.format(date, now: now), isNot('Just now'));
+    });
+
+    // ── SmartParser edge cases ────────────────────────
+    test('SmartParser — empty string returns null', () {
+      expect(SmartParser.parse(''), null);
+    });
+
+    test('SmartParser — whitespace returns null', () {
+      expect(SmartParser.parse('   '), null);
+    });
+
+    test('SmartParser — case insensitive', () {
+      final now = DateTime(2024, 6, 15);
+      expect(
+        SmartParser.parse('TOMORROW', now: now),
+        isNotNull,
+      );
+      expect(
+        SmartParser.parse('Tomorrow', now: now),
+        isNotNull,
+      );
+    });
+
+    test('SmartParser — "in a day" same as "in 1 day"', () {
+      final now = DateTime(2024, 6, 15);
+      final inADay = SmartParser.parse('in a day', now: now);
+      final in1Day = SmartParser.parse('in 1 day', now: now);
+      expect(inADay, in1Day);
+    });
+
+    // ── StreakCalculator edge cases ───────────────────
+    test('StreakCalculator — empty list returns 0', () {
+      expect(StreakCalculator.currentStreak([]), 0);
+      expect(StreakCalculator.longestStreak([]), 0);
+      expect(StreakCalculator.totalCompleted([]), 0);
+    });
+
+    test('StreakCalculator — duplicate dates counted once', () {
+      final dates = [
+        DateTime(2024, 6, 15),
+        DateTime(2024, 6, 15), // duplicate
+        DateTime(2024, 6, 15, 14, 30), // same day diff time
+      ];
+      expect(StreakCalculator.totalCompleted(dates), 1);
+    });
+
+    test('StreakCalculator — single date streak = 1', () {
+      expect(
+        StreakCalculator.longestStreak([DateTime(2024, 6, 15)]),
+        1,
+      );
+    });
+
+    // ── DateGrouper edge cases ────────────────────────
+    test('DateGrouper — empty list returns empty map', () {
+      expect(DateGrouper.byDay([]), isEmpty);
+      expect(DateGrouper.byMonth([]), isEmpty);
+      expect(DateGrouper.byYear([]), isEmpty);
+    });
+
+    test('DateGrouper.mostActiveDay — empty returns null', () {
+      expect(DateGrouper.mostActiveDay([]), isNull);
+    });
+
+    test('DateGrouper.averageGap — two dates', () {
+      final dates = [
+        DateTime(2024, 6, 1),
+        DateTime(2024, 6, 8),
+      ];
+      final gap = DateGrouper.averageGap(dates);
+      expect(gap?.inDays, 7);
+    });
+
+    // ── DateRangeHelper edge cases ────────────────────
+    test('DateRange.overlaps — non overlapping', () {
+      final r1 = DateRangeHelper.custom(
+        DateTime(2024, 1, 1),
+        DateTime(2024, 3, 31),
+      );
+      final r2 = DateRangeHelper.custom(
+        DateTime(2024, 7, 1),
+        DateTime(2024, 9, 30),
+      );
+      expect(r1.overlaps(r2), false);
+    });
+
+    test('DateRangeHelper.quarter — Q1 Jan-Mar', () {
+      final q1 = DateRangeHelper.quarter(1);
+      expect(q1.start.month, 1);
+      expect(q1.end.month, 3);
+    });
+
+    test('DateRangeHelper.quarter — Q4 Oct-Dec', () {
+      final q4 = DateRangeHelper.quarter(4);
+      expect(q4.start.month, 10);
+      expect(q4.end.month, 12);
+    });
+
+    // ── HolidayHelper edge cases ──────────────────────
+    test('HolidayHelper — empty holidays list', () {
+      expect(
+        HolidayHelper.isHoliday(DateTime.now(), holidays: []),
+        false,
+      );
+      expect(
+        HolidayHelper.isWorkingDay(DateTime(2024, 6, 17), holidays: []),
+        true,
+      );
+    });
+
+    test('HolidayHelper — time ignored in comparison', () {
+      final holiday = DateTime(2024, 12, 25, 0, 0, 0);
+      final check = DateTime(2024, 12, 25, 14, 30, 0);
+      expect(
+        HolidayHelper.isHoliday(check, holidays: [holiday]),
+        true,
+      );
+    });
+
+    // ── RecurrenceHelper edge cases ───────────────────
+    test('RecurrenceHelper — count 1 returns 1 date', () {
+      final dates = RecurrenceHelper.daily(
+        start: DateTime(2024, 6, 15),
+        count: 1,
+      );
+      expect(dates.length, 1);
+    });
+
+    test('RecurrenceHelper — until same as start', () {
+      final start = DateTime(2024, 6, 15);
+      final dates = RecurrenceHelper.daily(
+        start: start,
+        until: start,
+      );
+      expect(dates.length, 1);
+    });
+
+    // ── CalendarEvent edge cases ──────────────────────
+    test('CalendarEvent — same start and end = not multiDay', () {
+      final event = CalendarEvent(
+        date: DateTime(2024, 6, 15),
+        endDate: DateTime(2024, 6, 15),
+        title: 'Same day',
+        color: Colors.blue,
+      );
+      expect(event.isMultiDay, false);
+      expect(event.spanDays, 1);
+    });
+
+    test('CalendarEvent — no endDate = spanDays 1', () {
+      final event = CalendarEvent(
+        date: DateTime(2024, 6, 15),
+        title: 'Single',
+        color: Colors.blue,
+      );
+      expect(event.spanDays, 1);
+    });
+
+    test('CalendarEvent.timeString — no startTime', () {
+      final event = CalendarEvent(
+        date: DateTime(2024, 6, 15),
+        title: 'No time',
+        color: Colors.blue,
+        allDay: false,
+      );
+      expect(event.timeString, '');
+    });
+
+    // ── SelectedDateRange edge cases ──────────────────
+    test('SelectedDateRange — single day range = 1 day', () {
+      final range = SelectedDateRange(
+        start: DateTime(2024, 6, 15),
+        end: DateTime(2024, 6, 15),
+      );
+      expect(range.days, 1);
+    });
+
+    test('SelectedDateRange.contains — boundary dates', () {
+      final range = SelectedDateRange(
+        start: DateTime(2024, 6, 1),
+        end: DateTime(2024, 6, 30),
+      );
+      expect(range.contains(DateTime(2024, 6, 1)), true);
+      expect(range.contains(DateTime(2024, 6, 30)), true);
+    });
+  });
 }

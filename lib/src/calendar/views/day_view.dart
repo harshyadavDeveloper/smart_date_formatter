@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:smart_date_formatter/smart_date_formatter.dart';
 
-/// Day view for [SmartCalendar].
+/// Displays a single day detail view with events.
+///
+/// Used internally by [SmartCalendar].
+///
+/// ```dart
+/// DayView(
+///   controller: controller,
+///   events: events,
+///   onEventTap: (event) => print(event.title),
+/// )
+/// ```
 class DayView extends StatelessWidget {
   /// Controller
   final SmartCalendarController controller;

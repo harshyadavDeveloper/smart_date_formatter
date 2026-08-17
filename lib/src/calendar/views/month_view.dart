@@ -3,7 +3,17 @@ import 'package:smart_date_formatter/smart_date_formatter.dart';
 import '../widgets/calendar_header.dart';
 import '../widgets/day_cell.dart';
 
-/// Month view for [SmartCalendar].
+/// Displays a full month grid calendar view.
+///
+/// Used internally by [SmartCalendar].
+///
+/// ```dart
+/// MonthView(
+///   controller: controller,
+///   events: events,
+///   onDateSelected: (date, events) => print(date),
+/// )
+/// ```
 class MonthView extends StatelessWidget {
   /// Controller
   final SmartCalendarController controller;

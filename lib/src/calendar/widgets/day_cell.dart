@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import '../calendar_event.dart';
 import 'event_marker.dart';
 
-/// A single day cell in the calendar grid.
+/// A single day cell in the calendar month grid.
+///
+/// Displays date number, event markers, and handles selection.
 class DayCell extends StatelessWidget {
   /// The date this cell represents
   final DateTime date;

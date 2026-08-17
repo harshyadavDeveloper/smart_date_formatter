@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import '../calendar_event.dart';
 
-/// Displays event markers (dots or chips) for a calendar date.
+/// Displays event markers — dots or chips — for a calendar date.
+///
+/// ```dart
+/// EventMarker(
+///   events: events,
+///   style: EventMarkerStyle.dot,
+///   maxMarkers: 3,
+/// )
+/// ```
 class EventMarker extends StatelessWidget {
   /// Events to display
   final List<CalendarEvent> events;

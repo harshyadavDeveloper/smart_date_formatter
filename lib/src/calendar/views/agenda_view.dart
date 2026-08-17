@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:smart_date_formatter/smart_date_formatter.dart';
 
-/// Agenda (list) view for [SmartCalendar].
+/// Displays events in a chronological list grouped by date.
 ///
-/// Shows events in a chronological list grouped by date.
+/// Used internally by [SmartCalendar].
+///
+/// ```dart
+/// AgendaView(
+///   controller: controller,
+///   events: events,
+///   daysAhead: 30,
+///   daysBehind: 7,
+/// )
+/// ```
 class AgendaView extends StatelessWidget {
   /// Controller
   final SmartCalendarController controller;
