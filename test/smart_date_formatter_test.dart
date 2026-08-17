@@ -2707,4 +2707,122 @@ void main() {
       await tester.binding.setSurfaceSize(null);
     });
   });
+
+  group('SmartDateRangePicker v2.5.0 — Custom Colors', () {
+    testWidgets('SmartDateRangePicker — custom primaryColor', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: SmartDateRangePicker(
+                  primaryColor: Colors.teal,
+                  rangeColor: Colors.teal,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(find.byType(SmartDateRangePicker), findsOneWidget);
+    });
+
+    testWidgets('SmartDateRangePicker — custom rangeHighlightColor',
+        (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: SmartDateRangePicker(
+                  rangeHighlightColor: Colors.purple.withValues(alpha: 0.2),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(find.byType(SmartDateRangePicker), findsOneWidget);
+    });
+
+    testWidgets('SmartDateRangePicker — weekends hidden', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: SmartDateRangePicker(
+                  highlightWeekends: false,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(find.byType(SmartDateRangePicker), findsOneWidget);
+    });
+
+    testWidgets('SmartDateRangePicker — custom cellBorderRadius',
+        (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: SmartDateRangePicker(
+                  cellBorderRadius: 20,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(find.byType(SmartDateRangePicker), findsOneWidget);
+    });
+
+    testWidgets('SmartDateRangePicker — backgroundColor', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: SmartDateRangePicker(
+                  backgroundColor: Colors.grey.shade100,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(find.byType(SmartDateRangePicker), findsOneWidget);
+    });
+
+    testWidgets('SmartDateRangePicker — hotel booking theme', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: SmartDateRangePicker(
+                  primaryColor: Colors.teal,
+                  rangeColor: Colors.teal,
+                  weekendColor: Colors.orange,
+                  cellBorderRadius: 20,
+                  highlightWeekends: true,
+                  confirmLabel: 'Book Now',
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(find.byType(SmartDateRangePicker), findsOneWidget);
+    });
+  });
 }
