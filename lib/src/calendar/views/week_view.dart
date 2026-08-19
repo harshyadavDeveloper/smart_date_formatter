@@ -2,7 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:smart_date_formatter/smart_date_formatter.dart';
 import '../widgets/event_marker.dart';
 
-/// Week view for [SmartCalendar].
+/// Displays a week strip with events list.
+///
+/// Used internally by [SmartCalendar].
+///
+/// ```dart
+/// WeekView(
+///   controller: controller,
+///   events: events,
+/// )
+/// ```
 class WeekView extends StatelessWidget {
   /// Controller
   final SmartCalendarController controller;
@@ -26,6 +35,9 @@ class WeekView extends StatelessWidget {
   /// Header color
   final Color headerColor;
 
+  /// Whether dark theme is active
+  final bool isDark;
+
   /// Creates a [WeekView].
   const WeekView({
     super.key,
@@ -36,6 +48,7 @@ class WeekView extends StatelessWidget {
     this.selectedColor = Colors.indigo,
     this.todayColor = Colors.blue,
     this.headerColor = Colors.black87,
+    this.isDark = false,
   });
 
   List<DateTime> _daysInWeek(DateTime date) {
@@ -107,10 +120,12 @@ class WeekView extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       decoration: BoxDecoration(
                         color: isSelected
-                            ? selectedColor
-                            : isToday
-                                ? todayColor.withValues(alpha: 0.12)
-                                : Colors.transparent,
+                            ? Colors.white
+                            : isWeekend
+                                ? Colors.red.shade400
+                                : isDark
+                                    ? Colors.white
+                                    : Colors.black87,
                         borderRadius: BorderRadius.circular(10),
                         border: isToday && !isSelected
                             ? Border.all(color: todayColor, width: 1.5)
@@ -201,7 +216,9 @@ class WeekView extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 8),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: event.color.withValues(alpha: 0.08),
+          color: isDark
+              ? event.color.withValues(alpha: 0.15)
+              : event.color.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(10),
           border: Border(
             left: BorderSide(color: event.color, width: 4),

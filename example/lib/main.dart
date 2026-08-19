@@ -9,7 +9,8 @@ import 'tabs/widgets_tab.dart';
 import 'tabs/ranges_tab.dart';
 import 'tabs/analytics_tab.dart';
 import 'tabs/calendar_widget_tab.dart';
-import 'tabs/date_field_tab.dart'; // 👈 new
+import 'tabs/date_field_tab.dart';
+import 'tabs/range_picker_tab.dart';
 
 void main() => runApp(const ExampleApp());
 
@@ -35,7 +36,7 @@ class ExampleHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 11, // 👈 10 → 11
+      length: 12,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.indigo,
@@ -45,7 +46,7 @@ class ExampleHomePage extends StatelessWidget {
             children: [
               Text('smart_date_formatter',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              Text('v2.2.0 — Full Example',
+              Text('v2.4.0 — Full Example',
                   style: TextStyle(fontSize: 11, color: Colors.white70)),
             ],
           ),
@@ -65,7 +66,8 @@ class ExampleHomePage extends StatelessWidget {
               Tab(text: '🗄 Ranges'),
               Tab(text: '📊 Analytics'),
               Tab(text: '🗓 SmartCalendar'),
-              Tab(text: '📝 DateField'), // 👈 new
+              Tab(text: '📝 DateField'),
+              Tab(text: '📆 RangePicker'),
             ],
           ),
         ),
@@ -82,6 +84,7 @@ class ExampleHomePage extends StatelessWidget {
             AnalyticsTab(),
             CalendarWidgetTab(),
             DateFieldTab(),
+            RangePickerTab(),
           ],
         ),
       ),

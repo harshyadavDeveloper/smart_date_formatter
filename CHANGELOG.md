@@ -1,47 +1,63 @@
-## 2.3.0
+## 2.5.0
 
-* Added `showWeekNumbers` to `SmartCalendar`
-* Added time picker to `SmartDateField`
-  * `enableTimePicker` — show time picker icon
-  * `initialTime` — initial TimeOfDay value
-  * `onTimeChanged` — callback when time changes
-  * `use24HourFormat` — 12h or 24h display
-  * Combined date + time display in field
-  * Time shown in selected info section
-* Added `SmartDateRangePicker` widget
-  * Visual range selection with highlight
-  * Preset ranges: today, thisWeek, thisMonth,
+- Added `themeMode` to SmartCalendar — light/dark/system
+- Added `cellBuilder` to SmartCalendar — custom cell widget
+- Added custom colors to SmartDateRangePicker:
+  - `rangeHighlightColor`
+  - `disabledColor`
+  - `weekendColor`
+  - `backgroundColor`
+  - `textColor`
+  - `cellBorderRadius`
+  - `highlightWeekends`
+- Added 30+ edge case tests
+- Improved dartdoc coverage
+- Tuned analysis_options.yaml
+
+## 2.4.0
+
+- Added `showWeekNumbers` to `SmartCalendar`
+- Added time picker to `SmartDateField`
+  - `enableTimePicker` — show time picker icon
+  - `initialTime` — initial TimeOfDay value
+  - `onTimeChanged` — callback when time changes
+  - `use24HourFormat` — 12h or 24h display
+  - Combined date + time display in field
+  - Time shown in selected info section
+- Added `SmartDateRangePicker` widget
+  - Visual range selection with highlight
+  - Preset ranges: today, thisWeek, thisMonth,
     last7Days, last30Days, thisYear + more
-  * Min/Max date constraints
-  * `onRangeSelected` callback
-  * `onCleared` callback
-  * `showAsBottomSheet()` — dialog mode
-  * Custom preset labels support
-  * Configurable primary + range colors
-* Added `SmartDateRangePickerController`
-  * `setRange(start, end)`
-  * `setPreset(DateRangePreset)`
-  * `clear()`
-  * `value`, `hasValue`
-* Added `SelectedDateRange` model
-  * `days` — range length
-  * `contains(date)` — check if date in range
-  * `toDateRange()` — convert to DateRange
-* Added `DateRangePreset` enum
+  - Min/Max date constraints
+  - `onRangeSelected` callback
+  - `onCleared` callback
+  - `showAsBottomSheet()` — dialog mode
+  - Custom preset labels support
+  - Configurable primary + range colors
+- Added `SmartDateRangePickerController`
+  - `setRange(start, end)`
+  - `setPreset(DateRangePreset)`
+  - `clear()`
+  - `value`, `hasValue`
+- Added `SelectedDateRange` model
+  - `days` — range length
+  - `contains(date)` — check if date in range
+  - `toDateRange()` — convert to DateRange
+- Added `DateRangePreset` enum
 
 ## 2.2.0
 
-* Added `SmartDateField` — smart Flutter form field for date input
-  * Natural language input — type "tomorrow", "next monday"
-  * Smart autocomplete suggestions
-  * Date picker dialog integration
-  * Min/Max date constraints
-  * Built-in validation support
-  * Clear button
-  * Selected date display with timeAgo
-* Added `SmartDateFieldController`
-  * `setValue()`, `clear()`
-  * `value`, `hasValue`
+- Added `SmartDateField` — smart Flutter form field for date input
+  - Natural language input — type "tomorrow", "next monday"
+  - Smart autocomplete suggestions
+  - Date picker dialog integration
+  - Min/Max date constraints
+  - Built-in validation support
+  - Clear button
+  - Selected date display with timeAgo
+- Added `SmartDateFieldController`
+  - `setValue()`, `clear()`
+  - `value`, `hasValue`
 
 ## 2.1.0
 

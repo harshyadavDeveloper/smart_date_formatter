@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:smart_date_formatter/smart_date_formatter.dart';
 
-/// Agenda (list) view for [SmartCalendar].
+/// Displays events in a chronological list grouped by date.
 ///
-/// Shows events in a chronological list grouped by date.
+/// Used internally by [SmartCalendar].
+///
+/// ```dart
+/// AgendaView(
+///   controller: controller,
+///   events: events,
+///   daysAhead: 30,
+///   daysBehind: 7,
+/// )
+/// ```
 class AgendaView extends StatelessWidget {
   /// Controller
   final SmartCalendarController controller;
@@ -30,6 +39,9 @@ class AgendaView extends StatelessWidget {
   /// Number of days to show behind
   final int daysBehind;
 
+  /// Whether dark theme is active
+  final bool isDark;
+
   /// Creates an [AgendaView].
   const AgendaView({
     super.key,
@@ -41,6 +53,7 @@ class AgendaView extends StatelessWidget {
     this.selectedColor = Colors.indigo,
     this.daysAhead = 30,
     this.daysBehind = 7,
+    this.isDark = false,
   });
 
   List<CalendarEvent> _eventsForDate(DateTime date) =>
@@ -120,12 +133,20 @@ class AgendaView extends StatelessWidget {
                 child: Center(
                   child: Column(
                     children: [
-                      Icon(Icons.event_busy,
-                          size: 48, color: Colors.grey.shade400),
+                      Icon(
+                        Icons.event_busy,
+                        size: 48,
+                        color: isDark
+                            ? Colors.grey.shade700
+                            : Colors.grey.shade200,
+                      ),
                       const SizedBox(height: 12),
                       Text(
                         'No events in this period',
-                        style: TextStyle(color: Colors.grey.shade500),
+                        style: TextStyle(
+                            color: isDark
+                                ? Colors.grey.shade500
+                                : Colors.grey.shade500),
                       ),
                     ],
                   ),

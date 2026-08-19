@@ -226,6 +226,27 @@ class SmartDateRangePicker extends StatefulWidget {
   /// Confirm button label
   final String confirmLabel;
 
+  /// Color for range highlight between start and end
+  final Color? rangeHighlightColor;
+
+  /// Color for disabled dates
+  final Color disabledColor;
+
+  /// Color for weekend dates
+  final Color weekendColor;
+
+  /// Background color of the picker
+  final Color? backgroundColor;
+
+  /// Text color for date numbers
+  final Color? textColor;
+
+  /// Border radius for start/end date cells
+  final double cellBorderRadius;
+
+  /// Whether to show weekend dates in different color
+  final bool highlightWeekends;
+
   /// Creates a [SmartDateRangePicker].
   ///
   /// ```dart
@@ -261,6 +282,13 @@ class SmartDateRangePicker extends StatefulWidget {
     this.displayFormat = 'dd MMM yyyy',
     this.showConfirmButton = true,
     this.confirmLabel = 'Apply Range',
+    this.rangeHighlightColor,
+    this.disabledColor = Colors.grey,
+    this.weekendColor = Colors.red,
+    this.backgroundColor,
+    this.textColor,
+    this.cellBorderRadius = 8,
+    this.highlightWeekends = true,
   });
 
   /// Shows [SmartDateRangePicker] as a bottom sheet dialog.
@@ -369,6 +397,18 @@ class _SmartDateRangePickerState extends State<SmartDateRangePicker> {
       _activePreset = val?.preset;
     });
   }
+
+  // ── Color helpers ─────────────────────────────────────
+  Color get _rangeHighlight =>
+      widget.rangeHighlightColor ?? widget.rangeColor.withValues(alpha: 0.12);
+
+  Color get _textColor => widget.textColor ?? Colors.black87;
+
+  Color get _disabledTextColor => widget.disabledColor.withValues(alpha: 0.3);
+
+  Color get _weekendTextColor => widget.highlightWeekends
+      ? widget.weekendColor.withValues(alpha: 0.12)
+      : _textColor;
 
   @override
   void dispose() {
@@ -523,308 +563,326 @@ class _SmartDateRangePickerState extends State<SmartDateRangePicker> {
   Widget build(BuildContext context) {
     final days = _daysInMonth(_focusedMonth);
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // ── Presets ─────────────────────────────────────
-        if (widget.showPresets) ...[
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: widget.presets.map((preset) {
-                final isActive = _activePreset == preset;
-                return GestureDetector(
-                  onTap: () => _selectPreset(preset),
-                  child: Container(
-                    margin: const EdgeInsets.only(right: 8),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color:
-                          isActive ? widget.primaryColor : Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
+    return Container(
+      decoration: widget.backgroundColor != null
+          ? BoxDecoration(
+              color: widget.backgroundColor,
+              borderRadius: BorderRadius.circular(12),
+            )
+          : null,
+      padding: widget.backgroundColor != null
+          ? const EdgeInsets.all(12)
+          : EdgeInsets.zero,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ── Presets ─────────────────────────────────────
+          if (widget.showPresets) ...[
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: widget.presets.map((preset) {
+                  final isActive = _activePreset == preset;
+                  return GestureDetector(
+                    onTap: () => _selectPreset(preset),
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
                         color: isActive
                             ? widget.primaryColor
-                            : Colors.grey.shade300,
+                            : Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: isActive
+                              ? widget.primaryColor
+                              : Colors.grey.shade300,
+                        ),
+                      ),
+                      child: Text(
+                        _presetLabel(preset),
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: isActive ? Colors.white : Colors.grey.shade700,
+                        ),
                       ),
                     ),
-                    child: Text(
-                      _presetLabel(preset),
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: isActive ? Colors.white : Colors.grey.shade700,
-                      ),
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-          const SizedBox(height: 16),
-        ],
-
-        // ── Selected Range Display ───────────────────────
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: widget.primaryColor.withValues(alpha: 0.06),
-            borderRadius: BorderRadius.circular(10),
-            border:
-                Border.all(color: widget.primaryColor.withValues(alpha: 0.2)),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Start Date',
-                      style:
-                          TextStyle(fontSize: 10, color: Colors.grey.shade600),
-                    ),
-                    Text(
-                      _startDate != null
-                          ? DateFormatHelper.format(
-                              _startDate!, widget.displayFormat)
-                          : 'Select start',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: _startDate != null
-                            ? widget.primaryColor
-                            : Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
+                  );
+                }).toList(),
               ),
-              Icon(Icons.arrow_forward, color: Colors.grey.shade400, size: 18),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      'End Date',
-                      style:
-                          TextStyle(fontSize: 10, color: Colors.grey.shade600),
-                    ),
-                    Text(
-                      _endDate != null
-                          ? DateFormatHelper.format(
-                              _endDate!, widget.displayFormat)
-                          : 'Select end',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: _endDate != null
-                            ? widget.primaryColor
-                            : Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              if (_startDate != null && _endDate != null) ...[
-                const SizedBox(width: 8),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: widget.primaryColor.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    '${SelectedDateRange(start: _startDate!, end: _endDate!).days}d',
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: widget.primaryColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
-
-        const SizedBox(height: 12),
-
-        // ── Instruction text ─────────────────────────────
-        Text(
-          _startDate == null
-              ? 'Tap to select start date'
-              : _endDate == null
-                  ? 'Tap to select end date'
-                  : 'Range selected — tap to change',
-          style: TextStyle(
-            fontSize: 11,
-            color: Colors.grey.shade500,
-            fontStyle: FontStyle.italic,
-          ),
-        ),
-
-        const SizedBox(height: 8),
-
-        // ── Calendar Header ──────────────────────────────
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-              onPressed: () => setState(() {
-                _focusedMonth =
-                    DateTime(_focusedMonth.year, _focusedMonth.month - 1);
-              }),
-              icon: const Icon(Icons.chevron_left),
-              visualDensity: VisualDensity.compact,
             ),
-            Text(
-              DateFormatHelper.format(_focusedMonth, 'MMMM yyyy'),
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-            ),
-            IconButton(
-              onPressed: () => setState(() {
-                _focusedMonth =
-                    DateTime(_focusedMonth.year, _focusedMonth.month + 1);
-              }),
-              icon: const Icon(Icons.chevron_right),
-              visualDensity: VisualDensity.compact,
-            ),
+            const SizedBox(height: 16),
           ],
-        ),
 
-        // ── Weekday headers ──────────────────────────────
-        Row(
-          children: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
-              .map((d) => Expanded(
+          // ── Selected Range Display ───────────────────────
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: widget.primaryColor.withValues(alpha: 0.06),
+              borderRadius: BorderRadius.circular(10),
+              border:
+                  Border.all(color: widget.primaryColor.withValues(alpha: 0.2)),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Start Date',
+                        style: TextStyle(
+                            fontSize: 10, color: Colors.grey.shade600),
+                      ),
+                      Text(
+                        _startDate != null
+                            ? DateFormatHelper.format(
+                                _startDate!, widget.displayFormat)
+                            : 'Select start',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: _startDate != null
+                              ? widget.primaryColor
+                              : Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(Icons.arrow_forward,
+                    color: Colors.grey.shade400, size: 18),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        'End Date',
+                        style: TextStyle(
+                            fontSize: 10, color: Colors.grey.shade600),
+                      ),
+                      Text(
+                        _endDate != null
+                            ? DateFormatHelper.format(
+                                _endDate!, widget.displayFormat)
+                            : 'Select end',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: _endDate != null
+                              ? widget.primaryColor
+                              : Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (_startDate != null && _endDate != null) ...[
+                  const SizedBox(width: 8),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: widget.primaryColor.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                     child: Text(
-                      d,
-                      textAlign: TextAlign.center,
+                      '${SelectedDateRange(start: _startDate!, end: _endDate!).days}d',
                       style: TextStyle(
                         fontSize: 11,
+                        color: widget.primaryColor,
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey.shade500,
                       ),
                     ),
-                  ))
-              .toList(),
-        ),
-
-        const SizedBox(height: 4),
-
-        // ── Calendar Grid ────────────────────────────────
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 7,
-            childAspectRatio: 1.1,
+                  ),
+                ],
+              ],
+            ),
           ),
-          itemCount: days.length,
-          itemBuilder: (context, index) {
-            final date = days[index];
-            final isCurrentMonth = date.month == _focusedMonth.month;
-            final isStart = _isStart(date);
-            final isEnd = _isEnd(date);
-            final inRange = _isInRange(date);
-            final isToday = date.isToday;
-            final isDisabled = _isDisabled(date);
-            final isWeekend = date.isWeekend;
 
-            return GestureDetector(
-              onTap: isDisabled ? null : () => _onDateTap(date),
-              child: Container(
-                margin: EdgeInsets.zero,
-                decoration: BoxDecoration(
-                  color: isStart || isEnd
-                      ? widget.primaryColor
-                      : inRange
-                          ? widget.rangeColor.withValues(alpha: 0.12)
-                          : Colors.transparent,
-                  borderRadius: isStart
-                      ? const BorderRadius.only(
-                          topLeft: Radius.circular(8),
-                          bottomLeft: Radius.circular(8),
-                        )
-                      : isEnd
-                          ? const BorderRadius.only(
-                              topRight: Radius.circular(8),
-                              bottomRight: Radius.circular(8),
-                            )
-                          : inRange
-                              ? BorderRadius.zero
-                              : BorderRadius.circular(8),
-                  border: isToday && !isStart && !isEnd
-                      ? Border.all(
-                          color: widget.primaryColor,
-                          width: 1.5,
-                        )
-                      : null,
-                ),
-                child: Center(
-                  child: Text(
-                    '${date.day}',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: isStart || isEnd || isToday
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                      color: isStart || isEnd
-                          ? Colors.white
-                          : isDisabled
-                              ? Colors.grey.shade300
-                              : !isCurrentMonth
-                                  ? Colors.grey.shade400
-                                  : isWeekend
-                                      ? Colors.red.shade400
-                                      : Colors.black87,
+          const SizedBox(height: 12),
+
+          // ── Instruction text ─────────────────────────────
+          Text(
+            _startDate == null
+                ? 'Tap to select start date'
+                : _endDate == null
+                    ? 'Tap to select end date'
+                    : 'Range selected — tap to change',
+            style: TextStyle(
+              fontSize: 11,
+              color: Colors.grey.shade500,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+
+          const SizedBox(height: 8),
+
+          // ── Calendar Header ──────────────────────────────
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                onPressed: () => setState(() {
+                  _focusedMonth =
+                      DateTime(_focusedMonth.year, _focusedMonth.month - 1);
+                }),
+                icon: const Icon(Icons.chevron_left),
+                visualDensity: VisualDensity.compact,
+              ),
+              Text(
+                DateFormatHelper.format(_focusedMonth, 'MMMM yyyy'),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              ),
+              IconButton(
+                onPressed: () => setState(() {
+                  _focusedMonth =
+                      DateTime(_focusedMonth.year, _focusedMonth.month + 1);
+                }),
+                icon: const Icon(Icons.chevron_right),
+                visualDensity: VisualDensity.compact,
+              ),
+            ],
+          ),
+
+          // ── Weekday headers ──────────────────────────────
+          Row(
+            children: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
+                .map((d) => Expanded(
+                      child: Text(
+                        d,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey.shade500,
+                        ),
+                      ),
+                    ))
+                .toList(),
+          ),
+
+          const SizedBox(height: 4),
+
+          // ── Calendar Grid ────────────────────────────────
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 7,
+              childAspectRatio: 1.1,
+            ),
+            itemCount: days.length,
+            itemBuilder: (context, index) {
+              final date = days[index];
+              final isCurrentMonth = date.month == _focusedMonth.month;
+              final isStart = _isStart(date);
+              final isEnd = _isEnd(date);
+              final inRange = _isInRange(date);
+              final isToday = date.isToday;
+              final isDisabled = _isDisabled(date);
+              final isWeekend = date.isWeekend;
+
+              return GestureDetector(
+                onTap: isDisabled ? null : () => _onDateTap(date),
+                child: Container(
+                  margin: EdgeInsets.zero,
+                  decoration: BoxDecoration(
+                    color: isStart || isEnd
+                        ? widget.primaryColor
+                        : inRange
+                            ? _rangeHighlight
+                            : Colors.transparent,
+                    borderRadius: isStart
+                        ? BorderRadius.only(
+                            topLeft: Radius.circular(widget.cellBorderRadius),
+                            bottomLeft:
+                                Radius.circular(widget.cellBorderRadius),
+                          )
+                        : isEnd
+                            ? BorderRadius.only(
+                                topRight:
+                                    Radius.circular(widget.cellBorderRadius),
+                                bottomRight:
+                                    Radius.circular(widget.cellBorderRadius),
+                              )
+                            : inRange
+                                ? BorderRadius.zero
+                                : BorderRadius.circular(
+                                    widget.cellBorderRadius),
+                    border: isToday && !isStart && !isEnd
+                        ? Border.all(
+                            color: widget.primaryColor,
+                            width: 1.5,
+                          )
+                        : null,
+                  ),
+                  child: Center(
+                    child: Text(
+                      '${date.day}',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: isStart || isEnd || isToday
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                        color: isStart || isEnd
+                            ? Colors.white
+                            : isDisabled
+                                ? _disabledTextColor
+                                : !isCurrentMonth
+                                    ? Colors.grey.shade400
+                                    : isWeekend
+                                        ? _weekendTextColor
+                                        : _textColor,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
-          },
-        ),
+              );
+            },
+          ),
 
-        const SizedBox(height: 12),
+          const SizedBox(height: 12),
 
-        // ── Action Buttons ───────────────────────────────
-        Row(
-          children: [
-            // Clear button
-            if (_startDate != null || _endDate != null)
-              TextButton.icon(
-                onPressed: _clearSelection,
-                icon: const Icon(Icons.clear, size: 16),
-                label: const Text('Clear'),
-                style: TextButton.styleFrom(foregroundColor: Colors.grey),
-              ),
-            const Spacer(),
+          // ── Action Buttons ───────────────────────────────
+          Row(
+            children: [
+              // Clear button
+              if (_startDate != null || _endDate != null)
+                TextButton.icon(
+                  onPressed: _clearSelection,
+                  icon: const Icon(Icons.clear, size: 16),
+                  label: const Text('Clear'),
+                  style: TextButton.styleFrom(foregroundColor: Colors.grey),
+                ),
+              const Spacer(),
 
-            // Confirm button
-            if (widget.showConfirmButton &&
-                _startDate != null &&
-                _endDate != null)
-              ElevatedButton.icon(
-                onPressed: _confirmSelection,
-                icon: const Icon(Icons.check, size: 16),
-                label: Text(widget.confirmLabel),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: widget.primaryColor,
-                  foregroundColor: Colors.white,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+              // Confirm button
+              if (widget.showConfirmButton &&
+                  _startDate != null &&
+                  _endDate != null)
+                ElevatedButton.icon(
+                  onPressed: _confirmSelection,
+                  icon: const Icon(Icons.check, size: 16),
+                  label: Text(widget.confirmLabel),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: widget.primaryColor,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                 ),
-              ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

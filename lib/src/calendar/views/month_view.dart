@@ -3,7 +3,17 @@ import 'package:smart_date_formatter/smart_date_formatter.dart';
 import '../widgets/calendar_header.dart';
 import '../widgets/day_cell.dart';
 
-/// Month view for [SmartCalendar].
+/// Displays a full month grid calendar view.
+///
+/// Used internally by [SmartCalendar].
+///
+/// ```dart
+/// MonthView(
+///   controller: controller,
+///   events: events,
+///   onDateSelected: (date, events) => print(date),
+/// )
+/// ```
 class MonthView extends StatelessWidget {
   /// Controller
   final SmartCalendarController controller;
@@ -39,6 +49,35 @@ class MonthView extends StatelessWidget {
   /// Show week numbers on left side
   final bool showWeekNumbers;
 
+  /// Whether dark theme is active
+  final bool isDark;
+
+  /// Custom cell builder for month view dates.
+  ///
+  /// ```dart
+  /// SmartCalendar(
+  ///   cellBuilder: (date, events, isSelected, isToday) {
+  ///     return Container(
+  ///       decoration: BoxDecoration(
+  ///         color: isSelected ? Colors.indigo : null,
+  ///         borderRadius: BorderRadius.circular(8),
+  ///       ),
+  ///       child: Column(children: [
+  ///         Text('${date.day}'),
+  ///         if (events.isNotEmpty)
+  ///           Icon(Icons.circle, size: 6, color: events.first.color),
+  ///       ]),
+  ///     );
+  ///   },
+  /// )
+  /// ```
+  final Widget Function(
+    DateTime date,
+    List<CalendarEvent> events,
+    bool isSelected,
+    bool isToday,
+  )? cellBuilder;
+
   /// Creates a [MonthView].
   const MonthView({
     super.key,
@@ -53,6 +92,8 @@ class MonthView extends StatelessWidget {
     this.showWeekdayHeaders = true,
     this.firstDayOfWeek = 1,
     this.showWeekNumbers = false,
+    this.isDark = false,
+    this.cellBuilder,
   });
 
   List<DateTime> _daysInMonth(DateTime month) {
@@ -129,7 +170,9 @@ class MonthView extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
-                            color: Colors.grey.shade600,
+                            color: isDark
+                                ? Colors.grey.shade400
+                                : Colors.grey.shade600,
                           ),
                         ),
                       )),
@@ -173,7 +216,7 @@ class MonthView extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
-                    color: Colors.grey.shade400,
+                    color: isDark ? Colors.grey.shade500 : Colors.grey.shade400,
                   ),
                 ),
               ),
@@ -187,21 +230,35 @@ class MonthView extends StatelessWidget {
               final isWeekend = date.isWeekend;
 
               return Expanded(
-                child: DayCell(
-                  date: date,
-                  events: dayEvents,
-                  isSelected: isSelected,
-                  isToday: isToday,
-                  isCurrentMonth: isCurrentMonth,
-                  isWeekend: isWeekend,
-                  markerStyle: markerStyle,
-                  selectedColor: selectedColor,
-                  todayColor: todayColor,
-                  onTap: () {
-                    controller.selectDate(date);
-                    onDateSelected?.call(date, dayEvents);
-                  },
-                ),
+                child: cellBuilder != null
+                    ? GestureDetector(
+                        onTap: () {
+                          controller.selectDate(date);
+                          onDateSelected?.call(date, dayEvents);
+                        },
+                        child: cellBuilder!(
+                          date,
+                          dayEvents,
+                          isSelected,
+                          isToday,
+                        ),
+                      )
+                    : DayCell(
+                        date: date,
+                        events: dayEvents,
+                        isSelected: isSelected,
+                        isToday: isToday,
+                        isCurrentMonth: isCurrentMonth,
+                        isWeekend: isWeekend,
+                        markerStyle: markerStyle,
+                        selectedColor: selectedColor,
+                        todayColor: todayColor,
+                        isDark: isDark,
+                        onTap: () {
+                          controller.selectDate(date);
+                          onDateSelected?.call(date, dayEvents);
+                        },
+                      ),
               );
             }),
           ],

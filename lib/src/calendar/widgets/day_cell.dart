@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import '../calendar_event.dart';
 import 'event_marker.dart';
 
-/// A single day cell in the calendar grid.
+/// A single day cell in the calendar month grid.
+///
+/// Displays date number, event markers, and handles selection.
 class DayCell extends StatelessWidget {
   /// The date this cell represents
   final DateTime date;
@@ -34,6 +36,9 @@ class DayCell extends StatelessWidget {
   /// Today color
   final Color todayColor;
 
+  /// Whether dark theme active
+  final bool isDark;
+
   /// Creates a [DayCell].
   const DayCell({
     super.key,
@@ -47,6 +52,7 @@ class DayCell extends StatelessWidget {
     this.markerStyle = EventMarkerStyle.dot,
     this.selectedColor = Colors.indigo,
     this.todayColor = Colors.blue,
+    this.isDark = false,
   });
 
   @override
@@ -57,10 +63,16 @@ class DayCell extends StatelessWidget {
         margin: const EdgeInsets.all(2),
         decoration: BoxDecoration(
           color: isSelected
-              ? selectedColor
-              : isToday
-                  ? todayColor.withValues(alpha: 0.12)
-                  : Colors.transparent,
+              ? Colors.white
+              : isCurrentMonth
+                  ? isWeekend
+                      ? Colors.red.shade400
+                      : isDark
+                          ? Colors.white
+                          : Colors.black87
+                  : isDark
+                      ? Colors.grey.shade600
+                      : Colors.grey.shade400,
           borderRadius: BorderRadius.circular(8),
           border: isToday && !isSelected
               ? Border.all(color: todayColor, width: 1.5)
