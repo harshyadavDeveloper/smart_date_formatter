@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_date_formatter/smart_date_formatter.dart';
 import 'package:smart_date_formatter/src/calendar/views/agenda_view.dart';
 import 'calendar_event.dart';
 import 'calendar_controller.dart';
@@ -96,6 +97,12 @@ class SmartCalendar extends StatefulWidget {
   /// Theme mode for calendar
   final ThemeMode themeMode;
 
+  /// Enable range selection mode
+  final bool rangeSelectionMode;
+
+  /// Called when range is selected in calendar
+  final void Function(DateTime start, DateTime end)? onRangeSelected;
+
   /// Custom cell builder for month view dates.
   ///
   /// ```dart
@@ -155,6 +162,8 @@ class SmartCalendar extends StatefulWidget {
     this.showWeekNumbers = false,
     this.themeMode = ThemeMode.light,
     this.cellBuilder,
+    this.rangeSelectionMode = false,
+    this.onRangeSelected,
   });
 
   @override
@@ -165,6 +174,9 @@ class _SmartCalendarState extends State<SmartCalendar> {
   late SmartCalendarController _controller;
   late CalendarView _currentView;
   bool _ownsController = false;
+  DateTime? _rangeStart;
+  DateTime? _rangeEnd;
+  // bool _selectingRangeStart = true;
 
   @override
   void initState() {
@@ -204,6 +216,26 @@ class _SmartCalendarState extends State<SmartCalendar> {
   Color get _subtleTextColor =>
       _isDark ? Colors.grey.shade400 : Colors.grey.shade600;
 
+  // void _handleRangeTap(DateTime date) {
+  //   setState(() {
+  //     if (_selectingRangeStart || _rangeEnd != null) {
+  //       _rangeStart = date;
+  //       _rangeEnd = null;
+  //       _selectingRangeStart = false;
+  //     } else {
+  //       if (date.isBefore(_rangeStart!)) {
+  //         _rangeEnd = _rangeStart;
+  //         _rangeStart = date;
+  //       } else {
+  //         _rangeEnd = date;
+  //       }
+  //       _selectingRangeStart = true;
+  //       widget.onRangeSelected?.call(_rangeStart!, _rangeEnd!);
+  //     }
+  //     _controller.selectDate(date);
+  //   });
+  // }
+
   @override
   void dispose() {
     if (_ownsController) _controller.dispose();
@@ -240,6 +272,40 @@ class _SmartCalendarState extends State<SmartCalendar> {
                       ),
                   ],
                 ),
+              // After view switcher row
+              if (widget.rangeSelectionMode) ...[
+                Container(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: widget.selectedColor.withOpacity(0.08),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.date_range,
+                          size: 14, color: widget.selectedColor),
+                      const SizedBox(width: 6),
+                      Text(
+                        _rangeStart == null
+                            ? 'Tap to select start date'
+                            : _rangeEnd == null
+                                ? 'Tap to select end date'
+                                : '${_rangeStart!.format('dd MMM')} → '
+                                    '${_rangeEnd!.format('dd MMM')} '
+                                    '(${_rangeEnd!.daysUntil(_rangeStart!) * -1 + 1} days)',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: widget.selectedColor,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
 
               // Calendar view
               _buildCurrentView(),
@@ -343,6 +409,8 @@ class _SmartCalendarState extends State<SmartCalendar> {
           showWeekNumbers: widget.showWeekNumbers,
           isDark: _isDark,
           cellBuilder: widget.cellBuilder,
+          rangeStart: widget.rangeSelectionMode ? _rangeStart : null, // 👈 new
+          rangeEnd: widget.rangeSelectionMode ? _rangeEnd : null,
         );
       case CalendarView.week:
         return WeekView(

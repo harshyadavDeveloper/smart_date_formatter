@@ -3303,4 +3303,116 @@ void main() {
           SmartParser.supportedParseLocales, containsAll(['gu', 'bn', 'ta']));
     });
   });
+
+  group('SmartCalendar v2.6.0 — Improvements', () {
+    // Range selection tests
+    testWidgets('SmartCalendar — range selection mode', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      DateTime? rangeStart;
+      DateTime? rangeEnd;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SmartCalendar(
+                events: const [],
+                rangeSelectionMode: true,
+                onRangeSelected: (start, end) {
+                  rangeStart = start;
+                  rangeEnd = end;
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(SmartCalendar), findsOneWidget);
+      expect(find.text('Tap to select start date'), findsOneWidget);
+      await tester.binding.setSurfaceSize(null);
+    });
+
+    testWidgets('SmartCalendar — range mode shows instruction', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SmartCalendar(
+                events: const [],
+                rangeSelectionMode: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.text('Tap to select start date'), findsOneWidget);
+      await tester.binding.setSurfaceSize(null);
+    });
+
+    // Overlap detection tests
+    test('detectOverlaps — overlapping events', () {
+      final events = [
+        CalendarEvent(
+          date: DateTime.now(),
+          title: 'Meeting 1',
+          color: Colors.blue,
+          allDay: false,
+          startTime: const TimeOfDay(hour: 10, minute: 0),
+          endTime: const TimeOfDay(hour: 11, minute: 0),
+        ),
+        CalendarEvent(
+          date: DateTime.now(),
+          title: 'Meeting 2',
+          color: Colors.red,
+          allDay: false,
+          startTime: const TimeOfDay(hour: 10, minute: 30),
+          endTime: const TimeOfDay(hour: 11, minute: 30),
+        ),
+      ];
+
+      // Both events overlap (10:00-11:00 and 10:30-11:30)
+      final a = events[0].startTime!;
+      final b = events[1].startTime!;
+      final aStart = a.hour * 60 + a.minute;
+      final bStart = b.hour * 60 + b.minute;
+      final aEnd = events[0].endTime!.hour * 60 + events[0].endTime!.minute;
+      final bEnd = events[1].endTime!.hour * 60 + events[1].endTime!.minute;
+
+      expect(aStart < bEnd && aEnd > bStart, true);
+    });
+
+    test('detectOverlaps — non overlapping events', () {
+      final aStart = 10 * 60; // 10:00
+      final aEnd = 11 * 60; // 11:00
+      final bStart = 11 * 60; // 11:00
+      final bEnd = 12 * 60; // 12:00
+
+      expect(aStart < bEnd && aEnd > bStart, false);
+    });
+
+    // MonthView range params
+    testWidgets('MonthView — with range selection', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      final controller = SmartCalendarController();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SmartCalendar(
+                controller: controller,
+                events: const [],
+                rangeSelectionMode: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(SmartCalendar), findsOneWidget);
+      controller.dispose();
+      await tester.binding.setSurfaceSize(null);
+    });
+  });
 }

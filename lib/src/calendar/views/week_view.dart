@@ -23,6 +23,9 @@ class WeekView extends StatelessWidget {
   final void Function(DateTime date, List<CalendarEvent> events)?
       onDateSelected;
 
+  /// Called when event is tapped
+  final void Function(CalendarEvent event)? onEventTap;
+
   /// Marker style
   final EventMarkerStyle markerStyle;
 
@@ -44,6 +47,7 @@ class WeekView extends StatelessWidget {
     required this.controller,
     required this.events,
     this.onDateSelected,
+    this.onEventTap,
     this.markerStyle = EventMarkerStyle.dot,
     this.selectedColor = Colors.indigo,
     this.todayColor = Colors.blue,
@@ -183,7 +187,6 @@ class WeekView extends StatelessWidget {
 
   Widget _buildEventsList() {
     final dayEvents = _eventsForDate(controller.selectedDate);
-
     if (dayEvents.isEmpty) {
       return Center(
         child: Padding(
@@ -196,52 +199,145 @@ class WeekView extends StatelessWidget {
       );
     }
 
+    // Detect overlaps
+    final overlappingEvents = _detectOverlaps(dayEvents);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           DateFormatHelper.format(controller.selectedDate, 'EEE, dd MMMM'),
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
         ),
         const SizedBox(height: 8),
-        ...dayEvents.map((e) => _eventTile(e)),
+        ...dayEvents.map((e) => _buildEventCard(
+              e,
+              hasOverlap: overlappingEvents.contains(e),
+            )),
       ],
     );
   }
 
-  Widget _eventTile(CalendarEvent event) => Container(
-        margin: const EdgeInsets.only(bottom: 8),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: isDark
-              ? event.color.withValues(alpha: 0.15)
-              : event.color.withValues(alpha: 0.08),
-          borderRadius: BorderRadius.circular(10),
-          border: Border(
-            left: BorderSide(color: event.color, width: 4),
+  Set<CalendarEvent> _detectOverlaps(List<CalendarEvent> events) {
+    final overlapping = <CalendarEvent>{};
+    for (int i = 0; i < events.length; i++) {
+      for (int j = i + 1; j < events.length; j++) {
+        final a = events[i];
+        final b = events[j];
+        if (a.startTime != null && b.startTime != null) {
+          final aStart = a.startTime!.hour * 60 + a.startTime!.minute;
+          final aEnd = a.endTime != null
+              ? a.endTime!.hour * 60 + a.endTime!.minute
+              : aStart + 60;
+          final bStart = b.startTime!.hour * 60 + b.startTime!.minute;
+          final bEnd = b.endTime != null
+              ? b.endTime!.hour * 60 + b.endTime!.minute
+              : bStart + 60;
+          if (aStart < bEnd && aEnd > bStart) {
+            overlapping.add(a);
+            overlapping.add(b);
+          }
+        }
+      }
+    }
+    return overlapping;
+  }
+
+  Widget _buildEventCard(CalendarEvent event, {bool hasOverlap = false}) =>
+      GestureDetector(
+        onTap: () => onEventTap?.call(event),
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: isDark
+                ? event.color.withOpacity(0.15)
+                : event.color.withOpacity(0.08),
+            borderRadius: BorderRadius.circular(10),
+            border: Border(
+              left: BorderSide(color: event.color, width: 4),
+            ),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(children: [
+                      Expanded(
+                        child: Text(
+                          event.title,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 14),
+                        ),
+                      ),
+                      // ✅ Overlap indicator
+                      if (hasOverlap)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: event.color.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            'Overlaps',
+                            style: TextStyle(
+                              fontSize: 9,
+                              color: event.color,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                    ]),
+                    if (event.description != null)
+                      Text(event.description!,
+                          style: TextStyle(
+                              fontSize: 12, color: Colors.grey.shade600)),
+                  ],
+                ),
+              ),
+              Text(event.timeString,
+                  style: TextStyle(
+                      fontSize: 11,
+                      color: event.color,
+                      fontWeight: FontWeight.w600)),
+            ],
           ),
         ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(event.title,
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                  if (event.description != null)
-                    Text(event.description!,
-                        style:
-                            const TextStyle(fontSize: 12, color: Colors.grey)),
-                ],
-              ),
-            ),
-            Text(event.timeString,
-                style: TextStyle(fontSize: 11, color: event.color)),
-          ],
-        ),
       );
+
+//   Widget _eventTile(CalendarEvent event) => Container(
+//         margin: const EdgeInsets.only(bottom: 8),
+//         padding: const EdgeInsets.all(12),
+//         decoration: BoxDecoration(
+//           color: isDark
+//               ? event.color.withValues(alpha: 0.15)
+//               : event.color.withValues(alpha: 0.08),
+//           borderRadius: BorderRadius.circular(10),
+//           border: Border(
+//             left: BorderSide(color: event.color, width: 4),
+//           ),
+//         ),
+//         child: Row(
+//           children: [
+//             Expanded(
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Text(event.title,
+//                       style: const TextStyle(fontWeight: FontWeight.bold)),
+//                   if (event.description != null)
+//                     Text(event.description!,
+//                         style:
+//                             const TextStyle(fontSize: 12, color: Colors.grey)),
+//                 ],
+//               ),
+//             ),
+//             Text(event.timeString,
+//                 style: TextStyle(fontSize: 11, color: event.color)),
+//           ],
+//         ),
+//       );
 }

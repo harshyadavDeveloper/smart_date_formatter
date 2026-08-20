@@ -52,6 +52,12 @@ class MonthView extends StatelessWidget {
   /// Whether dark theme is active
   final bool isDark;
 
+  /// Range selection start date
+  final DateTime? rangeStart;
+
+  /// Range selection end date
+  final DateTime? rangeEnd;
+
   /// Custom cell builder for month view dates.
   ///
   /// ```dart
@@ -94,6 +100,8 @@ class MonthView extends StatelessWidget {
     this.showWeekNumbers = false,
     this.isDark = false,
     this.cellBuilder,
+    this.rangeStart,
+    this.rangeEnd,
   });
 
   List<DateTime> _daysInMonth(DateTime month) {
@@ -243,22 +251,8 @@ class MonthView extends StatelessWidget {
                           isToday,
                         ),
                       )
-                    : DayCell(
-                        date: date,
-                        events: dayEvents,
-                        isSelected: isSelected,
-                        isToday: isToday,
-                        isCurrentMonth: isCurrentMonth,
-                        isWeekend: isWeekend,
-                        markerStyle: markerStyle,
-                        selectedColor: selectedColor,
-                        todayColor: todayColor,
-                        isDark: isDark,
-                        onTap: () {
-                          controller.selectDate(date);
-                          onDateSelected?.call(date, dayEvents);
-                        },
-                      ),
+                    : _buildRangeCell(date, dayEvents, isSelected, isToday,
+                        isCurrentMonth, isWeekend),
               );
             }),
           ],
@@ -271,5 +265,74 @@ class MonthView extends StatelessWidget {
     final firstDayOfYear = DateTime(date.year, 1, 1);
     final dayOfYear = date.difference(firstDayOfYear).inDays + 1;
     return ((dayOfYear + firstDayOfYear.weekday - 2) / 7).ceil().clamp(1, 53);
+  }
+
+  bool _isInSelectedRange(DateTime date) {
+    if (rangeStart == null || rangeEnd == null) return false;
+    final d = DateTime(date.year, date.month, date.day);
+    final s = DateTime(rangeStart!.year, rangeStart!.month, rangeStart!.day);
+    final e = DateTime(rangeEnd!.year, rangeEnd!.month, rangeEnd!.day);
+    return d.isAfter(s) && d.isBefore(e);
+  }
+
+  bool _isRangeStart(DateTime date) =>
+      rangeStart != null && date.isSameDay(rangeStart!);
+
+  bool _isRangeEnd(DateTime date) =>
+      rangeEnd != null && date.isSameDay(rangeEnd!);
+
+  Widget _buildRangeCell(
+    DateTime date,
+    List<CalendarEvent> events,
+    bool isSelected,
+    bool isToday,
+    bool isCurrentMonth,
+    bool isWeekend,
+  ) {
+    final inRange = _isInSelectedRange(date);
+    final isStart = _isRangeStart(date);
+    final isEnd = _isRangeEnd(date);
+
+    return GestureDetector(
+      onTap: () {
+        controller.selectDate(date);
+        onDateSelected?.call(date, events);
+      },
+      child: Container(
+        margin: EdgeInsets.zero,
+        decoration: BoxDecoration(
+          color: isStart || isEnd
+              ? selectedColor
+              : inRange
+                  ? selectedColor.withOpacity(0.12)
+                  : Colors.transparent,
+          borderRadius: isStart
+              ? const BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  bottomLeft: Radius.circular(8),
+                )
+              : isEnd
+                  ? const BorderRadius.only(
+                      topRight: Radius.circular(8),
+                      bottomRight: Radius.circular(8),
+                    )
+                  : inRange
+                      ? BorderRadius.zero
+                      : BorderRadius.circular(8),
+        ),
+        child: DayCell(
+          date: date,
+          events: events,
+          isSelected: isSelected || isStart || isEnd,
+          isToday: isToday,
+          isCurrentMonth: isCurrentMonth,
+          isWeekend: isWeekend,
+          markerStyle: markerStyle,
+          selectedColor: selectedColor,
+          todayColor: todayColor,
+          isDark: isDark,
+        ),
+      ),
+    );
   }
 }
