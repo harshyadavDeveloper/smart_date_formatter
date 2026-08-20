@@ -304,7 +304,7 @@ class MonthView extends StatelessWidget {
           color: isStart || isEnd
               ? selectedColor
               : inRange
-                  ? selectedColor.withOpacity(0.12)
+                  ? selectedColor.withValues(alpha: 0.12)
                   : Colors.transparent,
           borderRadius: isStart
               ? const BorderRadius.only(

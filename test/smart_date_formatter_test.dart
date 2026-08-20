@@ -3310,6 +3310,7 @@ void main() {
       await tester.binding.setSurfaceSize(const Size(800, 1200));
       DateTime? rangeStart;
       DateTime? rangeEnd;
+      debugPrint('$rangeStart and $rangeEnd');
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -3335,11 +3336,11 @@ void main() {
     testWidgets('SmartCalendar — range mode shows instruction', (tester) async {
       await tester.binding.setSurfaceSize(const Size(800, 1200));
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: SingleChildScrollView(
               child: SmartCalendar(
-                events: const [],
+                events: [],
                 rangeSelectionMode: true,
               ),
             ),
@@ -3384,10 +3385,10 @@ void main() {
     });
 
     test('detectOverlaps — non overlapping events', () {
-      final aStart = 10 * 60; // 10:00
-      final aEnd = 11 * 60; // 11:00
-      final bStart = 11 * 60; // 11:00
-      final bEnd = 12 * 60; // 12:00
+      const aStart = 10 * 60; // 10:00
+      const aEnd = 11 * 60; // 11:00
+      const bStart = 11 * 60; // 11:00
+      const bEnd = 12 * 60; // 12:00
 
       expect(aStart < bEnd && aEnd > bStart, false);
     });

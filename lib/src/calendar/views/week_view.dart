@@ -251,8 +251,8 @@ class WeekView extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: isDark
-                ? event.color.withOpacity(0.15)
-                : event.color.withOpacity(0.08),
+                ? event.color.withValues(alpha: 0.15)
+                : event.color.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(10),
             border: Border(
               left: BorderSide(color: event.color, width: 4),
@@ -278,7 +278,7 @@ class WeekView extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: event.color.withOpacity(0.15),
+                            color: event.color.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smart_date_formatter/smart_date_formatter.dart';
 import 'package:smart_date_formatter/src/calendar/views/agenda_view.dart';
-import 'calendar_event.dart';
-import 'calendar_controller.dart';
 import 'views/month_view.dart';
 import 'views/week_view.dart';
 import 'views/day_view.dart';
@@ -279,7 +277,7 @@ class _SmartCalendarState extends State<SmartCalendar> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: widget.selectedColor.withOpacity(0.08),
+                    color: widget.selectedColor.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
