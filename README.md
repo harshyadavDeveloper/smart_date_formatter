@@ -19,6 +19,9 @@
   <a href="https://github.com/harshyadavDeveloper/smart_date_formatter/actions">
     <img src="https://github.com/harshyadavDeveloper/smart_date_formatter/actions/workflows/ci.yml/badge.svg" alt="CI"/>
   </a>
+  <a href="https://pub.dev/packages/smart_date_formatter/score">
+    <img src="https://img.shields.io/pub/points/smart_date_formatter?color=2E8B57&label=pub%20points" alt="Pub Points"/>
+  </a>
 </p>
 
 <p align="center">
