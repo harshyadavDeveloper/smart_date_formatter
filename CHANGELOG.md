@@ -1,3 +1,19 @@
+## 2.6.0
+
+* SmartParser — Gujarati, Bengali, Tamil parsing
+* SmartParser — new English expressions:
+  * "first/last monday of month"
+  * "2 mondays ago", "in 2 fridays"
+  * "beginning/end of next month"
+  * "this coming monday"
+  * "q1", "q2", "quarter 3"
+* SmartCalendar — range selection mode
+  * `rangeSelectionMode` param
+  * `onRangeSelected` callback
+  * Visual range highlight in month view
+* SmartCalendar — event overlap detection in week view
+* `supportedParseLocales` updated — now includes gu, bn, ta
+
 ## 2.5.0
 
 - Added `themeMode` to SmartCalendar — light/dark/system

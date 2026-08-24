@@ -3115,4 +3115,305 @@ void main() {
       expect(range.contains(DateTime(2024, 6, 30)), true);
     });
   });
+
+  group('SmartParser v2.6.0 — New Expressions', () {
+    final now = DateTime(2024, 6, 15, 12, 0, 0); // Saturday
+
+    // First/Last weekday of month
+    test('first monday of this month', () {
+      final result = SmartParser.parse('first monday of this month', now: now);
+      expect(result?.weekday, DateTime.monday);
+      expect(result?.month, 6);
+    });
+
+    test('last friday of this month', () {
+      final result = SmartParser.parse('last friday of this month', now: now);
+      expect(result?.weekday, DateTime.friday);
+      expect(result?.month, 6);
+    });
+
+    test('first monday of next month', () {
+      final result = SmartParser.parse('first monday of next month', now: now);
+      expect(result?.weekday, DateTime.monday);
+      expect(result?.month, 7);
+    });
+
+    // N weekdays ago/ahead
+    test('2 mondays ago', () {
+      final result = SmartParser.parse('2 mondays ago', now: now);
+      expect(result?.weekday, DateTime.monday);
+      expect(result?.isBefore(now), true);
+    });
+
+    test('in 2 fridays', () {
+      final result = SmartParser.parse('in 2 fridays', now: now);
+      expect(result?.weekday, DateTime.friday);
+      expect(result?.isAfter(now), true);
+    });
+
+    // Beginning/End of
+    test('beginning of next month', () {
+      final result = SmartParser.parse('beginning of next month', now: now);
+      expect(result?.month, 7);
+      expect(result?.day, 1);
+    });
+
+    test('end of this month', () {
+      final result = SmartParser.parse('end of this month', now: now);
+      expect(result?.month, 6);
+      expect(result?.day, 30);
+    });
+
+    test('beginning of next year', () {
+      final result = SmartParser.parse('beginning of next year', now: now);
+      expect(result?.year, 2025);
+      expect(result?.month, 1);
+    });
+
+    // This coming weekday
+    test('this coming monday', () {
+      final result = SmartParser.parse('this coming monday', now: now);
+      expect(result?.weekday, DateTime.monday);
+      expect(result?.isAfter(now), true);
+    });
+
+    // Quarter
+    test('q1 returns January', () {
+      final result = SmartParser.parse('q1', now: now);
+      expect(result?.month, 1);
+    });
+
+    test('q2 returns April', () {
+      final result = SmartParser.parse('q2', now: now);
+      expect(result?.month, 4);
+    });
+
+    test('quarter 3 returns July', () {
+      final result = SmartParser.parse('quarter 3', now: now);
+      expect(result?.month, 7);
+    });
+  });
+
+  group('SmartParser v2.6.0 — Gujarati', () {
+    final now = DateTime(2024, 6, 15, 12, 0, 0);
+
+    test('આજ — today', () {
+      expect(SmartParser.parse('આજ', now: now), DateTime(2024, 6, 15));
+    });
+
+    test('આવતી કાલ — tomorrow', () {
+      expect(SmartParser.parse('આવતી કાલ', now: now), DateTime(2024, 6, 16));
+    });
+
+    test('ગઈ કાલ — yesterday', () {
+      expect(SmartParser.parse('ગઈ કાલ', now: now), DateTime(2024, 6, 14));
+    });
+
+    test('આવતા અઠવાડિયે — next week', () {
+      final result = SmartParser.parse('આવતા અઠવાડિયે', now: now);
+      expect(result, DateTime(2024, 6, 22));
+    });
+
+    test('3 દિવસ પછી — in 3 days', () {
+      final result = SmartParser.parse('3 દિવસ પછી', now: now);
+      expect(result, DateTime(2024, 6, 18));
+    });
+
+    test('parseLocale — Gujarati', () {
+      final result = SmartParser.parseLocale(
+        'આવતી કાલ',
+        locale: SdfLocale.gu,
+        now: now,
+      );
+      expect(result, DateTime(2024, 6, 16));
+    });
+  });
+
+  group('SmartParser v2.6.0 — Bengali', () {
+    final now = DateTime(2024, 6, 15, 12, 0, 0);
+
+    test('আজ — today', () {
+      expect(SmartParser.parse('আজ', now: now), DateTime(2024, 6, 15));
+    });
+
+    test('আগামীকাল — tomorrow', () {
+      expect(SmartParser.parse('আগামীকাল', now: now), DateTime(2024, 6, 16));
+    });
+
+    test('গতকাল — yesterday', () {
+      expect(SmartParser.parse('গতকাল', now: now), DateTime(2024, 6, 14));
+    });
+
+    test('আগামী সপ্তাহ — next week', () {
+      final result = SmartParser.parse('আগামী সপ্তাহ', now: now);
+      expect(result, DateTime(2024, 6, 22));
+    });
+
+    test('3 দিন পরে — in 3 days', () {
+      final result = SmartParser.parse('3 দিন পরে', now: now);
+      expect(result, DateTime(2024, 6, 18));
+    });
+
+    test('parseLocale — Bengali', () {
+      final result = SmartParser.parseLocale(
+        'আগামীকাল',
+        locale: SdfLocale.bn,
+        now: now,
+      );
+      expect(result, DateTime(2024, 6, 16));
+    });
+  });
+
+  group('SmartParser v2.6.0 — Tamil', () {
+    final now = DateTime(2024, 6, 15, 12, 0, 0);
+
+    test('இன்று — today', () {
+      expect(SmartParser.parse('இன்று', now: now), DateTime(2024, 6, 15));
+    });
+
+    test('நாளை — tomorrow', () {
+      expect(SmartParser.parse('நாளை', now: now), DateTime(2024, 6, 16));
+    });
+
+    test('நேற்று — yesterday', () {
+      expect(SmartParser.parse('நேற்று', now: now), DateTime(2024, 6, 14));
+    });
+
+    test('அடுத்த வாரம் — next week', () {
+      final result = SmartParser.parse('அடுத்த வாரம்', now: now);
+      expect(result, DateTime(2024, 6, 22));
+    });
+
+    test('3 நாட்களில் — in 3 days', () {
+      final result = SmartParser.parse('3 நாட்களில்', now: now);
+      expect(result, DateTime(2024, 6, 18));
+    });
+
+    test('parseLocale — Tamil', () {
+      final result = SmartParser.parseLocale(
+        'நாளை',
+        locale: SdfLocale.ta,
+        now: now,
+      );
+      expect(result, DateTime(2024, 6, 16));
+    });
+
+    test('supportedParseLocales has gu bn ta', () {
+      expect(
+          SmartParser.supportedParseLocales, containsAll(['gu', 'bn', 'ta']));
+    });
+  });
+
+  group('SmartCalendar v2.6.0 — Improvements', () {
+    // Range selection tests
+    testWidgets('SmartCalendar — range selection mode', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      DateTime? rangeStart;
+      DateTime? rangeEnd;
+      debugPrint('$rangeStart and $rangeEnd');
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SmartCalendar(
+                events: const [],
+                rangeSelectionMode: true,
+                onRangeSelected: (start, end) {
+                  rangeStart = start;
+                  rangeEnd = end;
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(SmartCalendar), findsOneWidget);
+      expect(find.text('Tap to select start date'), findsOneWidget);
+      await tester.binding.setSurfaceSize(null);
+    });
+
+    testWidgets('SmartCalendar — range mode shows instruction', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SmartCalendar(
+                events: [],
+                rangeSelectionMode: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.text('Tap to select start date'), findsOneWidget);
+      await tester.binding.setSurfaceSize(null);
+    });
+
+    // Overlap detection tests
+    test('detectOverlaps — overlapping events', () {
+      final events = [
+        CalendarEvent(
+          date: DateTime.now(),
+          title: 'Meeting 1',
+          color: Colors.blue,
+          allDay: false,
+          startTime: const TimeOfDay(hour: 10, minute: 0),
+          endTime: const TimeOfDay(hour: 11, minute: 0),
+        ),
+        CalendarEvent(
+          date: DateTime.now(),
+          title: 'Meeting 2',
+          color: Colors.red,
+          allDay: false,
+          startTime: const TimeOfDay(hour: 10, minute: 30),
+          endTime: const TimeOfDay(hour: 11, minute: 30),
+        ),
+      ];
+
+      // Both events overlap (10:00-11:00 and 10:30-11:30)
+      final a = events[0].startTime!;
+      final b = events[1].startTime!;
+      final aStart = a.hour * 60 + a.minute;
+      final bStart = b.hour * 60 + b.minute;
+      final aEnd = events[0].endTime!.hour * 60 + events[0].endTime!.minute;
+      final bEnd = events[1].endTime!.hour * 60 + events[1].endTime!.minute;
+
+      expect(aStart < bEnd && aEnd > bStart, true);
+    });
+
+    test('detectOverlaps — non overlapping events', () {
+      const aStart = 10 * 60; // 10:00
+      const aEnd = 11 * 60; // 11:00
+      const bStart = 11 * 60; // 11:00
+      const bEnd = 12 * 60; // 12:00
+
+      expect(aStart < bEnd && aEnd > bStart, false);
+    });
+
+    // MonthView range params
+    testWidgets('MonthView — with range selection', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      final controller = SmartCalendarController();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SmartCalendar(
+                controller: controller,
+                events: const [],
+                rangeSelectionMode: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(SmartCalendar), findsOneWidget);
+      controller.dispose();
+      await tester.binding.setSurfaceSize(null);
+    });
+  });
 }

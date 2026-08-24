@@ -28,19 +28,24 @@ class SmartParser {
     final reference = now ?? DateTime.now();
     final normalized = input.trim().toLowerCase();
 
-    // Try English first
     final english = _parseEnglish(normalized, reference);
     if (english != null) return english;
 
-    // Try Hindi
     final hindi = _parseHindi(normalized, reference);
     if (hindi != null) return hindi;
 
-    // Try Marathi
     final marathi = _parseMarathi(normalized, reference);
     if (marathi != null) return marathi;
 
-    // Try standard date string
+    final gujarati = _parseGujarati(normalized, reference);
+    if (gujarati != null) return gujarati;
+
+    final bengali = _parseBengali(normalized, reference);
+    if (bengali != null) return bengali;
+
+    final tamil = _parseTamil(normalized, reference);
+    if (tamil != null) return tamil;
+
     try {
       return DateTime.parse(input.trim());
     } catch (_) {}
@@ -68,6 +73,15 @@ class SmartParser {
             _parseEnglish(normalized.toLowerCase(), reference);
       case 'mr':
         return _parseMarathi(normalized, reference) ??
+            _parseEnglish(normalized.toLowerCase(), reference);
+      case 'gu':
+        return _parseGujarati(normalized, reference) ??
+            _parseEnglish(normalized.toLowerCase(), reference);
+      case 'bn':
+        return _parseBengali(normalized, reference) ??
+            _parseEnglish(normalized.toLowerCase(), reference);
+      case 'ta':
+        return _parseTamil(normalized, reference) ??
             _parseEnglish(normalized.toLowerCase(), reference);
       default:
         return _parseEnglish(normalized.toLowerCase(), reference);
@@ -111,7 +125,14 @@ class SmartParser {
       parseLocale(input, locale: locale, now: now) != null;
 
   /// All supported locales for parsing.
-  static const List<String> supportedParseLocales = ['en', 'hi', 'mr'];
+  static const List<String> supportedParseLocales = [
+    'en',
+    'hi',
+    'mr',
+    'gu',
+    'bn',
+    'ta'
+  ];
 
   // ── English Parser ────────────────────────────────────────────
 
@@ -177,6 +198,79 @@ class SmartParser {
         return _startOf(reference.add(const Duration(days: 2)));
       case 'day before yesterday':
         return _startOf(reference.subtract(const Duration(days: 2)));
+    }
+
+    // "first/last monday of month"
+    final firstLastPattern = RegExp(
+        r'^(first|last) (monday|tuesday|wednesday|thursday|friday|saturday|sunday) of (this|next|last)? ?month$');
+    final firstLastMatch = firstLastPattern.firstMatch(input);
+    if (firstLastMatch != null) {
+      final position = firstLastMatch.group(1)!;
+      final weekdayStr = firstLastMatch.group(2)!;
+      final monthStr = firstLastMatch.group(3) ?? 'this';
+      final targetWeekday = _weekdayNumber(weekdayStr);
+      return _findWeekdayInMonth(
+          reference, targetWeekday, position == 'first', monthStr);
+    }
+
+// "N mondays/tuesdays ago"
+    final nWeekdaysAgoPattern = RegExp(
+        r'^(\d+) (monday|tuesday|wednesday|thursday|friday|saturday|sunday)s? ago$');
+    final nWeekdaysAgoMatch = nWeekdaysAgoPattern.firstMatch(input);
+    if (nWeekdaysAgoMatch != null) {
+      final n = int.parse(nWeekdaysAgoMatch.group(1)!);
+      final weekdayStr = nWeekdaysAgoMatch.group(2)!;
+      final targetWeekday = _weekdayNumber(weekdayStr);
+      return _findNthWeekdayAgo(reference, targetWeekday, n);
+    }
+
+// "in N mondays/tuesdays"
+    final inNWeekdaysPattern = RegExp(
+        r'^in (\d+) (monday|tuesday|wednesday|thursday|friday|saturday|sunday)s?$');
+    final inNWeekdaysMatch = inNWeekdaysPattern.firstMatch(input);
+    if (inNWeekdaysMatch != null) {
+      final n = int.parse(inNWeekdaysMatch.group(1)!);
+      final weekdayStr = inNWeekdaysMatch.group(2)!;
+      final targetWeekday = _weekdayNumber(weekdayStr);
+      return _findNthWeekdayAhead(reference, targetWeekday, n);
+    }
+
+// "beginning of next/last month"
+    final beginningPattern =
+        RegExp(r'^beginning of (next|last|this) (month|year|week)$');
+    final beginningMatch = beginningPattern.firstMatch(input);
+    if (beginningMatch != null) {
+      final when = beginningMatch.group(1)!;
+      final period = beginningMatch.group(2)!;
+      return _beginningOf(reference, when, period);
+    }
+
+// "end of next/last month"
+    final endPattern = RegExp(r'^end of (next|last|this) (month|year|week)$');
+    final endMatch = endPattern.firstMatch(input);
+    if (endMatch != null) {
+      final when = endMatch.group(1)!;
+      final period = endMatch.group(2)!;
+      return _endOf(reference, when, period);
+    }
+
+// "this coming monday/friday"
+    final comingPattern = RegExp(
+        r'^this coming (monday|tuesday|wednesday|thursday|friday|saturday|sunday)$');
+    final comingMatch = comingPattern.firstMatch(input);
+    if (comingMatch != null) {
+      final weekdayStr = comingMatch.group(1)!;
+      final targetWeekday = _weekdayNumber(weekdayStr);
+      return _findWeekday(reference, targetWeekday, true);
+    }
+
+// "quarter N" or "Q1/Q2/Q3/Q4"
+    final quarterPattern = RegExp(r'^(q|quarter )([1-4])$');
+    final quarterMatch = quarterPattern.firstMatch(input);
+    if (quarterMatch != null) {
+      final q = int.parse(quarterMatch.group(2)!);
+      final startMonth = (q - 1) * 3 + 1;
+      return DateTime(reference.year, startMonth, 1);
     }
 
     // "in N days/weeks/months/years"
@@ -430,6 +524,158 @@ class SmartParser {
     return null;
   }
 
+  static DateTime? _parseGujarati(String input, DateTime reference) {
+    switch (input) {
+      case 'આજ':
+        return _startOf(reference);
+      case 'આવતી કાલ':
+      case 'આવતીકાલ':
+        return _startOf(reference.add(const Duration(days: 1)));
+      case 'ગઈ કાલ':
+      case 'ગઈકાલ':
+        return _startOf(reference.subtract(const Duration(days: 1)));
+      case 'પરમ દિવસ':
+        return _startOf(reference.add(const Duration(days: 2)));
+      case 'આ અઠવાડિયે':
+        return _startOf(
+            reference.subtract(Duration(days: reference.weekday - 1)));
+      case 'આવતા અઠવાડિયે':
+        return _startOf(reference.add(const Duration(days: 7)));
+      case 'ગયા અઠવાડિયે':
+        return _startOf(reference.subtract(const Duration(days: 7)));
+      case 'આ મહિને':
+        return DateTime(reference.year, reference.month, 1);
+      case 'આવતા મહિને':
+        return DateTime(reference.year, reference.month + 1, 1);
+      case 'ગયા મહિને':
+        return DateTime(reference.year, reference.month - 1, 1);
+      case 'આ વર્ષે':
+        return DateTime(reference.year, 1, 1);
+      case 'આવતા વર્ષે':
+        return DateTime(reference.year + 1, 1, 1);
+      case 'ગયા વર્ષે':
+        return DateTime(reference.year - 1, 1, 1);
+    }
+
+    // "{n} દિવસ પછી" (in N days)
+    final inDaysGu = RegExp(r'^(\d+) દિવસ પછી$');
+    final inDaysGuMatch = inDaysGu.firstMatch(input);
+    if (inDaysGuMatch != null) {
+      final n = int.parse(inDaysGuMatch.group(1)!);
+      return _startOf(reference.add(Duration(days: n)));
+    }
+
+    // "{n} દિવસ પહેલાં" (N days ago)
+    final agoDaysGu = RegExp(r'^(\d+) દિવસ પહેલાં$');
+    final agoDaysGuMatch = agoDaysGu.firstMatch(input);
+    if (agoDaysGuMatch != null) {
+      final n = int.parse(agoDaysGuMatch.group(1)!);
+      return _startOf(reference.subtract(Duration(days: n)));
+    }
+
+    return null;
+  }
+
+  static DateTime? _parseBengali(String input, DateTime reference) {
+    switch (input) {
+      case 'আজ':
+        return _startOf(reference);
+      case 'আগামীকাল':
+        return _startOf(reference.add(const Duration(days: 1)));
+      case 'গতকাল':
+        return _startOf(reference.subtract(const Duration(days: 1)));
+      case 'পরশু':
+        return _startOf(reference.add(const Duration(days: 2)));
+      case 'এই সপ্তাহ':
+        return _startOf(
+            reference.subtract(Duration(days: reference.weekday - 1)));
+      case 'আগামী সপ্তাহ':
+        return _startOf(reference.add(const Duration(days: 7)));
+      case 'গত সপ্তাহ':
+        return _startOf(reference.subtract(const Duration(days: 7)));
+      case 'এই মাস':
+        return DateTime(reference.year, reference.month, 1);
+      case 'আগামী মাস':
+        return DateTime(reference.year, reference.month + 1, 1);
+      case 'গত মাস':
+        return DateTime(reference.year, reference.month - 1, 1);
+      case 'এই বছর':
+        return DateTime(reference.year, 1, 1);
+      case 'আগামী বছর':
+        return DateTime(reference.year + 1, 1, 1);
+      case 'গত বছর':
+        return DateTime(reference.year - 1, 1, 1);
+    }
+
+    // "{n} দিন পরে" (in N days)
+    final inDaysBn = RegExp(r'^(\d+) দিন পরে$');
+    final inDaysBnMatch = inDaysBn.firstMatch(input);
+    if (inDaysBnMatch != null) {
+      final n = int.parse(inDaysBnMatch.group(1)!);
+      return _startOf(reference.add(Duration(days: n)));
+    }
+
+    // "{n} দিন আগে" (N days ago)
+    final agoDaysBn = RegExp(r'^(\d+) দিন আগে$');
+    final agoDaysBnMatch = agoDaysBn.firstMatch(input);
+    if (agoDaysBnMatch != null) {
+      final n = int.parse(agoDaysBnMatch.group(1)!);
+      return _startOf(reference.subtract(Duration(days: n)));
+    }
+
+    return null;
+  }
+
+  static DateTime? _parseTamil(String input, DateTime reference) {
+    switch (input) {
+      case 'இன்று':
+        return _startOf(reference);
+      case 'நாளை':
+        return _startOf(reference.add(const Duration(days: 1)));
+      case 'நேற்று':
+        return _startOf(reference.subtract(const Duration(days: 1)));
+      case 'நாளை மறுநாள்':
+        return _startOf(reference.add(const Duration(days: 2)));
+      case 'இந்த வாரம்':
+        return _startOf(
+            reference.subtract(Duration(days: reference.weekday - 1)));
+      case 'அடுத்த வாரம்':
+        return _startOf(reference.add(const Duration(days: 7)));
+      case 'கடந்த வாரம்':
+        return _startOf(reference.subtract(const Duration(days: 7)));
+      case 'இந்த மாதம்':
+        return DateTime(reference.year, reference.month, 1);
+      case 'அடுத்த மாதம்':
+        return DateTime(reference.year, reference.month + 1, 1);
+      case 'கடந்த மாதம்':
+        return DateTime(reference.year, reference.month - 1, 1);
+      case 'இந்த ஆண்டு':
+        return DateTime(reference.year, 1, 1);
+      case 'அடுத்த ஆண்டு':
+        return DateTime(reference.year + 1, 1, 1);
+      case 'கடந்த ஆண்டு':
+        return DateTime(reference.year - 1, 1, 1);
+    }
+
+    // "{n} நாட்களில்" (in N days)
+    final inDaysTa = RegExp(r'^(\d+) நாட்களில்$');
+    final inDaysTaMatch = inDaysTa.firstMatch(input);
+    if (inDaysTaMatch != null) {
+      final n = int.parse(inDaysTaMatch.group(1)!);
+      return _startOf(reference.add(Duration(days: n)));
+    }
+
+    // "{n} நாட்களுக்கு முன்பு" (N days ago)
+    final agoDaysTa = RegExp(r'^(\d+) நாட்களுக்கு முன்பு$');
+    final agoDaysTaMatch = agoDaysTa.firstMatch(input);
+    if (agoDaysTaMatch != null) {
+      final n = int.parse(agoDaysTaMatch.group(1)!);
+      return _startOf(reference.subtract(Duration(days: n)));
+    }
+
+    return null;
+  }
+
   // ── Private helpers ───────────────────────────────────────────
 
   static DateTime _startOf(DateTime date) =>
@@ -504,5 +750,137 @@ class SmartParser {
     }
     final result = from.add(Duration(days: diff));
     return _startOf(result);
+  }
+
+  static DateTime? _findWeekdayInMonth(
+    DateTime reference,
+    int targetWeekday,
+    bool first,
+    String monthStr,
+  ) {
+    late DateTime monthDate;
+    switch (monthStr) {
+      case 'next':
+        monthDate = DateTime(reference.year, reference.month + 1, 1);
+      case 'last':
+        monthDate = DateTime(reference.year, reference.month - 1, 1);
+      default:
+        monthDate = DateTime(reference.year, reference.month, 1);
+    }
+
+    if (first) {
+      // Find first occurrence
+      DateTime current = monthDate;
+      while (current.weekday != targetWeekday) {
+        current = current.add(const Duration(days: 1));
+      }
+      return _startOf(current);
+    } else {
+      // Find last occurrence
+      final lastDay = DateTime(monthDate.year, monthDate.month + 1, 0);
+      DateTime current = lastDay;
+      while (current.weekday != targetWeekday) {
+        current = current.subtract(const Duration(days: 1));
+      }
+      return _startOf(current);
+    }
+  }
+
+  static DateTime _findNthWeekdayAgo(
+    DateTime reference,
+    int targetWeekday,
+    int n,
+  ) {
+    DateTime current = reference.subtract(const Duration(days: 1));
+    int count = 0;
+    while (count < n) {
+      if (current.weekday == targetWeekday) count++;
+      if (count < n) {
+        current = current.subtract(const Duration(days: 1));
+      }
+    }
+    return _startOf(current);
+  }
+
+  static DateTime _findNthWeekdayAhead(
+    DateTime reference,
+    int targetWeekday,
+    int n,
+  ) {
+    DateTime current = reference.add(const Duration(days: 1));
+    int count = 0;
+    while (count < n) {
+      if (current.weekday == targetWeekday) count++;
+      if (count < n) {
+        current = current.add(const Duration(days: 1));
+      }
+    }
+    return _startOf(current);
+  }
+
+  static DateTime? _beginningOf(
+    DateTime reference,
+    String when,
+    String period,
+  ) {
+    switch ('$when $period') {
+      case 'this month':
+        return DateTime(reference.year, reference.month, 1);
+      case 'next month':
+        return DateTime(reference.year, reference.month + 1, 1);
+      case 'last month':
+        return DateTime(reference.year, reference.month - 1, 1);
+      case 'this year':
+        return DateTime(reference.year, 1, 1);
+      case 'next year':
+        return DateTime(reference.year + 1, 1, 1);
+      case 'last year':
+        return DateTime(reference.year - 1, 1, 1);
+      case 'this week':
+        return _startOf(
+            reference.subtract(Duration(days: reference.weekday - 1)));
+      case 'next week':
+        final nextMon = reference.add(Duration(days: 8 - reference.weekday));
+        return _startOf(nextMon);
+      case 'last week':
+        final lastMon =
+            reference.subtract(Duration(days: reference.weekday + 6));
+        return _startOf(lastMon);
+      default:
+        return null;
+    }
+  }
+
+  static DateTime? _endOf(
+    DateTime reference,
+    String when,
+    String period,
+  ) {
+    switch ('$when $period') {
+      case 'this month':
+        return _startOf(DateTime(reference.year, reference.month + 1, 0));
+      case 'next month':
+        return _startOf(DateTime(reference.year, reference.month + 2, 0));
+      case 'last month':
+        return _startOf(DateTime(reference.year, reference.month, 0));
+      case 'this year':
+        return DateTime(reference.year, 12, 31);
+      case 'next year':
+        return DateTime(reference.year + 1, 12, 31);
+      case 'last year':
+        return DateTime(reference.year - 1, 12, 31);
+      case 'this week':
+        final daysToSunday = DateTime.sunday - reference.weekday;
+        return _startOf(reference.add(Duration(days: daysToSunday)));
+      case 'next week':
+        final nextSun = reference
+            .add(Duration(days: DateTime.sunday - reference.weekday + 7));
+        return _startOf(nextSun);
+      case 'last week':
+        final lastSun = reference.subtract(Duration(days: reference.weekday));
+        return _startOf(lastSun);
+      default:
+        return null;
+    }
   }
 }
