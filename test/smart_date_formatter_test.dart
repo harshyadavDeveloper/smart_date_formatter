@@ -462,6 +462,43 @@ void main() {
     });
   });
 
+  group('SmartParser — month-end clamping', () {
+    test('Jan 31 + 1 month = Feb 29 (leap year)', () {
+      final result =
+          SmartParser.parse('in 1 month', now: DateTime(2024, 1, 31));
+      expect(result, DateTime(2024, 2, 29));
+    });
+
+    test('Jan 31 + 1 month = Feb 28 (non-leap year)', () {
+      final result =
+          SmartParser.parse('in 1 month', now: DateTime(2023, 1, 31));
+      expect(result, DateTime(2023, 2, 28));
+    });
+
+    test('Mar 31 + 1 month = Apr 30', () {
+      final result =
+          SmartParser.parse('in 1 month', now: DateTime(2024, 3, 31));
+      expect(result, DateTime(2024, 4, 30));
+    });
+
+    test('Feb 29 + 1 year = Feb 28 next year', () {
+      final result = SmartParser.parse('in 1 year', now: DateTime(2024, 2, 29));
+      expect(result, DateTime(2025, 2, 28));
+    });
+
+    test('Jun 15 + 1 month = Jul 15 (no clamping needed)', () {
+      final result =
+          SmartParser.parse('in 1 month', now: DateTime(2024, 6, 15));
+      expect(result, DateTime(2024, 7, 15));
+    });
+
+    test('Jan 31 - 1 month = Dec 31', () {
+      final result =
+          SmartParser.parse('1 month ago', now: DateTime(2024, 1, 31));
+      expect(result, DateTime(2023, 12, 31));
+    });
+  });
+
   group('DateRange & DateRangeHelper v1.0.0', () {
     final now = DateTime(2024, 6, 15, 12, 0, 0); // Saturday
 

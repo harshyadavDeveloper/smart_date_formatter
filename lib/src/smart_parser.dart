@@ -694,12 +694,23 @@ class SmartParser {
       case 'week':
         return _startOf(base.add(Duration(days: n * 7)));
       case 'month':
-        return _startOf(DateTime(base.year, base.month + n, base.day));
+        return _startOf(_addMonths(base, n));
       case 'year':
-        return _startOf(DateTime(base.year + n, base.month, base.day));
+        return _startOf(_addMonths(base, n * 12));
       default:
         return base;
     }
+  }
+
+  /// Adds [n] months to [base] with end-of-month clamping.
+  /// e.g. Jan 31 + 1 month = Feb 28/29 (not Mar 2).
+   static DateTime _addMonths(DateTime base, int n) {
+    final totalMonths = (base.year * 12 + base.month - 1) + n;
+    final year = totalMonths ~/ 12;
+    final month = (totalMonths % 12) + 1;
+    final lastDayOfMonth = DateTime(year, month + 1, 0).day;
+    final day = base.day > lastDayOfMonth ? lastDayOfMonth : base.day;
+    return DateTime(year, month, day);
   }
 
   static int _weekdayNumber(String weekday) {

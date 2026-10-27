@@ -41,12 +41,14 @@ class _ParserPageState extends State<ParserPage> {
     super.dispose();
   }
 
-  void _parse(String value) {
-    setState(() {
-      _result = SmartParser.parse(value);
-      _canParse = SmartParser.canParse(value);
-    });
-  }
+static final _ref = DateTime(2024, 6, 15);
+
+void _parse(String value) {
+  setState(() {
+    _result = SmartParser.parse(value, now: _ref);
+    _canParse = SmartParser.canParse(value);
+  });
+}
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +65,32 @@ class _ParserPageState extends State<ParserPage> {
         const SizedBox(height: 16),
 
         // Live parser
+        // Yeh add karo Live Parser DemoSection se pehle:
+Container(
+  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+  decoration: BoxDecoration(
+    color: Colors.amber.shade50,
+    borderRadius: BorderRadius.circular(8),
+    border: Border.all(color: Colors.amber.shade300),
+  ),
+  child: Row(
+    children: [
+      Icon(Icons.info_outline, size: 16, color: Colors.amber.shade700),
+      const SizedBox(width: 8),
+      Expanded(
+        child: Text(
+          'Reference date: 15 Jun 2024 — results are relative to this fixed date for reproducibility',
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.amber.shade800,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+    ],
+  ),
+),
+const SizedBox(height: 8),
         const DemoSection('Live Parser — Type anything!'),
         const SizedBox(height: 8),
         Card(

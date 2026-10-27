@@ -1,18 +1,28 @@
+## 2.6.1
+
+- fix: month-end clamping in SmartParser — `in 1 month` from Jan 31 now
+  returns Feb 28/29 instead of overflowing to Mar 2
+- fix: year addition clamping — `in 1 year` from Feb 29 returns Feb 28
+  on non-leap years
+- playground: added fixed reference date (15 Jun 2024) for reproducible
+  parser examples
+- playground: added month-end edge case section showing Jan 31 clamping
+
 ## 2.6.0
 
-* SmartParser — Gujarati, Bengali, Tamil parsing
-* SmartParser — new English expressions:
-  * "first/last monday of month"
-  * "2 mondays ago", "in 2 fridays"
-  * "beginning/end of next month"
-  * "this coming monday"
-  * "q1", "q2", "quarter 3"
-* SmartCalendar — range selection mode
-  * `rangeSelectionMode` param
-  * `onRangeSelected` callback
-  * Visual range highlight in month view
-* SmartCalendar — event overlap detection in week view
-* `supportedParseLocales` updated — now includes gu, bn, ta
+- SmartParser — Gujarati, Bengali, Tamil parsing
+- SmartParser — new English expressions:
+  - "first/last monday of month"
+  - "2 mondays ago", "in 2 fridays"
+  - "beginning/end of next month"
+  - "this coming monday"
+  - "q1", "q2", "quarter 3"
+- SmartCalendar — range selection mode
+  - `rangeSelectionMode` param
+  - `onRangeSelected` callback
+  - Visual range highlight in month view
+- SmartCalendar — event overlap detection in week view
+- `supportedParseLocales` updated — now includes gu, bn, ta
 
 ## 2.5.0
 
