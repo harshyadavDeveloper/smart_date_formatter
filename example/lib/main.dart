@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_date_formatter/smart_date_formatter.dart';
 import 'tabs/time_ago_tab.dart';
 import 'tabs/calendar_tab.dart';
 import 'tabs/format_tab.dart';
@@ -46,7 +47,7 @@ class ExampleHomePage extends StatelessWidget {
             children: [
               Text('smart_date_formatter',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              Text('v2.4.0 — Full Example',
+              Text('v$kSmartDateFormatterVersion — Full Example',
                   style: TextStyle(fontSize: 11, color: Colors.white70)),
             ],
           ),
