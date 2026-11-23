@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A Flutter widget that counts down to a [target] DateTime
 /// and automatically updates every second.

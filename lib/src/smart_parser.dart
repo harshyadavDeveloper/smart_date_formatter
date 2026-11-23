@@ -704,7 +704,7 @@ class SmartParser {
 
   /// Adds [n] months to [base] with end-of-month clamping.
   /// e.g. Jan 31 + 1 month = Feb 28/29 (not Mar 2).
-   static DateTime _addMonths(DateTime base, int n) {
+  static DateTime _addMonths(DateTime base, int n) {
     final totalMonths = (base.year * 12 + base.month - 1) + n;
     final year = totalMonths ~/ 12;
     final month = (totalMonths % 12) + 1;

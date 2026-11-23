@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:smart_date_formatter/smart_date_formatter.dart';
 import '../widgets/calendar_header.dart';
 import '../widgets/day_cell.dart';
