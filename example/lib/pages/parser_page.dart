@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:smart_date_formatter/smart_date_formatter.dart';
 import '../widgets/demo_section.dart';
 import '../widgets/demo_code_box.dart';
@@ -41,14 +41,14 @@ class _ParserPageState extends State<ParserPage> {
     super.dispose();
   }
 
-static final _ref = DateTime(2024, 6, 15);
+  static final _ref = DateTime(2024, 6, 15);
 
-void _parse(String value) {
-  setState(() {
-    _result = SmartParser.parse(value, now: _ref);
-    _canParse = SmartParser.canParse(value);
-  });
-}
+  void _parse(String value) {
+    setState(() {
+      _result = SmartParser.parse(value, now: _ref);
+      _canParse = SmartParser.canParse(value);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,31 +66,31 @@ void _parse(String value) {
 
         // Live parser
         // Yeh add karo Live Parser DemoSection se pehle:
-Container(
-  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-  decoration: BoxDecoration(
-    color: Colors.amber.shade50,
-    borderRadius: BorderRadius.circular(8),
-    border: Border.all(color: Colors.amber.shade300),
-  ),
-  child: Row(
-    children: [
-      Icon(Icons.info_outline, size: 16, color: Colors.amber.shade700),
-      const SizedBox(width: 8),
-      Expanded(
-        child: Text(
-          'Reference date: 15 Jun 2024 — results are relative to this fixed date for reproducibility',
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.amber.shade800,
-            fontWeight: FontWeight.w500,
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.amber.shade50,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: Colors.amber.shade300),
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.info_outline, size: 16, color: Colors.amber.shade700),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Reference date: 15 Jun 2024 — results are relative to this fixed date for reproducibility',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.amber.shade800,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-      ),
-    ],
-  ),
-),
-const SizedBox(height: 8),
+        const SizedBox(height: 8),
         const DemoSection('Live Parser — Type anything!'),
         const SizedBox(height: 8),
         Card(

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A simple label → value tile used across all tabs.
 class ExampleTile extends StatelessWidget {

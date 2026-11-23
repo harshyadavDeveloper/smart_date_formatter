@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Small colored badge/pill widget.
 class DemoBadge extends StatelessWidget {

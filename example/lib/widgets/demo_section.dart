@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Section header with optional subtitle.
 class DemoSection extends StatelessWidget {
