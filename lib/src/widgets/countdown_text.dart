@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
+
+import 'package:material_ui/material_ui.dart';
 
 /// A Flutter widget that counts down to a [target] DateTime
 /// and automatically updates every second.
@@ -126,10 +127,6 @@ class _CountdownTextState extends State<CountdownText> {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      _buildText(),
-      style: widget.style,
-      textAlign: widget.textAlign,
-    );
+    return Text(_buildText(), style: widget.style, textAlign: widget.textAlign);
   }
 }

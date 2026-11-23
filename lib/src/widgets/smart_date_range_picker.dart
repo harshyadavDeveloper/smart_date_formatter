@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
+
 import '../date_format_helper.dart';
 import '../date_range_helper.dart';
 import '../extensions.dart';
@@ -73,7 +74,8 @@ class SelectedDateRange {
   DateRange toDateRange() => DateRange(start: start, end: end);
 
   @override
-  String toString() => 'SelectedDateRange(${start.toIso8601String()} → '
+  String toString() =>
+      'SelectedDateRange(${start.toIso8601String()} → '
       '${end.toIso8601String()}, $days days)';
 }
 
@@ -99,9 +101,8 @@ class SmartDateRangePickerController extends ChangeNotifier {
   ///   ),
   /// )
   /// ```
-  SmartDateRangePickerController({
-    SelectedDateRange? initialRange,
-  }) : _value = initialRange;
+  SmartDateRangePickerController({SelectedDateRange? initialRange})
+    : _value = initialRange;
 
   /// Current selected range
   SelectedDateRange? get value => _value;
@@ -340,10 +341,7 @@ class SmartDateRangePicker extends StatefulWidget {
             const SizedBox(height: 16),
             const Text(
               'Select Date Range',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             SmartDateRangePicker(
@@ -468,11 +466,13 @@ class _SmartDateRangePickerState extends State<SmartDateRangePicker> {
 
   void _confirmSelection() {
     if (_startDate != null && _endDate != null) {
-      widget.onRangeSelected?.call(SelectedDateRange(
-        start: _startDate!,
-        end: _endDate!,
-        preset: _activePreset,
-      ));
+      widget.onRangeSelected?.call(
+        SelectedDateRange(
+          start: _startDate!,
+          end: _endDate!,
+          preset: _activePreset,
+        ),
+      );
     }
   }
 
@@ -589,7 +589,9 @@ class _SmartDateRangePickerState extends State<SmartDateRangePicker> {
                     child: Container(
                       margin: const EdgeInsets.only(right: 8),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 6),
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
                       decoration: BoxDecoration(
                         color: isActive
                             ? widget.primaryColor
@@ -623,8 +625,9 @@ class _SmartDateRangePickerState extends State<SmartDateRangePicker> {
             decoration: BoxDecoration(
               color: widget.primaryColor.withValues(alpha: 0.06),
               borderRadius: BorderRadius.circular(10),
-              border:
-                  Border.all(color: widget.primaryColor.withValues(alpha: 0.2)),
+              border: Border.all(
+                color: widget.primaryColor.withValues(alpha: 0.2),
+              ),
             ),
             child: Row(
               children: [
@@ -635,12 +638,16 @@ class _SmartDateRangePickerState extends State<SmartDateRangePicker> {
                       Text(
                         'Start Date',
                         style: TextStyle(
-                            fontSize: 10, color: Colors.grey.shade600),
+                          fontSize: 10,
+                          color: Colors.grey.shade600,
+                        ),
                       ),
                       Text(
                         _startDate != null
                             ? DateFormatHelper.format(
-                                _startDate!, widget.displayFormat)
+                                _startDate!,
+                                widget.displayFormat,
+                              )
                             : 'Select start',
                         style: TextStyle(
                           fontSize: 14,
@@ -653,8 +660,11 @@ class _SmartDateRangePickerState extends State<SmartDateRangePicker> {
                     ],
                   ),
                 ),
-                Icon(Icons.arrow_forward,
-                    color: Colors.grey.shade400, size: 18),
+                Icon(
+                  Icons.arrow_forward,
+                  color: Colors.grey.shade400,
+                  size: 18,
+                ),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -662,12 +672,16 @@ class _SmartDateRangePickerState extends State<SmartDateRangePicker> {
                       Text(
                         'End Date',
                         style: TextStyle(
-                            fontSize: 10, color: Colors.grey.shade600),
+                          fontSize: 10,
+                          color: Colors.grey.shade600,
+                        ),
                       ),
                       Text(
                         _endDate != null
                             ? DateFormatHelper.format(
-                                _endDate!, widget.displayFormat)
+                                _endDate!,
+                                widget.displayFormat,
+                              )
                             : 'Select end',
                         style: TextStyle(
                           fontSize: 14,
@@ -683,8 +697,10 @@ class _SmartDateRangePickerState extends State<SmartDateRangePicker> {
                 if (_startDate != null && _endDate != null) ...[
                   const SizedBox(width: 8),
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: widget.primaryColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(20),
@@ -710,8 +726,8 @@ class _SmartDateRangePickerState extends State<SmartDateRangePicker> {
             _startDate == null
                 ? 'Tap to select start date'
                 : _endDate == null
-                    ? 'Tap to select end date'
-                    : 'Range selected — tap to change',
+                ? 'Tap to select end date'
+                : 'Range selected — tap to change',
             style: TextStyle(
               fontSize: 11,
               color: Colors.grey.shade500,
@@ -727,21 +743,27 @@ class _SmartDateRangePickerState extends State<SmartDateRangePicker> {
             children: [
               IconButton(
                 onPressed: () => setState(() {
-                  _focusedMonth =
-                      DateTime(_focusedMonth.year, _focusedMonth.month - 1);
+                  _focusedMonth = DateTime(
+                    _focusedMonth.year,
+                    _focusedMonth.month - 1,
+                  );
                 }),
                 icon: const Icon(Icons.chevron_left),
                 visualDensity: VisualDensity.compact,
               ),
               Text(
                 DateFormatHelper.format(_focusedMonth, 'MMMM yyyy'),
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
               ),
               IconButton(
                 onPressed: () => setState(() {
-                  _focusedMonth =
-                      DateTime(_focusedMonth.year, _focusedMonth.month + 1);
+                  _focusedMonth = DateTime(
+                    _focusedMonth.year,
+                    _focusedMonth.month + 1,
+                  );
                 }),
                 icon: const Icon(Icons.chevron_right),
                 visualDensity: VisualDensity.compact,
@@ -752,17 +774,19 @@ class _SmartDateRangePickerState extends State<SmartDateRangePicker> {
           // ── Weekday headers ──────────────────────────────
           Row(
             children: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
-                .map((d) => Expanded(
-                      child: Text(
-                        d,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey.shade500,
-                        ),
+                .map(
+                  (d) => Expanded(
+                    child: Text(
+                      d,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey.shade500,
                       ),
-                    ))
+                    ),
+                  ),
+                )
                 .toList(),
           ),
 
@@ -795,30 +819,27 @@ class _SmartDateRangePickerState extends State<SmartDateRangePicker> {
                     color: isStart || isEnd
                         ? widget.primaryColor
                         : inRange
-                            ? _rangeHighlight
-                            : Colors.transparent,
+                        ? _rangeHighlight
+                        : Colors.transparent,
                     borderRadius: isStart
                         ? BorderRadius.only(
                             topLeft: Radius.circular(widget.cellBorderRadius),
-                            bottomLeft:
-                                Radius.circular(widget.cellBorderRadius),
+                            bottomLeft: Radius.circular(
+                              widget.cellBorderRadius,
+                            ),
                           )
                         : isEnd
-                            ? BorderRadius.only(
-                                topRight:
-                                    Radius.circular(widget.cellBorderRadius),
-                                bottomRight:
-                                    Radius.circular(widget.cellBorderRadius),
-                              )
-                            : inRange
-                                ? BorderRadius.zero
-                                : BorderRadius.circular(
-                                    widget.cellBorderRadius),
-                    border: isToday && !isStart && !isEnd
-                        ? Border.all(
-                            color: widget.primaryColor,
-                            width: 1.5,
+                        ? BorderRadius.only(
+                            topRight: Radius.circular(widget.cellBorderRadius),
+                            bottomRight: Radius.circular(
+                              widget.cellBorderRadius,
+                            ),
                           )
+                        : inRange
+                        ? BorderRadius.zero
+                        : BorderRadius.circular(widget.cellBorderRadius),
+                    border: isToday && !isStart && !isEnd
+                        ? Border.all(color: widget.primaryColor, width: 1.5)
                         : null,
                   ),
                   child: Center(
@@ -832,12 +853,12 @@ class _SmartDateRangePickerState extends State<SmartDateRangePicker> {
                         color: isStart || isEnd
                             ? Colors.white
                             : isDisabled
-                                ? _disabledTextColor
-                                : !isCurrentMonth
-                                    ? Colors.grey.shade400
-                                    : isWeekend
-                                        ? _weekendTextColor
-                                        : _textColor,
+                            ? _disabledTextColor
+                            : !isCurrentMonth
+                            ? Colors.grey.shade400
+                            : isWeekend
+                            ? _weekendTextColor
+                            : _textColor,
                       ),
                     ),
                   ),
@@ -873,7 +894,9 @@ class _SmartDateRangePickerState extends State<SmartDateRangePicker> {
                     backgroundColor: widget.primaryColor,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),

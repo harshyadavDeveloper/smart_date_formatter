@@ -8,7 +8,7 @@ class DateFormatHelper {
     'Thursday',
     'Friday',
     'Saturday',
-    'Sunday'
+    'Sunday',
   ];
 
   static const List<String> _weekdaysShort = [
@@ -18,7 +18,7 @@ class DateFormatHelper {
     'Thu',
     'Fri',
     'Sat',
-    'Sun'
+    'Sun',
   ];
 
   static const List<String> _monthsFull = [
@@ -33,7 +33,7 @@ class DateFormatHelper {
     'September',
     'October',
     'November',
-    'December'
+    'December',
   ];
 
   static const List<String> _monthsShort = [
@@ -48,7 +48,7 @@ class DateFormatHelper {
     'Sep',
     'Oct',
     'Nov',
-    'Dec'
+    'Dec',
   ];
 
   /// Formats [date] using the given [pattern].
@@ -77,8 +77,8 @@ class DateFormatHelper {
     final hour12 = date.hour == 0
         ? 12
         : date.hour > 12
-            ? date.hour - 12
-            : date.hour;
+        ? date.hour - 12
+        : date.hour;
 
     // Step 1 — Sab tokens ko null-char placeholders mein convert karo
     // \x00 kabhi bhi normal string mein nahi aata — 100% safe
@@ -97,7 +97,6 @@ class DateFormatHelper {
         .replaceAll('mm', '\x00L\x00')
         .replaceAll('ss', '\x00M\x00')
         .replaceAll('a', '\x00N\x00')
-
         // Step 2 — Placeholders ko actual values se replace karo
         .replaceAll('\x00A\x00', _weekdaysFull[date.weekday - 1])
         .replaceAll('\x00B\x00', _weekdaysShort[date.weekday - 1])

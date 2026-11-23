@@ -196,9 +196,9 @@ class DateRangeHelper {
 
   /// Custom range — [start] 00:00 to [end] 23:59
   static DateRange custom(DateTime start, DateTime end) => DateRange(
-        start: DateTime(start.year, start.month, start.day),
-        end: DateTime(end.year, end.month, end.day, 23, 59, 59, 999),
-      );
+    start: DateTime(start.year, start.month, start.day),
+    end: DateTime(end.year, end.month, end.day, 23, 59, 59, 999),
+  );
 
   /// Quarter ranges — Q1, Q2, Q3, Q4
   static DateRange quarter(int q, {DateTime? now}) {

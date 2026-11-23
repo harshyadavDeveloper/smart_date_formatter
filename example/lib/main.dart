@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:smart_date_formatter/smart_date_formatter.dart';
 import 'tabs/time_ago_tab.dart';
 import 'tabs/calendar_tab.dart';

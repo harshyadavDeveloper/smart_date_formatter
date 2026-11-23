@@ -148,7 +148,7 @@ class DateGrouper {
       'Thursday',
       'Friday',
       'Saturday',
-      'Sunday'
+      'Sunday',
     ];
     final map = <String, List<DateTime>>{};
     for (final date in dates) {

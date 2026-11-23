@@ -73,14 +73,32 @@
 
 ```yaml
 dependencies:
-  smart_date_formatter: ^1.5.0
+  smart_date_formatter: ^3.0.0
 ```
 
 ```bash
 flutter pub get
 ```
 
----
+> **Requires Flutter 3.47+ and Dart 3.13+.**
+> On an older Flutter? Use `smart_date_formatter: ^2.6.1`.
+
+### Migrating from 2.x
+
+3.0.0 moves from `package:flutter/material.dart` to Flutter's standalone
+[`material_ui`](https://pub.dev/packages/material_ui) package. If your app
+passes Material types such as `TimeOfDay` into `CalendarEvent` or
+`SmartDateField`, update your imports:
+
+```dart
+// Before
+import 'package:flutter/material.dart';
+
+// After
+import 'package:material_ui/material_ui.dart';
+```
+
+Or run `dart fix --apply --code=migrate_design_widgets` to do it automatically.
 
 ## 🚀 Quick Start
 

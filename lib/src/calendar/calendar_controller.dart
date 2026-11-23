@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:smart_date_formatter/smart_date_formatter.dart';
 
 /// Controls a [SmartCalendar] programmatically.
@@ -25,8 +25,8 @@ class SmartCalendarController extends ChangeNotifier {
   /// )
   /// ```
   SmartCalendarController({DateTime? initialDate})
-      : _focusedDate = initialDate ?? DateTime.now(),
-        _selectedDate = initialDate ?? DateTime.now();
+    : _focusedDate = initialDate ?? DateTime.now(),
+      _selectedDate = initialDate ?? DateTime.now();
 
   /// Currently focused month/date
   DateTime get focusedDate => _focusedDate;

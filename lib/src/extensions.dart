@@ -350,14 +350,13 @@ extension SmartDateExtension on DateTime {
     int? minute,
     int? second,
     int? millisecond,
-  }) =>
-      DateTime(
-        year ?? this.year,
-        month ?? this.month,
-        day ?? this.day,
-        hour ?? this.hour,
-        minute ?? this.minute,
-        second ?? this.second,
-        millisecond ?? this.millisecond,
-      );
+  }) => DateTime(
+    year ?? this.year,
+    month ?? this.month,
+    day ?? this.day,
+    hour ?? this.hour,
+    minute ?? this.minute,
+    second ?? this.second,
+    millisecond ?? this.millisecond,
+  );
 }

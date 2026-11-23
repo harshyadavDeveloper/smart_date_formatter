@@ -1,3 +1,18 @@
+## 3.0.0
+
+**BREAKING**
+
+- migrate: `package:flutter/material.dart` → the standalone `material_ui`
+  package, following Flutter's decoupling of Material and Cupertino
+- minimum versions raised to Flutter 3.47.0 and Dart 3.13.0. Apps on older
+  Flutter versions should keep using `^2.6.1`
+- Material types in the public API, such as `TimeOfDay` in `CalendarEvent`
+  and `SmartDateField`, now come from `material_ui`. Change your import to
+  `package:material_ui/material_ui.dart`
+  (`dart fix --apply --code=migrate_design_widgets` can do this for you)
+- no functional changes to formatting, parsing, calendar or widgets — only
+  imports and minimum versions changed
+
 ## 2.6.1
 
 - fix: month-end clamping in SmartParser — `in 1 month` from Jan 31 now

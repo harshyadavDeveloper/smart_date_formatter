@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:smart_date_formatter/smart_date_formatter.dart';
+
 import '../widgets/calendar_header.dart';
 import '../widgets/day_cell.dart';
 
@@ -23,7 +24,7 @@ class MonthView extends StatelessWidget {
 
   /// Called when a date is selected
   final void Function(DateTime date, List<CalendarEvent> events)?
-      onDateSelected;
+  onDateSelected;
 
   /// Called when event is tapped
   final void Function(CalendarEvent event)? onEventTap;
@@ -82,7 +83,8 @@ class MonthView extends StatelessWidget {
     List<CalendarEvent> events,
     bool isSelected,
     bool isToday,
-  )? cellBuilder;
+  )?
+  cellBuilder;
 
   /// Creates a [MonthView].
   const MonthView({
@@ -171,19 +173,21 @@ class MonthView extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ...weekdays.map((day) => Expanded(
-                        child: Text(
-                          day,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: isDark
-                                ? Colors.grey.shade400
-                                : Colors.grey.shade600,
-                          ),
+                  ...weekdays.map(
+                    (day) => Expanded(
+                      child: Text(
+                        day,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: isDark
+                              ? Colors.grey.shade400
+                              : Colors.grey.shade600,
                         ),
-                      )),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             const SizedBox(height: 4),
@@ -197,10 +201,7 @@ class MonthView extends StatelessWidget {
   List<String> _weekdayHeaders() {
     const allDays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
     final offset = firstDayOfWeek - 1;
-    return [
-      ...allDays.sublist(offset),
-      ...allDays.sublist(0, offset),
-    ];
+    return [...allDays.sublist(offset), ...allDays.sublist(0, offset)];
   }
 
   Widget _buildCalendarGrid(List<DateTime> days) {
@@ -251,8 +252,14 @@ class MonthView extends StatelessWidget {
                           isToday,
                         ),
                       )
-                    : _buildRangeCell(date, dayEvents, isSelected, isToday,
-                        isCurrentMonth, isWeekend),
+                    : _buildRangeCell(
+                        date,
+                        dayEvents,
+                        isSelected,
+                        isToday,
+                        isCurrentMonth,
+                        isWeekend,
+                      ),
               );
             }),
           ],
@@ -304,21 +311,21 @@ class MonthView extends StatelessWidget {
           color: isStart || isEnd
               ? selectedColor
               : inRange
-                  ? selectedColor.withValues(alpha: 0.12)
-                  : Colors.transparent,
+              ? selectedColor.withValues(alpha: 0.12)
+              : Colors.transparent,
           borderRadius: isStart
               ? const BorderRadius.only(
                   topLeft: Radius.circular(8),
                   bottomLeft: Radius.circular(8),
                 )
               : isEnd
-                  ? const BorderRadius.only(
-                      topRight: Radius.circular(8),
-                      bottomRight: Radius.circular(8),
-                    )
-                  : inRange
-                      ? BorderRadius.zero
-                      : BorderRadius.circular(8),
+              ? const BorderRadius.only(
+                  topRight: Radius.circular(8),
+                  bottomRight: Radius.circular(8),
+                )
+              : inRange
+              ? BorderRadius.zero
+              : BorderRadius.circular(8),
         ),
         child: DayCell(
           date: date,

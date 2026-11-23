@@ -148,10 +148,7 @@ class StreakCalculator {
   /// ```dart
   /// StreakCalculator.missedDays(dates, start: DateTime(2024,6,1)) // 5
   /// ```
-  static int missedDays(
-    List<DateTime> dates, {
-    required DateTime start,
-  }) {
+  static int missedDays(List<DateTime> dates, {required DateTime start}) {
     final end = DateTime.now();
     final totalDays = end.difference(start).inDays + 1;
     return totalDays - totalCompleted(dates);

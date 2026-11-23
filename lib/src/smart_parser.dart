@@ -121,8 +121,7 @@ class SmartParser {
     String input, {
     required SdfLocale locale,
     DateTime? now,
-  }) =>
-      parseLocale(input, locale: locale, now: now) != null;
+  }) => parseLocale(input, locale: locale, now: now) != null;
 
   /// All supported locales for parsing.
   static const List<String> supportedParseLocales = [
@@ -131,7 +130,7 @@ class SmartParser {
     'mr',
     'gu',
     'bn',
-    'ta'
+    'ta',
   ];
 
   // ── English Parser ────────────────────────────────────────────
@@ -159,17 +158,36 @@ class SmartParser {
         return DateTime(reference.year - 1, reference.month, reference.day);
       case 'midnight':
         return DateTime(
-            reference.year, reference.month, reference.day, 0, 0, 0);
+          reference.year,
+          reference.month,
+          reference.day,
+          0,
+          0,
+          0,
+        );
       case 'noon':
         return DateTime(
-            reference.year, reference.month, reference.day, 12, 0, 0);
+          reference.year,
+          reference.month,
+          reference.day,
+          12,
+          0,
+          0,
+        );
       case 'end of day':
         return DateTime(
-            reference.year, reference.month, reference.day, 23, 59, 59);
+          reference.year,
+          reference.month,
+          reference.day,
+          23,
+          59,
+          59,
+        );
       case 'start of week':
       case 'beginning of week':
         return _startOf(
-            reference.subtract(Duration(days: reference.weekday - 1)));
+          reference.subtract(Duration(days: reference.weekday - 1)),
+        );
       case 'end of week':
         final daysToSunday = DateTime.sunday - reference.weekday;
         return _startOf(reference.add(Duration(days: daysToSunday)));
@@ -185,15 +203,21 @@ class SmartParser {
         return DateTime(reference.year, 12, 31);
       case 'this weekend':
         final daysToSat = DateTime.saturday - reference.weekday;
-        return _startOf(reference
-            .add(Duration(days: daysToSat <= 0 ? daysToSat + 7 : daysToSat)));
+        return _startOf(
+          reference.add(
+            Duration(days: daysToSat <= 0 ? daysToSat + 7 : daysToSat),
+          ),
+        );
       case 'next weekend':
         final daysToNextSat = DateTime.saturday - reference.weekday + 7;
         return _startOf(reference.add(Duration(days: daysToNextSat)));
       case 'last weekend':
         final daysSinceSat = reference.weekday - DateTime.saturday;
-        return _startOf(reference.subtract(Duration(
-            days: daysSinceSat <= 0 ? daysSinceSat + 7 : daysSinceSat)));
+        return _startOf(
+          reference.subtract(
+            Duration(days: daysSinceSat <= 0 ? daysSinceSat + 7 : daysSinceSat),
+          ),
+        );
       case 'day after tomorrow':
         return _startOf(reference.add(const Duration(days: 2)));
       case 'day before yesterday':
@@ -202,7 +226,8 @@ class SmartParser {
 
     // "first/last monday of month"
     final firstLastPattern = RegExp(
-        r'^(first|last) (monday|tuesday|wednesday|thursday|friday|saturday|sunday) of (this|next|last)? ?month$');
+      r'^(first|last) (monday|tuesday|wednesday|thursday|friday|saturday|sunday) of (this|next|last)? ?month$',
+    );
     final firstLastMatch = firstLastPattern.firstMatch(input);
     if (firstLastMatch != null) {
       final position = firstLastMatch.group(1)!;
@@ -210,12 +235,17 @@ class SmartParser {
       final monthStr = firstLastMatch.group(3) ?? 'this';
       final targetWeekday = _weekdayNumber(weekdayStr);
       return _findWeekdayInMonth(
-          reference, targetWeekday, position == 'first', monthStr);
+        reference,
+        targetWeekday,
+        position == 'first',
+        monthStr,
+      );
     }
 
-// "N mondays/tuesdays ago"
+    // "N mondays/tuesdays ago"
     final nWeekdaysAgoPattern = RegExp(
-        r'^(\d+) (monday|tuesday|wednesday|thursday|friday|saturday|sunday)s? ago$');
+      r'^(\d+) (monday|tuesday|wednesday|thursday|friday|saturday|sunday)s? ago$',
+    );
     final nWeekdaysAgoMatch = nWeekdaysAgoPattern.firstMatch(input);
     if (nWeekdaysAgoMatch != null) {
       final n = int.parse(nWeekdaysAgoMatch.group(1)!);
@@ -224,9 +254,10 @@ class SmartParser {
       return _findNthWeekdayAgo(reference, targetWeekday, n);
     }
 
-// "in N mondays/tuesdays"
+    // "in N mondays/tuesdays"
     final inNWeekdaysPattern = RegExp(
-        r'^in (\d+) (monday|tuesday|wednesday|thursday|friday|saturday|sunday)s?$');
+      r'^in (\d+) (monday|tuesday|wednesday|thursday|friday|saturday|sunday)s?$',
+    );
     final inNWeekdaysMatch = inNWeekdaysPattern.firstMatch(input);
     if (inNWeekdaysMatch != null) {
       final n = int.parse(inNWeekdaysMatch.group(1)!);
@@ -235,9 +266,10 @@ class SmartParser {
       return _findNthWeekdayAhead(reference, targetWeekday, n);
     }
 
-// "beginning of next/last month"
-    final beginningPattern =
-        RegExp(r'^beginning of (next|last|this) (month|year|week)$');
+    // "beginning of next/last month"
+    final beginningPattern = RegExp(
+      r'^beginning of (next|last|this) (month|year|week)$',
+    );
     final beginningMatch = beginningPattern.firstMatch(input);
     if (beginningMatch != null) {
       final when = beginningMatch.group(1)!;
@@ -245,7 +277,7 @@ class SmartParser {
       return _beginningOf(reference, when, period);
     }
 
-// "end of next/last month"
+    // "end of next/last month"
     final endPattern = RegExp(r'^end of (next|last|this) (month|year|week)$');
     final endMatch = endPattern.firstMatch(input);
     if (endMatch != null) {
@@ -254,9 +286,10 @@ class SmartParser {
       return _endOf(reference, when, period);
     }
 
-// "this coming monday/friday"
+    // "this coming monday/friday"
     final comingPattern = RegExp(
-        r'^this coming (monday|tuesday|wednesday|thursday|friday|saturday|sunday)$');
+      r'^this coming (monday|tuesday|wednesday|thursday|friday|saturday|sunday)$',
+    );
     final comingMatch = comingPattern.firstMatch(input);
     if (comingMatch != null) {
       final weekdayStr = comingMatch.group(1)!;
@@ -264,7 +297,7 @@ class SmartParser {
       return _findWeekday(reference, targetWeekday, true);
     }
 
-// "quarter N" or "Q1/Q2/Q3/Q4"
+    // "quarter N" or "Q1/Q2/Q3/Q4"
     final quarterPattern = RegExp(r'^(q|quarter )([1-4])$');
     final quarterMatch = quarterPattern.firstMatch(input);
     if (quarterMatch != null) {
@@ -274,8 +307,9 @@ class SmartParser {
     }
 
     // "in N days/weeks/months/years"
-    final inPattern =
-        RegExp(r'^in (\d+) (second|minute|hour|day|week|month|year)s?$');
+    final inPattern = RegExp(
+      r'^in (\d+) (second|minute|hour|day|week|month|year)s?$',
+    );
     final inMatch = inPattern.firstMatch(input);
     if (inMatch != null) {
       final n = int.parse(inMatch.group(1)!);
@@ -284,8 +318,9 @@ class SmartParser {
     }
 
     // "N days/weeks/months/years ago"
-    final agoPattern =
-        RegExp(r'^(\d+) (second|minute|hour|day|week|month|year)s? ago$');
+    final agoPattern = RegExp(
+      r'^(\d+) (second|minute|hour|day|week|month|year)s? ago$',
+    );
     final agoMatch = agoPattern.firstMatch(input);
     if (agoMatch != null) {
       final n = int.parse(agoMatch.group(1)!);
@@ -295,7 +330,8 @@ class SmartParser {
 
     // "next/last monday/tuesday/..."
     final weekdayPattern = RegExp(
-        r'^(next|last) (monday|tuesday|wednesday|thursday|friday|saturday|sunday)$');
+      r'^(next|last) (monday|tuesday|wednesday|thursday|friday|saturday|sunday)$',
+    );
     final weekdayMatch = weekdayPattern.firstMatch(input);
     if (weekdayMatch != null) {
       final direction = weekdayMatch.group(1)!;
@@ -306,7 +342,8 @@ class SmartParser {
 
     // "on monday/tuesday/..." (this week)
     final onPattern = RegExp(
-        r'^(on )?(monday|tuesday|wednesday|thursday|friday|saturday|sunday)$');
+      r'^(on )?(monday|tuesday|wednesday|thursday|friday|saturday|sunday)$',
+    );
     final onMatch = onPattern.firstMatch(input);
     if (onMatch != null) {
       final weekdayStr = onMatch.group(2)!;
@@ -365,7 +402,8 @@ class SmartParser {
       case 'इस हफ्ते':
       case 'इस सप्ताह':
         return _startOf(
-            reference.subtract(Duration(days: reference.weekday - 1)));
+          reference.subtract(Duration(days: reference.weekday - 1)),
+        );
       case 'पिछले हफ्ते':
       case 'पिछले सप्ताह':
         return _startOf(reference.subtract(const Duration(days: 7)));
@@ -395,7 +433,8 @@ class SmartParser {
 
     // "अगले सोमवार" (next monday)
     final nextWeekdayHi = RegExp(
-        r'^अगले (सोमवार|मंगलवार|बुधवार|गुरुवार|शुक्रवार|शनिवार|रविवार)$');
+      r'^अगले (सोमवार|मंगलवार|बुधवार|गुरुवार|शुक्रवार|शनिवार|रविवार)$',
+    );
     final nextHiMatch = nextWeekdayHi.firstMatch(input);
     if (nextHiMatch != null) {
       final weekday = _hindiWeekday(nextHiMatch.group(1)!);
@@ -404,7 +443,8 @@ class SmartParser {
 
     // "पिछले सोमवार" (last monday)
     final lastWeekdayHi = RegExp(
-        r'^पिछले (सोमवार|मंगलवार|बुधवार|गुरुवार|शुक्रवार|शनिवार|रविवार)$');
+      r'^पिछले (सोमवार|मंगलवार|बुधवार|गुरुवार|शुक्रवार|शनिवार|रविवार)$',
+    );
     final lastHiMatch = lastWeekdayHi.firstMatch(input);
     if (lastHiMatch != null) {
       final weekday = _hindiWeekday(lastHiMatch.group(1)!);
@@ -464,7 +504,8 @@ class SmartParser {
       // Week
       case 'या आठवड्यात':
         return _startOf(
-            reference.subtract(Duration(days: reference.weekday - 1)));
+          reference.subtract(Duration(days: reference.weekday - 1)),
+        );
       case 'पुढील आठवडा':
         return _startOf(reference.add(const Duration(days: 7)));
       case 'मागील आठवडा':
@@ -489,7 +530,8 @@ class SmartParser {
 
     // "पुढील सोमवार" (next monday)
     final nextWeekdayMr = RegExp(
-        r'^पुढील (सोमवार|मंगळवार|बुधवार|गुरुवार|शुक्रवार|शनिवार|रविवार)$');
+      r'^पुढील (सोमवार|मंगळवार|बुधवार|गुरुवार|शुक्रवार|शनिवार|रविवार)$',
+    );
     final nextMrMatch = nextWeekdayMr.firstMatch(input);
     if (nextMrMatch != null) {
       final weekday = _marathiWeekday(nextMrMatch.group(1)!);
@@ -498,7 +540,8 @@ class SmartParser {
 
     // "मागील सोमवार" (last monday)
     final lastWeekdayMr = RegExp(
-        r'^मागील (सोमवार|मंगळवार|बुधवार|गुरुवार|शुक्रवार|शनिवार|रविवार)$');
+      r'^मागील (सोमवार|मंगळवार|बुधवार|गुरुवार|शुक्रवार|शनिवार|रविवार)$',
+    );
     final lastMrMatch = lastWeekdayMr.firstMatch(input);
     if (lastMrMatch != null) {
       final weekday = _marathiWeekday(lastMrMatch.group(1)!);
@@ -538,7 +581,8 @@ class SmartParser {
         return _startOf(reference.add(const Duration(days: 2)));
       case 'આ અઠવાડિયે':
         return _startOf(
-            reference.subtract(Duration(days: reference.weekday - 1)));
+          reference.subtract(Duration(days: reference.weekday - 1)),
+        );
       case 'આવતા અઠવાડિયે':
         return _startOf(reference.add(const Duration(days: 7)));
       case 'ગયા અઠવાડિયે':
@@ -588,7 +632,8 @@ class SmartParser {
         return _startOf(reference.add(const Duration(days: 2)));
       case 'এই সপ্তাহ':
         return _startOf(
-            reference.subtract(Duration(days: reference.weekday - 1)));
+          reference.subtract(Duration(days: reference.weekday - 1)),
+        );
       case 'আগামী সপ্তাহ':
         return _startOf(reference.add(const Duration(days: 7)));
       case 'গত সপ্তাহ':
@@ -638,7 +683,8 @@ class SmartParser {
         return _startOf(reference.add(const Duration(days: 2)));
       case 'இந்த வாரம்':
         return _startOf(
-            reference.subtract(Duration(days: reference.weekday - 1)));
+          reference.subtract(Duration(days: reference.weekday - 1)),
+        );
       case 'அடுத்த வாரம்':
         return _startOf(reference.add(const Duration(days: 7)));
       case 'கடந்த வாரம்':
@@ -704,7 +750,7 @@ class SmartParser {
 
   /// Adds [n] months to [base] with end-of-month clamping.
   /// e.g. Jan 31 + 1 month = Feb 28/29 (not Mar 2).
-   static DateTime _addMonths(DateTime base, int n) {
+  static DateTime _addMonths(DateTime base, int n) {
     final totalMonths = (base.year * 12 + base.month - 1) + n;
     final year = totalMonths ~/ 12;
     final month = (totalMonths % 12) + 1;
@@ -849,24 +895,22 @@ class SmartParser {
         return DateTime(reference.year - 1, 1, 1);
       case 'this week':
         return _startOf(
-            reference.subtract(Duration(days: reference.weekday - 1)));
+          reference.subtract(Duration(days: reference.weekday - 1)),
+        );
       case 'next week':
         final nextMon = reference.add(Duration(days: 8 - reference.weekday));
         return _startOf(nextMon);
       case 'last week':
-        final lastMon =
-            reference.subtract(Duration(days: reference.weekday + 6));
+        final lastMon = reference.subtract(
+          Duration(days: reference.weekday + 6),
+        );
         return _startOf(lastMon);
       default:
         return null;
     }
   }
 
-  static DateTime? _endOf(
-    DateTime reference,
-    String when,
-    String period,
-  ) {
+  static DateTime? _endOf(DateTime reference, String when, String period) {
     switch ('$when $period') {
       case 'this month':
         return _startOf(DateTime(reference.year, reference.month + 1, 0));
@@ -884,8 +928,9 @@ class SmartParser {
         final daysToSunday = DateTime.sunday - reference.weekday;
         return _startOf(reference.add(Duration(days: daysToSunday)));
       case 'next week':
-        final nextSun = reference
-            .add(Duration(days: DateTime.sunday - reference.weekday + 7));
+        final nextSun = reference.add(
+          Duration(days: DateTime.sunday - reference.weekday + 7),
+        );
         return _startOf(nextSun);
       case 'last week':
         final lastSun = reference.subtract(Duration(days: reference.weekday));

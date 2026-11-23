@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
+
 import '../calendar_event.dart';
 import 'event_marker.dart';
 
@@ -65,14 +66,14 @@ class DayCell extends StatelessWidget {
           color: isSelected
               ? Colors.white
               : isCurrentMonth
-                  ? isWeekend
-                      ? Colors.red.shade400
-                      : isDark
-                          ? Colors.white
-                          : Colors.black87
-                  : isDark
-                      ? Colors.grey.shade600
-                      : Colors.grey.shade400,
+              ? isWeekend
+                    ? Colors.red.shade400
+                    : isDark
+                    ? Colors.white
+                    : Colors.black87
+              : isDark
+              ? Colors.grey.shade600
+              : Colors.grey.shade400,
           borderRadius: BorderRadius.circular(8),
           border: isToday && !isSelected
               ? Border.all(color: todayColor, width: 1.5)
@@ -85,15 +86,16 @@ class DayCell extends StatelessWidget {
               '${date.day}',
               style: TextStyle(
                 fontSize: 14,
-                fontWeight:
-                    isToday || isSelected ? FontWeight.bold : FontWeight.normal,
+                fontWeight: isToday || isSelected
+                    ? FontWeight.bold
+                    : FontWeight.normal,
                 color: isSelected
                     ? Colors.white
                     : isCurrentMonth
-                        ? isWeekend
-                            ? Colors.red.shade400
-                            : Colors.black87
-                        : Colors.grey.shade400,
+                    ? isWeekend
+                          ? Colors.red.shade400
+                          : Colors.black87
+                    : Colors.grey.shade400,
               ),
             ),
             if (events.isNotEmpty) ...[
