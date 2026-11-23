@@ -32,3 +32,7 @@ migrate_working_dir/
 
 # Local dev notes — not for repo
 .dev-notes.md
+
+# FVM Version Cache
+.fvm/
+.fvmrc
