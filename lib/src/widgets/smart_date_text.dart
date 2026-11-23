@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+
 import '../extensions.dart';
 import '../localization.dart';
 import '../formatter.dart';
@@ -169,10 +170,6 @@ class _SmartDateTextState extends State<SmartDateText> {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      _text,
-      style: widget.style,
-      textAlign: widget.textAlign,
-    );
+    return Text(_text, style: widget.style, textAlign: widget.textAlign);
   }
 }

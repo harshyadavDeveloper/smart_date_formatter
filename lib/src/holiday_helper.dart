@@ -23,13 +23,11 @@ class HolidayHelper {
   ///   holidays: [DateTime(2024, 12, 25)],
   /// ) // true
   /// ```
-  static bool isHoliday(
-    DateTime date, {
-    required List<DateTime> holidays,
-  }) {
+  static bool isHoliday(DateTime date, {required List<DateTime> holidays}) {
     final target = DateTime(date.year, date.month, date.day);
-    return holidays
-        .any((h) => DateTime(h.year, h.month, h.day).isAtSameMomentAs(target));
+    return holidays.any(
+      (h) => DateTime(h.year, h.month, h.day).isAtSameMomentAs(target),
+    );
   }
 
   /// Returns true if [date] is a working day —
@@ -116,8 +114,7 @@ class HolidayHelper {
   static List<DateTime> holidaysInYear(
     int year, {
     required List<DateTime> holidays,
-  }) =>
-      holidays.where((h) => h.year == year).toList();
+  }) => holidays.where((h) => h.year == year).toList();
 
   /// Returns next working day from [date] skipping weekends and [holidays].
   ///
@@ -128,15 +125,13 @@ class HolidayHelper {
   static DateTime nextWorkingDay(
     DateTime date, {
     List<DateTime> holidays = const [],
-  }) =>
-      addWorkingDays(date, 1, holidays: holidays);
+  }) => addWorkingDays(date, 1, holidays: holidays);
 
   /// Returns previous working day from [date].
   static DateTime previousWorkingDay(
     DateTime date, {
     List<DateTime> holidays = const [],
-  }) =>
-      addWorkingDays(date, -1, holidays: holidays);
+  }) => addWorkingDays(date, -1, holidays: holidays);
 
   /// Common Indian public holidays for [year].
   ///
@@ -145,22 +140,22 @@ class HolidayHelper {
   /// date.isHoliday(holidays: holidays)
   /// ```
   static List<DateTime> indianHolidays(int year) => [
-        DateTime(year, 1, 26), // Republic Day
-        DateTime(year, 8, 15), // Independence Day
-        DateTime(year, 10, 2), // Gandhi Jayanti
-        DateTime(year, 10, 24), // Dussehra (approximate)
-        DateTime(year, 11, 1), // Diwali (approximate)
-        DateTime(year, 11, 15), // Guru Nanak Jayanti (approximate)
-        DateTime(year, 12, 25), // Christmas
-        DateTime(year, 1, 1), // New Year
-      ];
+    DateTime(year, 1, 26), // Republic Day
+    DateTime(year, 8, 15), // Independence Day
+    DateTime(year, 10, 2), // Gandhi Jayanti
+    DateTime(year, 10, 24), // Dussehra (approximate)
+    DateTime(year, 11, 1), // Diwali (approximate)
+    DateTime(year, 11, 15), // Guru Nanak Jayanti (approximate)
+    DateTime(year, 12, 25), // Christmas
+    DateTime(year, 1, 1), // New Year
+  ];
 
   /// Common global public holidays for [year].
   static List<DateTime> globalHolidays(int year) => [
-        DateTime(year, 1, 1), // New Year's Day
-        DateTime(year, 12, 25), // Christmas
-        DateTime(year, 12, 26), // Boxing Day
-      ];
+    DateTime(year, 1, 1), // New Year's Day
+    DateTime(year, 12, 25), // Christmas
+    DateTime(year, 12, 26), // Boxing Day
+  ];
 }
 
 /// Extension on [DateTime] for holiday support.
@@ -194,13 +189,11 @@ extension HolidayExtension on DateTime {
   DateTime addWorkingDaysWithHolidays(
     int days, {
     List<DateTime> holidays = const [],
-  }) =>
-      HolidayHelper.addWorkingDays(this, days, holidays: holidays);
+  }) => HolidayHelper.addWorkingDays(this, days, holidays: holidays);
 
   /// Working days until [other] skipping weekends and [holidays].
   int workingDaysUntilWithHolidays(
     DateTime other, {
     List<DateTime> holidays = const [],
-  }) =>
-      HolidayHelper.workingDaysBetween(this, other, holidays: holidays);
+  }) => HolidayHelper.workingDaysBetween(this, other, holidays: holidays);
 }

@@ -22,7 +22,7 @@ class AgendaView extends StatelessWidget {
 
   /// Called when a date is selected
   final void Function(DateTime date, List<CalendarEvent> events)?
-      onDateSelected;
+  onDateSelected;
 
   /// Called when event is tapped
   final void Function(CalendarEvent event)? onEventTap;
@@ -57,17 +57,16 @@ class AgendaView extends StatelessWidget {
   });
 
   List<CalendarEvent> _eventsForDate(DateTime date) =>
-      events.where((e) => e.isOnDate(date)).toList()
-        ..sort((a, b) {
-          if (a.allDay && !b.allDay) return -1;
-          if (!a.allDay && b.allDay) return 1;
-          if (a.startTime != null && b.startTime != null) {
-            final aMin = a.startTime!.hour * 60 + a.startTime!.minute;
-            final bMin = b.startTime!.hour * 60 + b.startTime!.minute;
-            return aMin.compareTo(bMin);
-          }
-          return 0;
-        });
+      events.where((e) => e.isOnDate(date)).toList()..sort((a, b) {
+        if (a.allDay && !b.allDay) return -1;
+        if (!a.allDay && b.allDay) return 1;
+        if (a.startTime != null && b.startTime != null) {
+          final aMin = a.startTime!.hour * 60 + a.startTime!.minute;
+          final bMin = b.startTime!.hour * 60 + b.startTime!.minute;
+          return aMin.compareTo(bMin);
+        }
+        return 0;
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -85,8 +84,9 @@ class AgendaView extends StatelessWidget {
         );
 
         // Filter days that have events
-        final daysWithEvents =
-            days.where((d) => _eventsForDate(d).isNotEmpty).toList();
+        final daysWithEvents = days
+            .where((d) => _eventsForDate(d).isNotEmpty)
+            .toList();
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,8 +97,12 @@ class AgendaView extends StatelessWidget {
               children: [
                 IconButton(
                   onPressed: () {
-                    controller.jumpToMonth(DateTime(controller.focusedDate.year,
-                        controller.focusedDate.month - 1));
+                    controller.jumpToMonth(
+                      DateTime(
+                        controller.focusedDate.year,
+                        controller.focusedDate.month - 1,
+                      ),
+                    );
                   },
                   icon: const Icon(Icons.chevron_left),
                   visualDensity: VisualDensity.compact,
@@ -107,7 +111,9 @@ class AgendaView extends StatelessWidget {
                   onTap: controller.goToToday,
                   child: Text(
                     DateFormatHelper.format(
-                        controller.focusedDate, 'MMMM yyyy'),
+                      controller.focusedDate,
+                      'MMMM yyyy',
+                    ),
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -117,8 +123,12 @@ class AgendaView extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () {
-                    controller.jumpToMonth(DateTime(controller.focusedDate.year,
-                        controller.focusedDate.month + 1));
+                    controller.jumpToMonth(
+                      DateTime(
+                        controller.focusedDate.year,
+                        controller.focusedDate.month + 1,
+                      ),
+                    );
                   },
                   icon: const Icon(Icons.chevron_right),
                   visualDensity: VisualDensity.compact,
@@ -144,9 +154,10 @@ class AgendaView extends StatelessWidget {
                       Text(
                         'No events in this period',
                         style: TextStyle(
-                            color: isDark
-                                ? Colors.grey.shade500
-                                : Colors.grey.shade500),
+                          color: isDark
+                              ? Colors.grey.shade500
+                              : Colors.grey.shade500,
+                        ),
                       ),
                     ],
                   ),
@@ -176,169 +187,165 @@ class AgendaView extends StatelessWidget {
     required List<CalendarEvent> events,
     required bool isSelected,
     required bool isToday,
-  }) =>
-      GestureDetector(
-        onTap: () {
-          controller.selectDate(date);
-          onDateSelected?.call(date, events);
-        },
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Date column
-              SizedBox(
-                width: 56,
-                child: Column(
-                  children: [
-                    Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? selectedColor
-                            : isToday
-                                ? selectedColor.withValues(alpha: 0.12)
-                                : Colors.grey.shade100,
-                        shape: BoxShape.circle,
-                        border: isToday && !isSelected
-                            ? Border.all(color: selectedColor, width: 2)
-                            : null,
+  }) => GestureDetector(
+    onTap: () {
+      controller.selectDate(date);
+      onDateSelected?.call(date, events);
+    },
+    child: Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Date column
+          SizedBox(
+            width: 56,
+            child: Column(
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? selectedColor
+                        : isToday
+                        ? selectedColor.withValues(alpha: 0.12)
+                        : Colors.grey.shade100,
+                    shape: BoxShape.circle,
+                    border: isToday && !isSelected
+                        ? Border.all(color: selectedColor, width: 2)
+                        : null,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        DateFormatHelper.format(date, 'EEE').substring(0, 3),
+                        style: TextStyle(
+                          fontSize: 9,
+                          color: isSelected
+                              ? Colors.white70
+                              : Colors.grey.shade600,
+                        ),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            DateFormatHelper.format(date, 'EEE')
-                                .substring(0, 3),
-                            style: TextStyle(
-                              fontSize: 9,
-                              color: isSelected
-                                  ? Colors.white70
-                                  : Colors.grey.shade600,
-                            ),
-                          ),
-                          Text(
-                            '${date.day}',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: isSelected
-                                  ? Colors.white
-                                  : isToday
-                                      ? selectedColor
-                                      : Colors.black87,
-                            ),
-                          ),
-                        ],
+                      Text(
+                        '${date.day}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: isSelected
+                              ? Colors.white
+                              : isToday
+                              ? selectedColor
+                              : Colors.black87,
+                        ),
                       ),
-                    ),
-                    // Vertical line
-                    if (events.length > 1)
-                      Container(
-                        width: 1,
-                        height: (events.length - 1) * 60.0,
-                        color: Colors.grey.shade200,
-                        margin: const EdgeInsets.only(top: 4),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-
-              // Events column
-              Expanded(
-                child: Column(
-                  children:
-                      events.map((event) => _buildEventCard(event)).toList(),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-
-  Widget _buildEventCard(CalendarEvent event) => GestureDetector(
-        onTap: () => onEventTap?.call(event),
-        child: Container(
-          margin: const EdgeInsets.only(bottom: 8),
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: event.color.withValues(alpha: 0.08),
-            borderRadius: BorderRadius.circular(10),
-            border: Border(
-              left: BorderSide(color: event.color, width: 4),
+                // Vertical line
+                if (events.length > 1)
+                  Container(
+                    width: 1,
+                    height: (events.length - 1) * 60.0,
+                    color: Colors.grey.shade200,
+                    margin: const EdgeInsets.only(top: 4),
+                  ),
+              ],
             ),
           ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+
+          // Events column
+          Expanded(
+            child: Column(
+              children: events.map((event) => _buildEventCard(event)).toList(),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+
+  Widget _buildEventCard(CalendarEvent event) => GestureDetector(
+    onTap: () => onEventTap?.call(event),
+    child: Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: event.color.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(10),
+        border: Border(left: BorderSide(color: event.color, width: 4)),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   children: [
-                    Row(children: [
-                      Expanded(
+                    Expanded(
+                      child: Text(
+                        event.title,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    if (event.isMultiDay)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: event.color.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                         child: Text(
-                          event.title,
-                          style: const TextStyle(
+                          '${event.spanDays}d',
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: event.color,
                             fontWeight: FontWeight.bold,
-                            fontSize: 14,
                           ),
                         ),
                       ),
-                      if (event.isMultiDay)
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 6, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: event.color.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            '${event.spanDays}d',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: event.color,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                    ]),
-                    if (event.description != null) ...[
-                      const SizedBox(height: 3),
-                      Text(
-                        event.description!,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                    ],
-                    if (event.isMultiDay) ...[
-                      const SizedBox(height: 3),
-                      Text(
-                        event.dateRangeString,
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: event.color,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
                   ],
                 ),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                event.timeString,
-                style: TextStyle(
-                  fontSize: 11,
-                  color: event.color,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
+                if (event.description != null) ...[
+                  const SizedBox(height: 3),
+                  Text(
+                    event.description!,
+                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                  ),
+                ],
+                if (event.isMultiDay) ...[
+                  const SizedBox(height: 3),
+                  Text(
+                    event.dateRangeString,
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: event.color,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ],
+            ),
           ),
-        ),
-      );
+          const SizedBox(width: 8),
+          Text(
+            event.timeString,
+            style: TextStyle(
+              fontSize: 11,
+              color: event.color,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

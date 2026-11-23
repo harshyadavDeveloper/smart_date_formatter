@@ -146,34 +146,36 @@ class DayView extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(children: [
-                              Container(
-                                width: 10,
-                                height: 10,
-                                decoration: BoxDecoration(
-                                  color: event.color,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  event.title,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
+                            Row(
+                              children: [
+                                Container(
+                                  width: 10,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                    color: event.color,
+                                    shape: BoxShape.circle,
                                   ),
                                 ),
-                              ),
-                              Text(
-                                event.timeString,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: event.color,
-                                  fontWeight: FontWeight.w600,
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    event.title,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ]),
+                                Text(
+                                  event.timeString,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: event.color,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
                             if (event.description != null) ...[
                               const SizedBox(height: 6),
                               Text(

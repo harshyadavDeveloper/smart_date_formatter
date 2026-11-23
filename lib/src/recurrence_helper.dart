@@ -109,15 +109,14 @@ class RecurrenceHelper {
     DateTime? until,
     bool skipWeekends = false,
     List<DateTime> skipHolidays = const [],
-  }) =>
-      generate(
-        start: start,
-        frequency: RecurrenceFrequency.daily,
-        count: count,
-        until: until,
-        skipWeekends: skipWeekends,
-        skipHolidays: skipHolidays,
-      );
+  }) => generate(
+    start: start,
+    frequency: RecurrenceFrequency.daily,
+    count: count,
+    until: until,
+    skipWeekends: skipWeekends,
+    skipHolidays: skipHolidays,
+  );
 
   /// Generates weekly recurring dates.
   ///
@@ -133,15 +132,14 @@ class RecurrenceHelper {
     DateTime? until,
     bool skipWeekends = false,
     List<DateTime> skipHolidays = const [],
-  }) =>
-      generate(
-        start: start,
-        frequency: RecurrenceFrequency.weekly,
-        count: count,
-        until: until,
-        skipWeekends: skipWeekends,
-        skipHolidays: skipHolidays,
-      );
+  }) => generate(
+    start: start,
+    frequency: RecurrenceFrequency.weekly,
+    count: count,
+    until: until,
+    skipWeekends: skipWeekends,
+    skipHolidays: skipHolidays,
+  );
 
   /// Generates monthly recurring dates.
   ///
@@ -156,14 +154,13 @@ class RecurrenceHelper {
     int? count,
     DateTime? until,
     List<DateTime> skipHolidays = const [],
-  }) =>
-      generate(
-        start: start,
-        frequency: RecurrenceFrequency.monthly,
-        count: count,
-        until: until,
-        skipHolidays: skipHolidays,
-      );
+  }) => generate(
+    start: start,
+    frequency: RecurrenceFrequency.monthly,
+    count: count,
+    until: until,
+    skipHolidays: skipHolidays,
+  );
 
   /// Generates yearly recurring dates.
   ///
@@ -178,14 +175,13 @@ class RecurrenceHelper {
     int? count,
     DateTime? until,
     List<DateTime> skipHolidays = const [],
-  }) =>
-      generate(
-        start: start,
-        frequency: RecurrenceFrequency.yearly,
-        count: count,
-        until: until,
-        skipHolidays: skipHolidays,
-      );
+  }) => generate(
+    start: start,
+    frequency: RecurrenceFrequency.yearly,
+    count: count,
+    until: until,
+    skipHolidays: skipHolidays,
+  );
 
   /// Returns next occurrence after [date] for given [frequency].
   ///
@@ -198,8 +194,7 @@ class RecurrenceHelper {
   static DateTime nextOccurrence(
     DateTime date,
     RecurrenceFrequency frequency,
-  ) =>
-      _next(date, frequency);
+  ) => _next(date, frequency);
 
   // ── Private helpers ───────────────────────────────────────────
 
@@ -229,7 +224,8 @@ class RecurrenceHelper {
     if (skipHolidays.isNotEmpty) {
       final target = DateTime(date.year, date.month, date.day);
       final isHoliday = skipHolidays.any(
-          (h) => DateTime(h.year, h.month, h.day).isAtSameMomentAs(target));
+        (h) => DateTime(h.year, h.month, h.day).isAtSameMomentAs(target),
+      );
       if (isHoliday) return false;
     }
     return true;

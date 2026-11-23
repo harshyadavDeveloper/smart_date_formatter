@@ -1,5 +1,7 @@
 import 'dart:async';
+
 import 'package:material_ui/material_ui.dart';
+
 import '../date_format_helper.dart';
 import '../smart_parser.dart';
 import '../extensions.dart';
@@ -14,9 +16,7 @@ class DateValidationResult {
   final String? error;
 
   /// Creates a valid [DateValidationResult].
-  const DateValidationResult.valid()
-      : isValid = true,
-        error = null;
+  const DateValidationResult.valid() : isValid = true, error = null;
 
   /// Creates an invalid [DateValidationResult] with [error].
   const DateValidationResult.invalid(this.error) : isValid = false;
@@ -176,8 +176,10 @@ class _SmartDateFieldState extends State<SmartDateField> {
     }
 
     if (_selectedDate != null) {
-      _textController.text =
-          DateFormatHelper.format(_selectedDate!, widget.displayFormat);
+      _textController.text = DateFormatHelper.format(
+        _selectedDate!,
+        widget.displayFormat,
+      );
     }
 
     widget.controller?.addListener(_onControllerChanged);
@@ -185,8 +187,10 @@ class _SmartDateFieldState extends State<SmartDateField> {
 
   String _buildDisplayText() {
     if (_selectedDate == null) return '';
-    final dateStr =
-        DateFormatHelper.format(_selectedDate!, widget.displayFormat);
+    final dateStr = DateFormatHelper.format(
+      _selectedDate!,
+      widget.displayFormat,
+    );
     if (!widget.enableTimePicker || _selectedTime == null) {
       return dateStr;
     }
@@ -202,8 +206,8 @@ class _SmartDateFieldState extends State<SmartDateField> {
     final hour = time.hour == 0
         ? 12
         : time.hour > 12
-            ? time.hour - 12
-            : time.hour;
+        ? time.hour - 12
+        : time.hour;
     final minute = time.minute.toString().padLeft(2, '0');
     final period = time.hour >= 12 ? 'PM' : 'AM';
     return '$hour:$minute $period';
@@ -214,9 +218,8 @@ class _SmartDateFieldState extends State<SmartDateField> {
       context: context,
       initialTime: _selectedTime ?? TimeOfDay.now(),
       builder: (context, child) => MediaQuery(
-        data: MediaQuery.of(context).copyWith(
-          alwaysUse24HourFormat: widget.use24HourFormat,
-        ),
+        data: MediaQuery.of(context)
+            .copyWith(alwaysUse24HourFormat: widget.use24HourFormat),
         child: child!,
       ),
     );
@@ -290,13 +293,17 @@ class _SmartDateFieldState extends State<SmartDateField> {
   void _setDate(DateTime? date, {bool updateText = true}) {
     if (date != null) {
       if (widget.minDate != null && date.isBefore(widget.minDate!)) {
-        setState(() => _errorText =
-            'Date must be after ${DateFormatHelper.format(widget.minDate!, widget.displayFormat)}');
+        setState(
+          () => _errorText =
+              'Date must be after ${DateFormatHelper.format(widget.minDate!, widget.displayFormat)}',
+        );
         return;
       }
       if (widget.maxDate != null && date.isAfter(widget.maxDate!)) {
-        setState(() => _errorText =
-            'Date must be before ${DateFormatHelper.format(widget.maxDate!, widget.displayFormat)}');
+        setState(
+          () => _errorText =
+              'Date must be before ${DateFormatHelper.format(widget.maxDate!, widget.displayFormat)}',
+        );
         return;
       }
     }
@@ -321,8 +328,10 @@ class _SmartDateFieldState extends State<SmartDateField> {
     final parsed = SmartParser.parse(suggestion);
     if (parsed != null) {
       _setDate(parsed);
-      _textController.text =
-          DateFormatHelper.format(parsed, widget.displayFormat);
+      _textController.text = DateFormatHelper.format(
+        parsed,
+        widget.displayFormat,
+      );
     }
     setState(() => _showSuggestions = false);
   }
@@ -381,10 +390,12 @@ class _SmartDateFieldState extends State<SmartDateField> {
               });
             }
           },
-          decoration: widget.decoration ??
+          decoration:
+              widget.decoration ??
               InputDecoration(
                 labelText: widget.label,
-                hintText: widget.hint ??
+                hintText:
+                    widget.hint ??
                     (widget.enableNaturalLanguage
                         ? 'Type a date or "tomorrow", "next week"...'
                         : 'Select a date'),
@@ -404,8 +415,11 @@ class _SmartDateFieldState extends State<SmartDateField> {
                     // Clear button
                     if (widget.showClearButton && _selectedDate != null)
                       IconButton(
-                        icon: const Icon(Icons.clear,
-                            size: 18, color: Colors.grey),
+                        icon: const Icon(
+                          Icons.clear,
+                          size: 18,
+                          color: Colors.grey,
+                        ),
                         onPressed: _clearDate,
                         tooltip: 'Clear date',
                       ),
@@ -447,13 +461,18 @@ class _SmartDateFieldState extends State<SmartDateField> {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.check_circle,
-                        size: 14, color: Colors.green.shade600),
+                    Icon(
+                      Icons.check_circle,
+                      size: 14,
+                      color: Colors.green.shade600,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       '${_selectedDate!.calendar}  •  ${_selectedDate!.timeAgo}',
-                      style:
-                          TextStyle(fontSize: 11, color: Colors.green.shade600),
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: Colors.green.shade600,
+                      ),
                     ),
                   ],
                 ),
@@ -461,13 +480,18 @@ class _SmartDateFieldState extends State<SmartDateField> {
                   const SizedBox(height: 2),
                   Row(
                     children: [
-                      Icon(Icons.access_time,
-                          size: 14, color: Colors.blue.shade600),
+                      Icon(
+                        Icons.access_time,
+                        size: 14,
+                        color: Colors.blue.shade600,
+                      ),
                       const SizedBox(width: 4),
                       Text(
                         'Time: ${_formatTime(_selectedTime!)}',
                         style: TextStyle(
-                            fontSize: 11, color: Colors.blue.shade600),
+                          fontSize: 11,
+                          color: Colors.blue.shade600,
+                        ),
                       ),
                     ],
                   ),
@@ -501,8 +525,11 @@ class _SmartDateFieldState extends State<SmartDateField> {
                   final parsed = SmartParser.parse(suggestion);
                   return ListTile(
                     dense: true,
-                    leading: const Icon(Icons.access_time,
-                        size: 16, color: Colors.grey),
+                    leading: const Icon(
+                      Icons.access_time,
+                      size: 16,
+                      color: Colors.grey,
+                    ),
                     title: Text(
                       suggestion,
                       style: const TextStyle(
@@ -513,7 +540,9 @@ class _SmartDateFieldState extends State<SmartDateField> {
                     trailing: parsed != null
                         ? Text(
                             DateFormatHelper.format(
-                                parsed, widget.displayFormat),
+                              parsed,
+                              widget.displayFormat,
+                            ),
                             style: const TextStyle(
                               fontSize: 11,
                               color: Colors.grey,

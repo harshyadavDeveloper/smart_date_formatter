@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:smart_date_formatter/smart_date_formatter.dart';
 import 'package:smart_date_formatter/src/calendar/views/agenda_view.dart';
+
 import 'views/month_view.dart';
 import 'views/week_view.dart';
 import 'views/day_view.dart';
@@ -42,7 +43,7 @@ class SmartCalendar extends StatefulWidget {
 
   /// Called when a date is selected
   final void Function(DateTime date, List<CalendarEvent> events)?
-      onDateSelected;
+  onDateSelected;
 
   /// Called when an event is tapped
   final void Function(CalendarEvent event)? onEventTap;
@@ -125,7 +126,8 @@ class SmartCalendar extends StatefulWidget {
     List<CalendarEvent> events,
     bool isSelected,
     bool isToday,
-  )? cellBuilder;
+  )?
+  cellBuilder;
 
   /// Creates a [SmartCalendar] widget.
   ///
@@ -274,8 +276,10 @@ class _SmartCalendarState extends State<SmartCalendar> {
               if (widget.rangeSelectionMode) ...[
                 Container(
                   margin: const EdgeInsets.only(bottom: 8),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: widget.selectedColor.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(8),
@@ -283,17 +287,20 @@ class _SmartCalendarState extends State<SmartCalendar> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.date_range,
-                          size: 14, color: widget.selectedColor),
+                      Icon(
+                        Icons.date_range,
+                        size: 14,
+                        color: widget.selectedColor,
+                      ),
                       const SizedBox(width: 6),
                       Text(
                         _rangeStart == null
                             ? 'Tap to select start date'
                             : _rangeEnd == null
-                                ? 'Tap to select end date'
-                                : '${_rangeStart!.format('dd MMM')} → '
-                                    '${_rangeEnd!.format('dd MMM')} '
-                                    '(${_rangeEnd!.daysUntil(_rangeStart!) * -1 + 1} days)',
+                            ? 'Tap to select end date'
+                            : '${_rangeStart!.format('dd MMM')} → '
+                                  '${_rangeEnd!.format('dd MMM')} '
+                                  '(${_rangeEnd!.daysUntil(_rangeStart!) * -1 + 1} days)',
                         style: TextStyle(
                           fontSize: 12,
                           color: widget.selectedColor,
@@ -336,8 +343,9 @@ class _SmartCalendarState extends State<SmartCalendar> {
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
-                  color:
-                      isActive ? Colors.white : _subtleTextColor, // 👈 dynamic
+                  color: isActive
+                      ? Colors.white
+                      : _subtleTextColor, // 👈 dynamic
                 ),
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+
 import '../extensions.dart';
 import '../localization.dart';
 
@@ -163,7 +164,7 @@ class DateBadge extends StatelessWidget {
       'SEP',
       'OCT',
       'NOV',
-      'DEC'
+      'DEC',
     ];
     return months[month - 1];
   }

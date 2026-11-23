@@ -132,8 +132,8 @@ class CalendarEvent {
     final hour = time.hour > 12
         ? time.hour - 12
         : time.hour == 0
-            ? 12
-            : time.hour;
+        ? 12
+        : time.hour;
     final minute = time.minute.toString().padLeft(2, '0');
     final period = time.hour >= 12 ? 'PM' : 'AM';
     return '$hour:$minute $period';
@@ -142,6 +142,7 @@ class CalendarEvent {
   String _formatDate(DateTime date) => '${date.day}/${date.month}/${date.year}';
 
   @override
-  String toString() => 'CalendarEvent($title, $date'
+  String toString() =>
+      'CalendarEvent($title, $date'
       '${endDate != null ? ' → $endDate' : ''})';
 }

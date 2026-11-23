@@ -1,5 +1,7 @@
 import 'dart:async';
+
 import 'package:material_ui/material_ui.dart';
+
 import '../formatter.dart';
 import '../localization.dart';
 
@@ -114,10 +116,6 @@ class _TimeAgoTextState extends State<TimeAgoText> {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      _text,
-      style: widget.style,
-      textAlign: widget.textAlign,
-    );
+    return Text(_text, style: widget.style, textAlign: widget.textAlign);
   }
 }

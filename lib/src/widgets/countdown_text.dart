@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:material_ui/material_ui.dart';
 
 /// A Flutter widget that counts down to a [target] DateTime
@@ -126,10 +127,6 @@ class _CountdownTextState extends State<CountdownText> {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      _buildText(),
-      style: widget.style,
-      textAlign: widget.textAlign,
-    );
+    return Text(_buildText(), style: widget.style, textAlign: widget.textAlign);
   }
 }

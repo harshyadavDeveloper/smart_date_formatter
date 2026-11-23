@@ -126,8 +126,9 @@ class SmartDateFormatter {
     final today = DateTime(reference.year, reference.month, reference.day);
     final target = DateTime(date.year, date.month, date.day);
     final diff = target.difference(today).inDays;
-    final hour =
-        date.hour > 12 ? date.hour - 12 : (date.hour == 0 ? 12 : date.hour);
+    final hour = date.hour > 12
+        ? date.hour - 12
+        : (date.hour == 0 ? 12 : date.hour);
     final minute = date.minute.toString().padLeft(2, '0');
     final period = date.hour >= 12 ? 'PM' : 'AM';
     final time = '$hour:$minute $period';
@@ -149,7 +150,7 @@ class SmartDateFormatter {
       'Thursday',
       'Friday',
       'Saturday',
-      'Sunday'
+      'Sunday',
     ];
     return days[weekday - 1];
   }
@@ -167,7 +168,7 @@ class SmartDateFormatter {
       'September',
       'October',
       'November',
-      'December'
+      'December',
     ];
     return months[month - 1];
   }

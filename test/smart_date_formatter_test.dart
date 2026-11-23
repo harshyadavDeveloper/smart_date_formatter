@@ -9,7 +9,13 @@ void main() {
   setUp(() {
     formatter = const SmartDateFormatter();
     now = DateTime(
-        2024, 6, 15, 14, 30, 0); // Fixed reference: Sat 15 Jun 2024, 2:30 PM
+      2024,
+      6,
+      15,
+      14,
+      30,
+      0,
+    ); // Fixed reference: Sat 15 Jun 2024, 2:30 PM
   });
 
   group('SmartDateFormatter.format()', () {
@@ -282,7 +288,10 @@ void main() {
 
     test('age calculation', () {
       final birthDate = DateTime(
-          DateTime.now().year - 25, DateTime.now().month, DateTime.now().day);
+        DateTime.now().year - 25,
+        DateTime.now().month,
+        DateTime.now().day,
+      );
       expect(birthDate.age, 25);
     });
 
@@ -369,8 +378,10 @@ void main() {
     });
 
     test('supported locales list', () {
-      expect(SdfLocale.supported,
-          containsAll(['en', 'hi', 'es', 'fr', 'ja', 'ar']));
+      expect(
+        SdfLocale.supported,
+        containsAll(['en', 'hi', 'es', 'fr', 'ja', 'ar']),
+      );
     });
   });
 
@@ -455,29 +466,32 @@ void main() {
     });
 
     test('standard date string fallback', () {
-      expect(
-        SmartParser.parse('2024-01-15', now: now),
-        DateTime(2024, 1, 15),
-      );
+      expect(SmartParser.parse('2024-01-15', now: now), DateTime(2024, 1, 15));
     });
   });
 
   group('SmartParser — month-end clamping', () {
     test('Jan 31 + 1 month = Feb 29 (leap year)', () {
-      final result =
-          SmartParser.parse('in 1 month', now: DateTime(2024, 1, 31));
+      final result = SmartParser.parse(
+        'in 1 month',
+        now: DateTime(2024, 1, 31),
+      );
       expect(result, DateTime(2024, 2, 29));
     });
 
     test('Jan 31 + 1 month = Feb 28 (non-leap year)', () {
-      final result =
-          SmartParser.parse('in 1 month', now: DateTime(2023, 1, 31));
+      final result = SmartParser.parse(
+        'in 1 month',
+        now: DateTime(2023, 1, 31),
+      );
       expect(result, DateTime(2023, 2, 28));
     });
 
     test('Mar 31 + 1 month = Apr 30', () {
-      final result =
-          SmartParser.parse('in 1 month', now: DateTime(2024, 3, 31));
+      final result = SmartParser.parse(
+        'in 1 month',
+        now: DateTime(2024, 3, 31),
+      );
       expect(result, DateTime(2024, 4, 30));
     });
 
@@ -487,14 +501,18 @@ void main() {
     });
 
     test('Jun 15 + 1 month = Jul 15 (no clamping needed)', () {
-      final result =
-          SmartParser.parse('in 1 month', now: DateTime(2024, 6, 15));
+      final result = SmartParser.parse(
+        'in 1 month',
+        now: DateTime(2024, 6, 15),
+      );
       expect(result, DateTime(2024, 7, 15));
     });
 
     test('Jan 31 - 1 month = Dec 31', () {
-      final result =
-          SmartParser.parse('1 month ago', now: DateTime(2024, 1, 31));
+      final result = SmartParser.parse(
+        '1 month ago',
+        now: DateTime(2024, 1, 31),
+      );
       expect(result, DateTime(2023, 12, 31));
     });
   });
@@ -589,16 +607,22 @@ void main() {
     });
 
     test('DateRange.overlaps', () {
-      final r1 =
-          DateRangeHelper.custom(DateTime(2024, 1, 1), DateTime(2024, 6, 30));
-      final r2 =
-          DateRangeHelper.custom(DateTime(2024, 6, 1), DateTime(2024, 12, 31));
+      final r1 = DateRangeHelper.custom(
+        DateTime(2024, 1, 1),
+        DateTime(2024, 6, 30),
+      );
+      final r2 = DateRangeHelper.custom(
+        DateTime(2024, 6, 1),
+        DateTime(2024, 12, 31),
+      );
       expect(r1.overlaps(r2), true);
     });
 
     test('DateRange.days count', () {
-      final range =
-          DateRangeHelper.custom(DateTime(2024, 6, 1), DateTime(2024, 6, 7));
+      final range = DateRangeHelper.custom(
+        DateTime(2024, 6, 1),
+        DateTime(2024, 6, 7),
+      );
       expect(range.days, 7);
     });
   });
@@ -690,39 +714,24 @@ void main() {
     });
 
     test('isSameDay — different dates', () {
-      expect(
-        DateTime(2024, 6, 15).isSameDay(DateTime(2024, 6, 16)),
-        false,
-      );
+      expect(DateTime(2024, 6, 15).isSameDay(DateTime(2024, 6, 16)), false);
     });
 
     test('isSameWeek — same week', () {
       // Monday Jun 10 and Saturday Jun 15 — same week
-      expect(
-        DateTime(2024, 6, 10).isSameWeek(DateTime(2024, 6, 15)),
-        true,
-      );
+      expect(DateTime(2024, 6, 10).isSameWeek(DateTime(2024, 6, 15)), true);
     });
 
     test('isSameWeek — different weeks', () {
-      expect(
-        DateTime(2024, 6, 10).isSameWeek(DateTime(2024, 6, 17)),
-        false,
-      );
+      expect(DateTime(2024, 6, 10).isSameWeek(DateTime(2024, 6, 17)), false);
     });
 
     test('isSameMonth — same month', () {
-      expect(
-        DateTime(2024, 6, 1).isSameMonth(DateTime(2024, 6, 30)),
-        true,
-      );
+      expect(DateTime(2024, 6, 1).isSameMonth(DateTime(2024, 6, 30)), true);
     });
 
     test('isSameMonth — different months', () {
-      expect(
-        DateTime(2024, 6, 1).isSameMonth(DateTime(2024, 7, 1)),
-        false,
-      );
+      expect(DateTime(2024, 6, 1).isSameMonth(DateTime(2024, 7, 1)), false);
     });
 
     test('isSameYear — same year', () {
@@ -730,10 +739,7 @@ void main() {
     });
 
     test('isSameYear — different years', () {
-      expect(
-        DateTime(2024, 1, 1).isSameYear(DateTime(2023, 1, 1)),
-        false,
-      );
+      expect(DateTime(2024, 1, 1).isSameYear(DateTime(2023, 1, 1)), false);
     });
 
     // ── Next / Previous Weekday ────────────────
@@ -866,9 +872,7 @@ void main() {
     testWidgets('DateBadge — today shows TODAY', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          home: Scaffold(
-            body: DateBadge(date: DateTime.now()),
-          ),
+          home: Scaffold(body: DateBadge(date: DateTime.now())),
         ),
       );
     });
@@ -877,10 +881,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: DateBadge(
-              date: DateTime.now(),
-              style: DateBadgeStyle.chip,
-            ),
+            body: DateBadge(date: DateTime.now(), style: DateBadgeStyle.chip),
           ),
         ),
       );
@@ -919,10 +920,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: DateBadge(
-              date: DateTime.now(),
-              label: 'NEW',
-            ),
+            body: DateBadge(date: DateTime.now(), label: 'NEW'),
           ),
         ),
       );
@@ -933,10 +931,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: SmartDateText(
-              date: date,
-              mode: SmartDateMode.timeAgo,
-            ),
+            body: SmartDateText(date: date, mode: SmartDateMode.timeAgo),
           ),
         ),
       );
@@ -973,16 +968,14 @@ void main() {
       expect(find.text('15-06-2024'), findsOneWidget);
     });
 
-    testWidgets('SmartDateText — auto mode recent date uses timeAgo',
-        (tester) async {
+    testWidgets('SmartDateText — auto mode recent date uses timeAgo', (
+      tester,
+    ) async {
       final date = DateTime.now().subtract(const Duration(hours: 2));
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: SmartDateText(
-              date: date,
-              mode: SmartDateMode.auto,
-            ),
+            body: SmartDateText(date: date, mode: SmartDateMode.auto),
           ),
         ),
       );
@@ -1046,38 +1039,23 @@ void main() {
     final holidays = [christmas, republicDay];
 
     test('isHoliday — christmas is holiday', () {
-      expect(
-        HolidayHelper.isHoliday(christmas, holidays: holidays),
-        true,
-      );
+      expect(HolidayHelper.isHoliday(christmas, holidays: holidays), true);
     });
 
     test('isHoliday — random day is not holiday', () {
-      expect(
-        HolidayHelper.isHoliday(monday, holidays: holidays),
-        false,
-      );
+      expect(HolidayHelper.isHoliday(monday, holidays: holidays), false);
     });
 
     test('isWorkingDay — Monday is working day', () {
-      expect(
-        HolidayHelper.isWorkingDay(monday, holidays: holidays),
-        true,
-      );
+      expect(HolidayHelper.isWorkingDay(monday, holidays: holidays), true);
     });
 
     test('isWorkingDay — Saturday is not working day', () {
-      expect(
-        HolidayHelper.isWorkingDay(saturday, holidays: holidays),
-        false,
-      );
+      expect(HolidayHelper.isWorkingDay(saturday, holidays: holidays), false);
     });
 
     test('isWorkingDay — Christmas is not working day', () {
-      expect(
-        HolidayHelper.isWorkingDay(christmas, holidays: holidays),
-        false,
-      );
+      expect(HolidayHelper.isWorkingDay(christmas, holidays: holidays), false);
     });
 
     test('addWorkingDays — skips Christmas', () {
@@ -1085,8 +1063,11 @@ void main() {
       // Dec 23 → Dec 24 (Tue) → skip Dec 25 (Christmas)
       // → Dec 26 (Thu) → Dec 27 (Fri) = 3 days
       final dec23 = DateTime(2024, 12, 23);
-      final result =
-          HolidayHelper.addWorkingDays(dec23, 3, holidays: [christmas]);
+      final result = HolidayHelper.addWorkingDays(
+        dec23,
+        3,
+        holidays: [christmas],
+      );
       expect(result, DateTime(2024, 12, 27));
     });
 
@@ -1156,13 +1137,18 @@ void main() {
     });
 
     test('daily — skip weekends', () {
-      final dates =
-          RecurrenceHelper.daily(start: start, count: 5, skipWeekends: true);
+      final dates = RecurrenceHelper.daily(
+        start: start,
+        count: 5,
+        skipWeekends: true,
+      );
       // Mon, Tue, Wed, Thu, Fri — no weekends
       expect(
-          dates.every((d) =>
-              d.weekday != DateTime.saturday && d.weekday != DateTime.sunday),
-          true);
+        dates.every(
+          (d) => d.weekday != DateTime.saturday && d.weekday != DateTime.sunday,
+        ),
+        true,
+      );
     });
 
     test('daily — until date', () {
@@ -1181,8 +1167,10 @@ void main() {
     });
 
     test('monthly — count 3', () {
-      final dates =
-          RecurrenceHelper.monthly(start: DateTime(2024, 1, 15), count: 3);
+      final dates = RecurrenceHelper.monthly(
+        start: DateTime(2024, 1, 15),
+        count: 3,
+      );
       expect(dates.length, 3);
       expect(dates[0].month, 1);
       expect(dates[1].month, 2);
@@ -1271,10 +1259,7 @@ void main() {
     });
 
     test('lastCompletedDate', () {
-      expect(
-        StreakCalculator.lastCompletedDate(dates),
-        DateTime(2024, 6, 15),
-      );
+      expect(StreakCalculator.lastCompletedDate(dates), DateTime(2024, 6, 15));
     });
 
     test('lastCompletedDate — empty returns null', () {
@@ -1286,10 +1271,7 @@ void main() {
     });
 
     test('isTodayCompleted — true when today included', () {
-      expect(
-        StreakCalculator.isTodayCompleted([DateTime.now()]),
-        true,
-      );
+      expect(StreakCalculator.isTodayCompleted([DateTime.now()]), true);
     });
 
     test('completionRate — 5 out of 6 days', () {
@@ -1593,7 +1575,9 @@ void main() {
 
     test('supportedParseLocales', () {
       expect(
-          SmartParser.supportedParseLocales, containsAll(['en', 'hi', 'mr']));
+        SmartParser.supportedParseLocales,
+        containsAll(['en', 'hi', 'mr']),
+      );
     });
   });
 
@@ -1642,32 +1626,36 @@ void main() {
 
     // Controller tests
     test('SmartCalendarController — initial date', () {
-      final controller =
-          SmartCalendarController(initialDate: DateTime(2024, 6, 15));
+      final controller = SmartCalendarController(
+        initialDate: DateTime(2024, 6, 15),
+      );
       expect(controller.focusedDate.month, 6);
       expect(controller.focusedDate.day, 15);
       controller.dispose();
     });
 
     test('Controller.nextMonth', () {
-      final controller =
-          SmartCalendarController(initialDate: DateTime(2024, 6, 15));
+      final controller = SmartCalendarController(
+        initialDate: DateTime(2024, 6, 15),
+      );
       controller.nextMonth();
       expect(controller.focusedDate.month, 7);
       controller.dispose();
     });
 
     test('Controller.previousMonth', () {
-      final controller =
-          SmartCalendarController(initialDate: DateTime(2024, 6, 15));
+      final controller = SmartCalendarController(
+        initialDate: DateTime(2024, 6, 15),
+      );
       controller.previousMonth();
       expect(controller.focusedDate.month, 5);
       controller.dispose();
     });
 
     test('Controller.goToToday', () {
-      final controller =
-          SmartCalendarController(initialDate: DateTime(2024, 1, 1));
+      final controller = SmartCalendarController(
+        initialDate: DateTime(2024, 1, 1),
+      );
       controller.goToToday();
       expect(controller.focusedDate.year, DateTime.now().year);
       controller.dispose();
@@ -1681,18 +1669,22 @@ void main() {
     });
 
     test('Controller.isCurrentMonth — false for past', () {
-      final controller =
-          SmartCalendarController(initialDate: DateTime(2020, 1, 1));
+      final controller = SmartCalendarController(
+        initialDate: DateTime(2020, 1, 1),
+      );
       expect(controller.isCurrentMonth, false);
       controller.dispose();
     });
 
     test('Controller.nextWeek', () {
-      final controller =
-          SmartCalendarController(initialDate: DateTime(2024, 6, 15));
+      final controller = SmartCalendarController(
+        initialDate: DateTime(2024, 6, 15),
+      );
       controller.nextWeek();
-      expect(controller.focusedDate,
-          DateTime(2024, 6, 15).add(const Duration(days: 7)));
+      expect(
+        controller.focusedDate,
+        DateTime(2024, 6, 15).add(const Duration(days: 7)),
+      );
       controller.dispose();
     });
 
@@ -1728,10 +1720,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: SingleChildScrollView(
-              child: SmartCalendar(
-                events: events,
-                showTodayButton: true,
-              ),
+              child: SmartCalendar(events: events, showTodayButton: true),
             ),
           ),
         ),
@@ -1781,16 +1770,14 @@ void main() {
 
     testWidgets('SmartCalendar — with controller', (tester) async {
       await tester.binding.setSurfaceSize(const Size(800, 1200));
-      final controller =
-          SmartCalendarController(initialDate: DateTime(2024, 6, 15));
+      final controller = SmartCalendarController(
+        initialDate: DateTime(2024, 6, 15),
+      );
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: SingleChildScrollView(
-              child: SmartCalendar(
-                events: events,
-                controller: controller,
-              ),
+              child: SmartCalendar(events: events, controller: controller),
             ),
           ),
         ),
@@ -1937,16 +1924,18 @@ void main() {
 
     // Controller
     test('Controller.nextDay', () {
-      final controller =
-          SmartCalendarController(initialDate: DateTime(2024, 6, 15));
+      final controller = SmartCalendarController(
+        initialDate: DateTime(2024, 6, 15),
+      );
       controller.nextDay();
       expect(controller.focusedDate.day, 16);
       controller.dispose();
     });
 
     test('Controller.previousDay', () {
-      final controller =
-          SmartCalendarController(initialDate: DateTime(2024, 6, 15));
+      final controller = SmartCalendarController(
+        initialDate: DateTime(2024, 6, 15),
+      );
       controller.previousDay();
       expect(controller.focusedDate.day, 14);
       controller.dispose();
@@ -1989,16 +1978,14 @@ void main() {
 
     testWidgets('SmartCalendar — swipe left navigates forward', (tester) async {
       await tester.binding.setSurfaceSize(const Size(800, 1200));
-      final controller =
-          SmartCalendarController(initialDate: DateTime(2024, 6, 15));
+      final controller = SmartCalendarController(
+        initialDate: DateTime(2024, 6, 15),
+      );
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: SingleChildScrollView(
-              child: SmartCalendar(
-                controller: controller,
-                events: const [],
-              ),
+              child: SmartCalendar(controller: controller, events: const []),
             ),
           ),
         ),
@@ -2014,19 +2001,18 @@ void main() {
       await tester.binding.setSurfaceSize(null);
     });
 
-    testWidgets('SmartCalendar — swipe right navigates backward',
-        (tester) async {
+    testWidgets('SmartCalendar — swipe right navigates backward', (
+      tester,
+    ) async {
       await tester.binding.setSurfaceSize(const Size(800, 1200));
-      final controller =
-          SmartCalendarController(initialDate: DateTime(2024, 6, 15));
+      final controller = SmartCalendarController(
+        initialDate: DateTime(2024, 6, 15),
+      );
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: SingleChildScrollView(
-              child: SmartCalendar(
-                controller: controller,
-                events: const [],
-              ),
+              child: SmartCalendar(controller: controller, events: const []),
             ),
           ),
         ),
@@ -2065,10 +2051,7 @@ void main() {
             home: Scaffold(
               body: Padding(
                 padding: const EdgeInsets.all(16),
-                child: SmartDateField(
-                  label: 'Date',
-                  initialValue: date,
-                ),
+                child: SmartDateField(label: 'Date', initialValue: date),
               ),
             ),
           ),
@@ -2103,10 +2086,7 @@ void main() {
             home: Scaffold(
               body: Padding(
                 padding: EdgeInsets.all(16),
-                child: SmartDateField(
-                  label: 'Date',
-                  showPickerIcon: true,
-                ),
+                child: SmartDateField(label: 'Date', showPickerIcon: true),
               ),
             ),
           ),
@@ -2165,8 +2145,9 @@ void main() {
       });
 
       test('SmartDateFieldController — clear', () {
-        final controller =
-            SmartDateFieldController(initialValue: DateTime.now());
+        final controller = SmartDateFieldController(
+          initialValue: DateTime.now(),
+        );
         expect(controller.hasValue, true);
         controller.clear();
         expect(controller.hasValue, false);
@@ -2188,10 +2169,7 @@ void main() {
             home: Scaffold(
               body: Padding(
                 padding: const EdgeInsets.all(16),
-                child: SmartDateField(
-                  label: 'Date',
-                  controller: controller,
-                ),
+                child: SmartDateField(label: 'Date', controller: controller),
               ),
             ),
           ),
@@ -2208,10 +2186,7 @@ void main() {
             home: Scaffold(
               body: Padding(
                 padding: EdgeInsets.all(16),
-                child: SmartDateField(
-                  label: 'Date',
-                  showSuggestions: true,
-                ),
+                child: SmartDateField(label: 'Date', showSuggestions: true),
               ),
             ),
           ),
@@ -2230,10 +2205,7 @@ void main() {
           const MaterialApp(
             home: Scaffold(
               body: SingleChildScrollView(
-                child: SmartCalendar(
-                  events: [],
-                  showWeekNumbers: true,
-                ),
+                child: SmartCalendar(events: [], showWeekNumbers: true),
               ),
             ),
           ),
@@ -2244,17 +2216,14 @@ void main() {
         await tester.binding.setSurfaceSize(null);
       });
 
-      testWidgets('SmartCalendar — week numbers hidden by default',
-          (tester) async {
+      testWidgets('SmartCalendar — week numbers hidden by default', (
+        tester,
+      ) async {
         await tester.binding.setSurfaceSize(const Size(800, 1200));
         await tester.pumpWidget(
           const MaterialApp(
             home: Scaffold(
-              body: SingleChildScrollView(
-                child: SmartCalendar(
-                  events: [],
-                ),
-              ),
+              body: SingleChildScrollView(child: SmartCalendar(events: [])),
             ),
           ),
         );
@@ -2267,8 +2236,9 @@ void main() {
         final date = DateTime(2024, 1, 1);
         final firstDayOfYear = DateTime(date.year, 1, 1);
         final dayOfYear = date.difference(firstDayOfYear).inDays + 1;
-        final weekNum =
-            ((dayOfYear + firstDayOfYear.weekday - 2) / 7).ceil().clamp(1, 53);
+        final weekNum = ((dayOfYear + firstDayOfYear.weekday - 2) / 7)
+            .ceil()
+            .clamp(1, 53);
         expect(weekNum, 1);
       });
 
@@ -2276,8 +2246,9 @@ void main() {
         final date = DateTime(2024, 6, 15);
         final firstDayOfYear = DateTime(date.year, 1, 1);
         final dayOfYear = date.difference(firstDayOfYear).inDays + 1;
-        final weekNum =
-            ((dayOfYear + firstDayOfYear.weekday - 2) / 7).ceil().clamp(1, 53);
+        final weekNum = ((dayOfYear + firstDayOfYear.weekday - 2) / 7)
+            .ceil()
+            .clamp(1, 53);
         expect(weekNum, greaterThan(20));
         expect(weekNum, lessThan(30));
       });
@@ -2302,16 +2273,15 @@ void main() {
       expect(find.byIcon(Icons.access_time), findsOneWidget);
     });
 
-    testWidgets('SmartDateField — time picker hidden by default',
-        (tester) async {
+    testWidgets('SmartDateField — time picker hidden by default', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
             body: Padding(
               padding: EdgeInsets.all(16),
-              child: SmartDateField(
-                label: 'Date Only',
-              ),
+              child: SmartDateField(label: 'Date Only'),
             ),
           ),
         ),
@@ -2418,10 +2388,7 @@ void main() {
     // Controller tests
     test('Controller.setRange', () {
       final controller = SmartDateRangePickerController();
-      controller.setRange(
-        DateTime(2024, 6, 1),
-        DateTime(2024, 6, 30),
-      );
+      controller.setRange(DateTime(2024, 6, 1), DateTime(2024, 6, 30));
       expect(controller.hasValue, true);
       expect(controller.value?.days, 30);
       controller.dispose();
@@ -2489,9 +2456,7 @@ void main() {
             body: SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.all(16),
-                child: SmartDateRangePicker(
-                  showPresets: true,
-                ),
+                child: SmartDateRangePicker(showPresets: true),
               ),
             ),
           ),
@@ -2534,9 +2499,7 @@ void main() {
             body: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: SmartDateRangePicker(
-                  controller: controller,
-                ),
+                child: SmartDateRangePicker(controller: controller),
               ),
             ),
           ),
@@ -2555,9 +2518,7 @@ void main() {
             body: SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.all(16),
-                child: SmartDateRangePicker(
-                  showPresets: false,
-                ),
+                child: SmartDateRangePicker(showPresets: false),
               ),
             ),
           ),
@@ -2574,10 +2535,7 @@ void main() {
         const MaterialApp(
           home: Scaffold(
             body: SingleChildScrollView(
-              child: SmartCalendar(
-                events: [],
-                themeMode: ThemeMode.dark,
-              ),
+              child: SmartCalendar(events: [], themeMode: ThemeMode.dark),
             ),
           ),
         ),
@@ -2593,10 +2551,7 @@ void main() {
         const MaterialApp(
           home: Scaffold(
             body: SingleChildScrollView(
-              child: SmartCalendar(
-                events: [],
-                themeMode: ThemeMode.light,
-              ),
+              child: SmartCalendar(events: [], themeMode: ThemeMode.light),
             ),
           ),
         ),
@@ -2612,10 +2567,7 @@ void main() {
         const MaterialApp(
           home: Scaffold(
             body: SingleChildScrollView(
-              child: SmartCalendar(
-                events: [],
-                themeMode: ThemeMode.system,
-              ),
+              child: SmartCalendar(events: [], themeMode: ThemeMode.system),
             ),
           ),
         ),
@@ -2677,9 +2629,7 @@ void main() {
                 events: const [],
                 cellBuilder: (date, events, isSelected, isToday) => Container(
                   color: isSelected ? Colors.indigo : Colors.transparent,
-                  child: Center(
-                    child: Text('${date.day}'),
-                  ),
+                  child: Center(child: Text('${date.day}')),
                 ),
               ),
             ),
@@ -2691,17 +2641,14 @@ void main() {
       await tester.binding.setSurfaceSize(null);
     });
 
-    testWidgets('SmartCalendar — default cell when builder null',
-        (tester) async {
+    testWidgets('SmartCalendar — default cell when builder null', (
+      tester,
+    ) async {
       await tester.binding.setSurfaceSize(const Size(800, 1200));
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: SingleChildScrollView(
-              child: SmartCalendar(
-                events: [],
-              ),
-            ),
+            body: SingleChildScrollView(child: SmartCalendar(events: [])),
           ),
         ),
       );
@@ -2724,16 +2671,17 @@ void main() {
                     color: Colors.blue,
                   ),
                 ],
-                cellBuilder: (date, events, isSelected, isToday) =>
-                    Stack(children: [
-                  Center(child: Text('${date.day}')),
-                  if (events.isNotEmpty)
-                    const Positioned(
-                      bottom: 4,
-                      right: 4,
-                      child: Icon(Icons.circle, size: 6, color: Colors.blue),
-                    ),
-                ]),
+                cellBuilder: (date, events, isSelected, isToday) => Stack(
+                  children: [
+                    Center(child: Text('${date.day}')),
+                    if (events.isNotEmpty)
+                      const Positioned(
+                        bottom: 4,
+                        right: 4,
+                        child: Icon(Icons.circle, size: 6, color: Colors.blue),
+                      ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -2765,8 +2713,9 @@ void main() {
       expect(find.byType(SmartDateRangePicker), findsOneWidget);
     });
 
-    testWidgets('SmartDateRangePicker — custom rangeHighlightColor',
-        (tester) async {
+    testWidgets('SmartDateRangePicker — custom rangeHighlightColor', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -2791,9 +2740,7 @@ void main() {
             body: SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.all(16),
-                child: SmartDateRangePicker(
-                  highlightWeekends: false,
-                ),
+                child: SmartDateRangePicker(highlightWeekends: false),
               ),
             ),
           ),
@@ -2802,17 +2749,16 @@ void main() {
       expect(find.byType(SmartDateRangePicker), findsOneWidget);
     });
 
-    testWidgets('SmartDateRangePicker — custom cellBorderRadius',
-        (tester) async {
+    testWidgets('SmartDateRangePicker — custom cellBorderRadius', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
             body: SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.all(16),
-                child: SmartDateRangePicker(
-                  cellBorderRadius: 20,
-                ),
+                child: SmartDateRangePicker(cellBorderRadius: 20),
               ),
             ),
           ),
@@ -2979,14 +2925,8 @@ void main() {
 
     test('SmartParser — case insensitive', () {
       final now = DateTime(2024, 6, 15);
-      expect(
-        SmartParser.parse('TOMORROW', now: now),
-        isNotNull,
-      );
-      expect(
-        SmartParser.parse('Tomorrow', now: now),
-        isNotNull,
-      );
+      expect(SmartParser.parse('TOMORROW', now: now), isNotNull);
+      expect(SmartParser.parse('Tomorrow', now: now), isNotNull);
     });
 
     test('SmartParser — "in a day" same as "in 1 day"', () {
@@ -3013,10 +2953,7 @@ void main() {
     });
 
     test('StreakCalculator — single date streak = 1', () {
-      expect(
-        StreakCalculator.longestStreak([DateTime(2024, 6, 15)]),
-        1,
-      );
+      expect(StreakCalculator.longestStreak([DateTime(2024, 6, 15)]), 1);
     });
 
     // ── DateGrouper edge cases ────────────────────────
@@ -3031,10 +2968,7 @@ void main() {
     });
 
     test('DateGrouper.averageGap — two dates', () {
-      final dates = [
-        DateTime(2024, 6, 1),
-        DateTime(2024, 6, 8),
-      ];
+      final dates = [DateTime(2024, 6, 1), DateTime(2024, 6, 8)];
       final gap = DateGrouper.averageGap(dates);
       expect(gap?.inDays, 7);
     });
@@ -3066,10 +3000,7 @@ void main() {
 
     // ── HolidayHelper edge cases ──────────────────────
     test('HolidayHelper — empty holidays list', () {
-      expect(
-        HolidayHelper.isHoliday(DateTime.now(), holidays: []),
-        false,
-      );
+      expect(HolidayHelper.isHoliday(DateTime.now(), holidays: []), false);
       expect(
         HolidayHelper.isWorkingDay(DateTime(2024, 6, 17), holidays: []),
         true,
@@ -3079,10 +3010,7 @@ void main() {
     test('HolidayHelper — time ignored in comparison', () {
       final holiday = DateTime(2024, 12, 25, 0, 0, 0);
       final check = DateTime(2024, 12, 25, 14, 30, 0);
-      expect(
-        HolidayHelper.isHoliday(check, holidays: [holiday]),
-        true,
-      );
+      expect(HolidayHelper.isHoliday(check, holidays: [holiday]), true);
     });
 
     // ── RecurrenceHelper edge cases ───────────────────
@@ -3096,10 +3024,7 @@ void main() {
 
     test('RecurrenceHelper — until same as start', () {
       final start = DateTime(2024, 6, 15);
-      final dates = RecurrenceHelper.daily(
-        start: start,
-        until: start,
-      );
+      final dates = RecurrenceHelper.daily(start: start, until: start);
       expect(dates.length, 1);
     });
 
@@ -3337,7 +3262,9 @@ void main() {
 
     test('supportedParseLocales has gu bn ta', () {
       expect(
-          SmartParser.supportedParseLocales, containsAll(['gu', 'bn', 'ta']));
+        SmartParser.supportedParseLocales,
+        containsAll(['gu', 'bn', 'ta']),
+      );
     });
   });
 
@@ -3376,10 +3303,7 @@ void main() {
         const MaterialApp(
           home: Scaffold(
             body: SingleChildScrollView(
-              child: SmartCalendar(
-                events: [],
-                rangeSelectionMode: true,
-              ),
+              child: SmartCalendar(events: [], rangeSelectionMode: true),
             ),
           ),
         ),
