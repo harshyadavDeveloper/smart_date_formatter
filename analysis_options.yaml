@@ -22,6 +22,7 @@ linter:
     prefer_final_fields: true
     prefer_final_locals: true
     prefer_single_quotes: true
+    migrate_design_widgets: true
 
     # Documentation
     public_member_api_docs: true
