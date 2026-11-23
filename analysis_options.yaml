@@ -11,6 +11,8 @@ analyzer:
     dead_code: warning
     unused_import: warning
     unused_local_variable: warning
+  exclude:
+    - build/**
 
 linter:
   rules:
